@@ -1,0 +1,3033 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: foot-cream\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-07 21:16+0200\n"
+"PO-Revision-Date: 2026-08-10 11:33\n"
+"Last-Translator: \n"
+"Language-Team: Danish\n"
+"Language: da_DK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: foot-cream\n"
+"X-Crowdin-Project-ID: 919191\n"
+"X-Crowdin-Language: da\n"
+"X-Crowdin-File: /main/l10n/templates/foot-cream-labels.pot\n"
+"X-Crowdin-File-ID: 8\n"
+
+#. ffi/util provides runInSubProcess / isSubProcessDone for background work
+#. Out-of-tree plugins aren't part of KOReader's own l10n project (the core
+#. GetText textdomain is hardcoded to "koreader", one .mo per language), so
+#. Footcream ships its own compiled translations and merges them into the
+#. SAME lookup table gettext() reads from — loadMO() only adds entries, it
+#. doesn't clear what's already loaded (only changeLang() does that), so this
+#. is safe to run after core's own translations are in place. Must happen
+#. before any module-level table literal below calls _(), so it runs here
+#. rather than in FootFree:init() (which only runs once a book is opened).
+#. Books whose Footcream data the user removed THIS SESSION (keyed by file
+#. path). Auto-scan skips them so the rescan/convert prompt doesn't pop right
+#. back up after "Remove Footcream data from this book" (the removal reloads
+#. the document, which re-runs onReaderReady). Lives on the CLASS table —
+#. reloadDocument recreates the plugin instance, so an instance field would
+#. be lost. Not persisted: reopening the book in a later session auto-scans
+#. again as normal. A manual "Scan book" clears the entry.
+#. ── Unicode constants (decimal-escaped UTF-8) ─────────────────────────────────
+#. ′  U+2032
+#. ″  U+2033
+#. Curly/smart-quote twins of the ASCII apostrophe/quote — most commercial
+#. EPUBs are typeset with these, not straight ASCII, for shorthand height
+#. notation ("6’2”"). Recognized everywhere the straight forms are (issue #2).
+#. Class attributes, not `local`s — see the 200-local ceiling note in
+#. references/gotchas.md.
+#. '  U+2019 curly right single quote (apostrophe)
+#. "  U+201D curly right double quote
+#. –  U+2013
+#. ×  U+00D7
+#. ²  U+00B2 (superscript two)
+#. bumped: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001’s" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001’ = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6’ wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-toed/-legged/-clawed/-pawed/etc. feet/foot" no longer reads as a distance — anatomy, not a measurement (report #9: "three-toed feet" was reading as 91 cm; the shared _parse_num word-number fallback treats a hyphen right after a number word as an ordinary compound-number boundary, the same mechanism that composes "twenty-three", so it doesn't distinguish "three-toed" from "twenty-three"). (62 was: shorthand height notation (issue #2) now recognizes curly/smart quotes ("6’2”"), not just straight ASCII/true-prime — most commercial EPUBs are typeset this way, which is why it looked entirely broken to the reporter. A digit-adjacent bare feet-mark ('/′/’) immediately followed by "s" is now read as a year/decade possessive or plural ("2001's", "the 90's"), not a height — closes the false positive in reports #11-13 ("2001's Ghosts of Mars" was reading as 2001 ft = 600 m). (61 was: bare "degrees" (no F/Fahrenheit qualifier) now converts as a Fahrenheit temperature when a nearby word suggests one (cold/hot/warm/chill/freez.../temperature/weather/humid/...); default is still to leave it alone (angle, rotation, proof, heading, latitude). Spelled "minus" before a number now negates it ("minus seventy degrees" = -70), matching the existing symbolic-dash handling. "N degrees below zero" is suppressed rather than mis-signed (residual — reports #14-33). (60 was: hyphenated adjectival "square <unit>" compounds ("a 250,000-square-foot room", "a three-million-square-foot cave") now detect as area — the "square" cue check missed the hyphen glue and fell through to the linear-foot factor, badly wrong and missing the ² (reports #22-24). (59 was: metric→imperial direction ("Preferred units": metric/us/uk; sidecars carry a direction field, matches can now target imperial compound formats). (58 was: hyphen-glued attributive fractions parse — "<ordinal>-of-a-<unit>-thick/long" reads as 1/denominator ("a third-of-a-mile-thick" = 540 m; "quarter-of-a" worked already via _WORD_NUMS, ordinals like "third" were nil because bare ordinals are ambiguous — the glued "-of-a" tail disambiguates). (57 was: bare-article "a million miles" (incl. "an hour"/"away" forms) suppressed as hyperbole — user-approved 2026-07-06, all 7 corpus hits figurative; digits and real multiples ("two million miles", "half a million miles") still convert. (56 was: URL path fragments never convert (digit/letter slash in matched_text — "178650/League" was 860 000 km); "N-foot-by-M-foot" dimension adjectives convert both sides ("twenty-foot-by-hundred-foot" = 6 × 30 m, was a bare 6 m). (55 was: shy-book plain passes enforce true \\b via adjacent-char probes on BOTH sides (plain-path contexts are word-based, so "15 mi|nutes"/"one kn|ows" looked clean and inflated matches 3-6x). (54 was: soft-hyphen books (U+00AD in the text) scan via per-alias PLAIN findAllText passes — the regex path returns span-shifted/missing hits in such books (The Rise and Fall of the Dinosaurs: "1,700 miles" never hit, "seven-ton" garbled). (53 was: new-test-books sweep fixes — em-dash/ellipsis glued to the number no longer defeats _prev_num_words ("too far—eleven feet six inches", "off course by…sixty miles", "park—four acres"); fused digit+unit forms hit via a digit lookbehind in _FAST_UNIT_PAT ("260lbs", "6ft"); banking vocabulary (bank/account/bills/untraceable) added to the soft-currency cues. (52 was: "for a mile" article cue (user-approved) + attributive-tail guard ("ran a mile RELAY" is a compound noun — the batch-2 motion-verb cues were wrongly converting it). (51 was: tight U+2044 fractions from sup/sub-span markup ("21⁄2-inch" = 2½, "13⁄16-inch" = 13/16 — improper-looking numerator reads as a mixed number, proper as a plain fraction). 50 was: corpus-sweep batch 2 follow-ups — prime matches re-check the coordinate/astronomy vocab on the tail of their own paragraph (the 5-word hit window missed "ABERRATION … is established 20″"); spaced U+2044 mixed fractions parse ("2 1 ⁄ 2 -inch plank" = 2.5); _prev_num_words' article-fraction tail requires both words ("half LONG" no longer reads 0.5, which spawned a bogus 0.5–1000 range eating "…a mile and a half long and 1000 ft. deep"). (49 was: batch 2 — FP guards for closing-quote/middle-dot/arcsecond; enumeration lists; ASCII mixed fractions; million; article-mile directional/motion cues; at-a-time ≤ 2; "<digit> of a mile" fraction guard. 48 was: foot-idiom positional cues gated ≤ 2.)
+#. v2: ordered originals per converted string (position-aware reverse lookup)
+#. ── Number prefixes ───────────────────────────────────────────────────────────
+#. [^0-9,] before the digit prevents mid-number matches (e.g. "0 lbs" from "140 lbs").
+#. digit with mandatory boundary char
+#. ── Word → number lookup ──────────────────────────────────────────────────────
+#. Longest-first so sub(1,#word) finds the right entry before shorter prefixes.
+#. Hyphenated N-thousand forms for compound adjectives ("twenty-thousand-foot peaks").
+#. Must precede plain "twenty" etc. in this prefix-match table.
+#. Broader fractions (fourths/fifths/sixths/eighths/tenths). Bare forms —
+#. the fast scan strips "of a/an" and prefix-matches just the fraction
+#. ("two fifths of a mile" → "two fifths" = 0.4). Placed before the plain
+#. numbers further down so e.g. "one quarter" beats a bare "one".
+#. Hyphenated N-hundred forms for compound adjectives ("two-hundred-foot drop").
+#. Must precede plain "two", "three" etc.
+#. Hyphenated N-hundred (1100–1900) forms ("twelve-hundred-mile voyage")
+#. Bare "million" mirrors bare "hundred"/"thousand": needed so the
+#. back-walk's _is_number_word("million") accepts it and compounds like
+#. "fifty-seven million gallons" compose (corpus-sweep miss, Lost City of Z).
+#. N-hundreds (1100–1900): must precede plain 11–19 entries
+#. Compound tens (must precede plain tens in the lookup table)
+#. ── Core helpers ─────────────────────────────────────────────────────────────
+#. Strip the leading boundary character that _ND captures.
+#. If matched_text starts with a non-digit then a digit, the first char is the
+#. boundary (e.g. " 6ft" → "6ft"). Word patterns start letter+letter, not stripped.
+#. UTF-8 bytes of U+2212 (−), the "real" minus sign some books use instead of
+#. an ASCII hyphen. Treated as a leading minus everywhere a hyphen would be.
+#. Other dashes books use as a leading minus before a number ("–10°F", "—10°F").
+#. – U+2013
+#. — U+2014
+#. ≈ U+2248 (prefix for vague-quantifier bands)
+#. All four dash forms, longest-byte-safe, treated as a leading minus sign.
+#. Strip the single leading boundary char the digit patterns require
+#. ([^0-9,]) — but keep a leading minus sign so negatives read correctly
+#. (e.g. "-10°F" must not display as "10°F"). U+2212 is multi-byte so it
+#. never matched the single-byte strip below anyway.
+#. Spelled-out cardinal composition. _parse_num's _WORD_NUMS table is a flat
+#. prefix-match, so a multi-part number like "five thousand five hundred" matched
+#. only its first chunk (→ 5000) and "six and a half" lost the half. This composes
+#. the number properly from the START of the text, stopping at the first
+#. non-number token (prefix semantics). Hyphen/dash-joined forms ("six-and-a-half",
+#. "five-thousand-five-hundred") work via normalising the joiners to spaces; a
+#. comma ends the number (a measurement boundary, e.g. "…nine, two hundred thirty
+#. pounds"). Returns value, value-token-count, had_fraction — or nil. Multiplicative
+#. fractions ("two fifths", "three quarters") bail so the _WORD_NUMS table (which
+#. knows them) handles them. Callers engage this only for ≥2 value tokens or an
+#. additive fraction, so single words keep their exact _WORD_NUMS values.
+#. Unicode "vulgar fraction" glyphs (their UTF-8 bytes) → decimal value, so
+#. "18½ miles" reads 18.5 and "½ mile" reads 0.5. The ½/¼/¾ live in Latin-1
+#. (2 bytes); the ⅓-family in U+215x (3 bytes).
+#. ½
+#. ¼
+#. ¾
+#. ⅓
+#. ⅔
+#. ⅕
+#. ⅛
+#. ⅜
+#. ⅝
+#. ⅞
+#. Spelled multiplicative fractions: "three quarters" = 0.75, "three tenths" = 0.3,
+#. "two thirds" ≈ 0.667, "a quarter" = 0.25. The denominator word maps to its
+#. divisor; the numerator must be a small number word strictly below it (so
+#. "three quarters" but not "five quarters", and not unrelated "<n> <noun>" pairs).
+#. Only the ASCII hyphen joins parts of ONE number ("twenty-three",
+#. "six-and-a-half"). En/em dashes separate two numbers (a range, "five–six"),
+#. so they are NOT normalised here — otherwise "five–six" would compose to 11.
+#. Within one sub-hundred group there is at most one tens word and one units
+#. word ("eighty-five"). A second tens or units word means a NEW number, not a
+#. continuation — "eighty-five and ninety" is 85 then 90 (a range/list), NOT
+#. 175. These flags reset on hundred / dozen / a scale word (which open a fresh
+#. group), so "one hundred and twelve" still composes 100 + 12 = 112.
+#. comma = number boundary
+#. connector, ignore
+#. "a half" vs "a hundred"
+#. "five six" → two numbers
+#. "eighty-five and ninety" → 85, then stop
+#. "two dozen" = 24, "a dozen" = 12. Without this branch the composer
+#. stopped at "dozen", mis-reading "two dozen" as 2 and leaving the
+#. Units-list value blank ("?") even though _WORD_NUMS knew dozen=12.
+#. additive fraction only ("six and a half"); a multiplicative form
+#. ("two fifths") has a number right before with no "a" → bail.
+#. non-number token: stop
+#. words consumed by this number
+#. 4th result: words consumed (lets a caller walk multiple numbers in a phrase).
+#. ASCII mixed fraction "19-3/10" / "1-3/8" / "2 1/2" (also U+2044 ⁄): the
+#. plain digit path below would read just the integer (or, worse, stop at
+#. the hyphen). ASCII slash is TIGHT only — no spaces around it — so the
+#. OCR-mangled "1 /10" form (CH18) keeps its deliberate suppression. The
+#. U+2044 fraction slash is unambiguous, so spaces around it are just
+#. typography and allowed ("2 1 ⁄ 2 -inch plank", Sailor's Word-Book).
+#. p<q keeps this to genuine fractions ("3/10"), never date-ish "10/12".
+#. TIGHT U+2044 with no separator ("21⁄2-inch" — superscript/subscript
+#. spans render with no space): a proper-looking numerator is a plain
+#. fraction ("13⁄16" = 13/16), an improper-looking one is a MIXED
+#. number whose last digit is the numerator ("21⁄2" = 2½ — nobody
+#. typesets 21/2 with a fraction slash). ASCII "/" is left alone
+#. ("21/2" could be a date or division).
+#. A vulgar-fraction glyph fused to the digits ("18½") adds its value.
+#. Honor a minus sign immediately before the digits — ASCII hyphen
+#. OR any of the Unicode dashes books use (U+2212 −, U+2013 –,
+#. U+2014 —) — so "−10°F"/"–10°F"/"—10°F" parse as -10, not 10.
+#. A standalone vulgar-fraction glyph ("½ mile" → 0.5), after any leading space.
+#. Compose multi-word / additive-fraction spelled numbers ("five thousand five
+#. hundred" = 5500, "six and a half" = 6.5) the flat table below can't. Gated
+#. to ≥2 number tokens or a fraction, so single words and multiplicative
+#. fractions ("two fifths") still resolve via _WORD_NUMS.
+#. Spelled multiplicative fraction ("three quarters" = 0.75, "three tenths" =
+#. 0.3) — before the flat _WORD_NUMS lookup, which would prefix-match just the
+#. numerator ("three" → 3).
+#. Strip leading punctuation/space so a paren- or quote-attached word number
+#. still prefix-matches ("(three" → "three", "  ten" → "ten").
+#. Hyphen-glued attributive fraction ("third-of-a-mile-thick rock"): the
+#. "-of-a" tail disambiguates the ordinal completely — "the third of May"
+#. is never hyphenated — so <denominator>-of-a reads as 1/denom. Singular
+#. only: a plural here would be the tail of a numerator form the composer
+#. already handles as one token ("two-thirds-of-a" = 2/3).
+#. Require a word boundary after the match so "tentacles" isn't read as
+#. "ten", "only" as "one", etc. A following letter means it's a longer,
+#. non-number word; digits/spaces/punctuation are fine.
+#. Group the integer part with thin spaces as the thousands separator (SI style:
+#. "160000" -> "160 000"), never a comma. Operates on a formatted number string,
+#. preserving a leading sign and any decimal tail.
+#. One decimal, but drop a trailing ".0" so e.g. 0.9922 reads "1" not "1.0".
+#. Group first (it matches on the "." of the C-locale form), THEN localize
+#. the decimal mark — doing it the other way round would make the grouper
+#. treat a comma decimal as part of the integer part.
+#. A readable view of the source number(s) a match detected, for the debug Units
+#. list: "three feet" → "3", "four hundred feet" → "400", "five to six miles" →
+#. "5–6", "six foot four" → "6, 4", "5'6\"" → "5, 6". Digit forms are read
+#. directly; spelled forms are composed left to right, one maximal number at a
+#. time, so ranges and compounds both surface all their numbers.
+#. Range separators join two DISTINCT numbers, unlike an intra-number hyphen
+#. ("twenty-three", "six-and-a-half"). Split on them first so each endpoint is
+#. parsed on its own — otherwise "five–six" composes to 11.
+#. spelled: compose each maximal number run (hyphens = joiners)
+#. The composer can't start on a leading fraction word
+#. ("half a gallon", "three quarters of a mile"), but
+#. _parse_num knows these via _WORD_NUMS — so the Units
+#. list shows "0.5"/"0.75" instead of "?".
+#. ── Locale-aware decimal separator ───────────────────────────────────────────
+#. "1.8 m" is simply WRONG in most of the languages KOReader ships: German,
+#. French, Polish, Russian, Spanish… all write "1,8 m". This is locale DATA,
+#. not a translation judgement call, so it lives in code rather than being
+#. exposed to translators — and it matters more than the wording, because in
+#. the in-text modes the converted number is written into the reader's own
+#. book file. reader.lua does os.setlocale("C", "numeric") deliberately, so
+#. string.format("%.1f") can never do this for us; we substitute afterwards.
+#.
+#. Languages NOT listed here use the period (en, ga, cy, he, ar, fa, hi, bn,
+#. kn, or, si, th, ms, ja, ko, zh, ur). Matched on the base language, so
+#. "pt_BR"/"pt_PT" both resolve via "pt".
+#. The thousands separator stays a space for every locale (SI style, already
+#. shipping, and unambiguous everywhere — unlike "." or "," which collide
+#. with the decimal mark across languages).
+#. Class attribute, not a local: this file is at the 200-local ceiling.
+#. The decimal mark for the active UI language (cached per language, since
+#. this runs on every formatted number in a scan). Class attributes and
+#. methods rather than locals — the 200-local ceiling again.
+#. Apply the locale's decimal mark to a plain "%.Nf"-style string. Safe to
+#. call on integers (no-op) — the C locale always gives us "." to swap.
+#. For compound feet+inches heights, _fmt's 1-decimal rounding loses too much
+#. (6'4" -> "1.9 m" hides a ~3cm range). Always show centimeter precision.
+#. Pick a friendlier sub-unit when the value is below a whole one: km->m,
+#. m->cm, kg->g. Returns the scaled value and the new unit. ("0.4 km" -> "400 m",
+#. "0.1 m" -> "10 cm", "0.3 kg" -> "300 g".)
+#. Imperial target tag (metric→imperial direction): compound formatting
+#. lives in FootFree._IMPERIAL (defined below; resolved at call time).
+#. Range version of _fmt_dist: downscales both ends based on the (larger) upper
+#. bound, so both endpoints stay in the same unit. `conn` is the original
+#. connector (" and "/" or "/" to ", spaces included) so the converted range
+#. reads as prose ("1.2 and 1.5 m") instead of range notation ("1.2–1.5 m") —
+#. this matters most in Convert-in-text mode, where it lands in the sentence.
+#. ── Smart Rounding of Converted Units ────────────────────────────────────────
+#. When on (default), a converted value gets rounded to a "nice" 1-2-5×10^n
+#. step — but only when the SOURCE number looks like an approximation
+#. (a round number: "ten thousand", "a hundred", "two hundred and fifty", ...).
+#. Precise source numbers ("27 feet", "65 pounds", "5.5 miles", "511 feet")
+#. are left exactly as today. The step is chosen as coarse as possible while
+#. staying within _SMART_ROUND_TOLERANCE of the true value.
+#. 2%
+#. A whole number >= 10 with at least one trailing zero "looks approximate"
+#. (10, 100, 140, 250, 10000, ...). Numbers with a fractional part, or small/
+#. non-round integers (9, 27, 65, 511), are treated as deliberately precise.
+#. Fractions of a single unit ("a third of a mile", "half a pound", "two
+#. thirds of a foot") are colloquial approximations, not precise measurements,
+#. so a value below 1 is rounded too (536.4 m -> 540 m). Precise sub-unit
+#. decimals like "0.25 inches" are unaffected: _nice_round only rounds when a
+#. coarser value stays within tolerance, which it can't for those.
+#. Round v to the coarsest 1-2-5×10^n step whose relative error stays within
+#. _SMART_ROUND_TOLERANCE. Returns v unchanged if even the smallest such step
+#. would overshoot the tolerance.
+#. Round the magnitude and reapply the sign, so negative values (sub-zero °C
+#. temperatures, negative range endpoints) round the same way positives do.
+#. Round to the FEWEST significant figures that stays within tolerance —
+#. i.e. the nearest value at each precision level, coarsest first. Because
+#. each candidate is a *nearest* rounding, the result never lands further
+#. from the true value than necessary (the old coarsest-1-2-5-step rule could
+#. overshoot, e.g. 6705.6 → 6800 instead of the closer 6700).
+#. 10^digits <= v < 10^(digits+1)
+#. "Round harder" units (user-selected): a wider tolerance AND rounding even when
+#. the source number looks deliberately precise. Temperature is special-cased to
+#. whole degrees. Plain metres ("m") are deliberately absent here and gated by
+#. magnitude in _smart_round instead, so heights/short lengths stay untouched.
+#. 4%
+#. Apply smart rounding to a converted value `v`, given the source number `n`
+#. it was converted from and (optionally) the metric `target` unit. Pass
+#. force=true for ranges, which are inherently approximate regardless of how the
+#. endpoints happen to be written.
+#. Imperial target tags own their rounding inside FootFree._IMPERIAL.fmt
+#. (compound output rounds inherently) — pass the value through untouched.
+#. Temperature: always whole degrees (72°F → 22 °C, not 22.2 °C).
+#. Centimetres: collapse to fewest sig-figs within the band first (30.5 → 30,
+#. 91.4 → 90), then ensure a whole-cm result for anything ≥3 cm (7.6 → 8),
+#. which the band alone wouldn't reach. Sub-3 cm keeps its decimal so a
+#. deliberate "0.5 inches → 1.3 cm" isn't flattened to a wrong whole number.
+#. Harsh units: wider band, and round regardless of source precision. Plain
+#. metres only qualify at distance scale (≥10 m), sparing heights/short lengths.
+#. Sub-metre lengths display as centimetres (via _downscale at format time),
+#. so round them on the cm scale to ~2 sig figs — otherwise the metre value's
+#. 1-decimal format leaks odd precision once downscaled ("three feet" →
+#. 0.9144 m → "91.4 cm"; now → 0.90 m → "90 cm"). Mirrors the cm branch above.
+#. Whole-number distance for "not <n> <unit>" — the negation signals a vague,
+#. approximate distance, so a round number reads more honestly ("not two miles" →
+#. "3 km", not "3.2 km"). Smart-round first (nice 1-2-5 value, e.g. half a mile →
+#. 0.8 km → 800 m), THEN drop any remaining decimal in the display unit, so "not"
+#. never reads LESS round than the plain conversion would.
+#. ── Metric → imperial direction ("Convert units to") ─────────────────────────
+#. Data + formatters for the REVERSE direction: scanning metric units and
+#. showing imperial conversions, for readers whose preferred system is
+#. imperial ("us"/"uk"; "metric" is the classic direction and the default).
+#. One class-attached block of pure data/functions (not chunk locals: the main
+#. chunk sits near LuaJIT's 200-locals ceiling, and the headless test
+#. extractor lifts dotted blocks — same convention as FootFree._REPORTING).
+#. Imperial TARGET TAGS mark a conversion entry as metric-direction.
+#. _smart_round passes tagged values through untouched and _fmt_dist /
+#. _fmt_dist_range dispatch to fmt/fmt_range below, so the generic
+#. pipeline (single values, ranges, sidecar, popups) needs no other
+#. changes. Each tag's BASE unit (what `factor` converts into):
+#. ftin=feet, in=inches, mi=miles, lboz=pounds, oz=ounces, °F=degrees F,
+#. vol=LITERS (flavor picks fl oz / pints / quarts / gallons at format
+#. time), mph=mph, acres=acres.
+#. The user's preferred system: "metric" (default) | "us" | "uk".
+#. Metric-source unit → conversion entry (mirror of _UNIT_CONV). Bare
+#. one-letter "m"/"g" are identified from matched text but deliberately
+#. get special anchoring in the scan pattern (digit-adjacent only);
+#. tonnes are deliberately absent (register-tonnage ambiguity — standing
+#. decision); °C degree-symbol forms run as literal passes like °F.
+#. Square metric ("an eleven-square-metre cell" converted as LINEAR
+#. 36 ft before these — Nesbø sweep). Hyphen twins cover the
+#. adjectival form; conv keys must mirror the suffix strings exactly.
+#. Longest-first, like _UNIT_SUFFIXES (suffix identification + shy-book
+#. plain passes; "m"/"g" are identified here but anchored digit-adjacent
+#. in the pattern, and skipped by the shy plain passes entirely — a plain
+#. search for a single letter matches every occurrence of the letter).
+#. Square units FIRST: "…square kilometres" must not tail-match the
+#. linear "kilometres". Hyphen twins catch "eleven-square-metre".
+#. AFTER kilometers/centimeters/millimeters: "meters" is a tail of all
+#. three, and _identify_unit takes the first tail match.
+#. Eighth-inch fraction display for small lengths ("⅜ in", "1¼ in").
+#. Eighths, not quarters: quarter resolution mangled gun calibers ("9mm"
+#. = 0.354 in showed ¼ instead of ⅜ — Nesbø sweep), and eighths are the
+#. everyday US carpentry fractions anyway.
+#. Natural-compound imperial formatting. `v` is in the tag's base unit;
+#. `flavor` defaults to the live preference (tests pass it explicitly).
+#. Owns its own rounding (compounds round inherently), which is why
+#. _smart_round passes tagged values through. With the Smart Rounding
+#. toggle OFF, falls back to decimal single units ("5.9 ft").
+#. Inches, formatted DIRECTLY: routing through the "in" branch
+#. ping-pongs (its >=12-inch promotion sends 1–2 ft straight
+#. back here — stack overflow on any 0.3–0.6 m length; found
+#. by the Nesbø metric sweep).
+#. Sub-tenth values need two decimals — _fmt's single decimal
+#. printed "one gram = 0 oz" (Nesbø sweep). Never show 0 for a
+#. real amount.
+#. fl oz below one pint (UK) / one quart (US) — "17 fl oz" reads
+#. better than "0.5 qt". Whole fl oz from 2 up; decimals only for
+#. tiny amounts ("0.5 fl oz" for 15 ml).
+#. Range twin: format both endpoints; when both come out as simple
+#. "<number> <same unit>" strings, drop the first unit ("3.1–6.2 mi").
+#. Compound endpoints stay whole ("5 ft 11 in to 6 ft 2 in").
+#. ── Compound converters ───────────────────────────────────────────────────────
+#. "six foot two" / "6 foot 4" / "5 feet 3 inches" / "six-foot-four" → metres
+#. "6′9″" / "6'8"" / "6’9”" (curly, most commercial EPUBs) → metres
+#. "nine stone four" / "ten stone two" → kg  (stone + extra lbs)
+#. "seven pounds four ounces" / "two pounds, four ounces" / "1-lb 4-oz" → kg
+#. "four feet by two inches" / "6 ft by 3 in" → "1.8 m by 7.6 cm"
+#. f[eo]?[eo]?t matches feet / foot / ft (vowels optional → also "ft").
+#. "4′ × 2″" / "4' × 2"" dimension → "1.2 m by 5.1 cm"
+#. "10x10 feet" / "10×10 ft" → "3 × 3 m": two same-unit dimensions joined by
+#. x/X/× (no spaces — the spaced form "10 x 10 feet" only spans "10 feet"). Both
+#. numbers convert with the unit's own factor/target; nil if it isn't this shape.
+#. Range factory: "twenty or thirty feet" → "6.1 or 9.1 m" (keeps the connector)
+#. "twelve acres" / "200 acres" → "4.9 hectares" / "80 hectares"
+#. ── Convert a match to display string ────────────────────────────────────────
+#. Unit-first match: number in r._num, unit word in r.matched_text
+#. Compound height: "6 foot 4" detected via r._num2
+#. Compound stone: "nine stone four" via r._num2
+#. Compound lbs+oz: "seven pounds four ounces" via r._num_oz
+#. Custom converter (e.g. acres → hectares)
+#. Standard factor/offset conversion
+#. Standard (non-unit-first) match
+#. ── UK Imperial volume overrides ─────────────────────────────────────────────
+#. Applied when the book's dc:language starts with "en-GB" (UK volumes are always
+#. on now). UK volumes are ~20% larger than US equivalents.
+#. ── Pounds context classifier (weight vs. £ currency) ────────────────────────
+#. Always on now. Checks the prev/next context words that findAllText already
+#. returns — no extra document scan needed.
+#. Pound disambiguation (spelled "pound(s)" only — "lb"/"lbs" is unambiguously
+#. weight). Two tiers feed ONE weighted decision (see _pound_* helpers below):
+#. _CURRENCY_HARD — words with NO plausible weight reading (coin denominations,
+#. "sterling"). Their presence suppresses the match outright,
+#. at scan time, like the £ symbol.
+#. _CURRENCY_SOFT — money cues that CAN sit beside a real weight ("the crate,
+#. worth a fortune, weighed two hundred pounds"). These only
+#. *vote*: currency suppresses only when its cues outnumber the
+#. weight cues, so a weighty context rescues the match.
+#. gold/silver are deliberately in NEITHER list — "ten pounds of gold/silver" is a
+#. real weight (see the Around-the-World "in gold" flag); treating them as money
+#. would suppress genuine weights.
+#. transaction verbs
+#. money nouns
+#. financial nouns surfaced by the Gutenberg-corpus measurement (P&P/Verne):
+#. "to the amount of", "interest of", "per annum", "per cent", a marriage
+#. "settlement", "inherited", "expenses". Each has no weight sense.
+#. inheritance / estate vocabulary (P&P "a legacy of …", "his estate",
+#. "bequeathed"): money words with no weight sense.
+#. banking vocabulary (We Solve Murders corpus sweep: "a million pounds in
+#. untraceable bills" → 450 000 kg; "the NatWest account his grandad
+#. started for him with five pounds"). NOT "balance" — that's also a
+#. weighing instrument ("placed ten pounds on the balance"). A genuine
+#. weight near these words still ties and keeps.
+#. Currency PHRASES (multi-word; checked as bounded substrings). "in gold" /
+#. "in silver" mark money ("twenty thousand pounds in gold"), while the weight
+#. reading uses "of gold" ("ten pounds of gold") — so the phrase disambiguates
+#. without the bare word "gold"/"silver" wrongly suppressing genuine weights.
+#. "left <pron> <sum>" is the inheritance/will idiom ("her father … had left her
+#. four thousand pounds"). A bounded phrase keeps it from firing on "left" alone
+#. (turn left / left behind). If a real weight sits nearby ("left her ten pounds
+#. lighter") the weight cue ties and keeps it.
+#. Pound classifier helpers (pure; unit-tested in builder/lua_helper_tests.lua).
+#. `window` is the lowercased prev+next context around a spelled-"pound(s)" match.
+#. A hard currency cue (coin denomination / "sterling") means money, full stop.
+#. Soft decision: currency "wins" (suppress) only when its cues OUTNUMBER the
+#. weight cues, so a genuinely weighty context keeps the match even with a money
+#. word nearby. Ties keep (lean toward converting). `num` (optional) is the
+#. pound amount, used for the magnitude prior below.
+#. Phrase cues vote on the currency side. %f[%a]…%f[%A] frontiers keep them
+#. whole-word ("in gold", not "thin gold" / "in golden").
+#. Magnitude prior: in prose, amounts of a thousand pounds or more are almost
+#. always money — a person or object weighing ≥1000 lb (450 kg) is absurd
+#. (Pride & Prejudice: "twenty thousand pounds", "her fortune of thirty
+#. thousand pounds"…). Worth ONE currency vote — not more — so a single
+#. genuine weight cue ("the anchor weighed two thousand pounds") still ties
+#. and keeps the conversion. Hundreds are NOT boosted: 200–800 lb are real
+#. weights for people/loads (the CH30 "two/three hundred pounds" cases rely
+#. on this).
+#. ── Bare "degrees" temperature cue classifier ───────────────────────────────
+#. Bare "degrees" (no °F/°C, no "Fahrenheit"/"Celsius") is genuinely ambiguous
+#. in prose — angle ("banked forty degrees"), rotation, alcohol proof, compass
+#. heading, latitude, oven gas marks. Unlike the pounds classifier above
+#. (default keep, suppress on strong currency evidence), this GATES: the
+#. default is suppress, and a nearby cue word is required to opt a match IN.
+#. Reports #14/17/18/19/26/30/31/32/33 (Frostbite, The Postmortal) are all
+#. genuine Fahrenheit temperatures with a temperature word nearby.
+#. Class attributes (not `local`s) — see the 200-local ceiling note in
+#. references/gotchas.md; FootFree._IMPERIAL/._RadioDot use the same trick.
+#. Window-truncation helpers. The scan stores 15 context words each side (the
+#. pound currency classifier needs the wide view), but the number/range/idiom
+#. logic and the legacy filters are tuned for 8 — these trim back to the 8 words
+#. nearest the match so that behaviour is unchanged for everything but pounds.
+#. ── Metric edition helpers ───────────────────────────────────────────────────
+#. Directory containing main.lua (and metric_epub.lua).
+#. Pure-Lua EPUB rewriter (libarchive) — replaces the old python3 metric_epub.py
+#. so "Convert directly in the text" works on-device (Kobo etc., no Python).
+#. Loaded lazily and cached; the subprocess fork inherits the loaded module.
+#. Return just the converted value (no "original = " prefix).
+#. e.g. "1.8 m" from a match for "six feet".
+#. Compound matches carry pre-parsed numbers; mirror _convert's compound
+#. branches so the value is correct even before a _converted string is
+#. cached (e.g. a fresh fast-scan record shown in the tap popup).
+#. NOTE: _patches_path and _is_metric_mode are defined after _SIDECAR_DIR below.
+#. ── Sidecar cache ────────────────────────────────────────────────────────────
+#. Stored in KOReader's own data dir to avoid permission/space issues on
+#. external mounts. Key is the sanitised book path so it survives book moves
+#. only if the path is identical on next open.
+#. no separate area icon; length is the closest
+#. Append-only log of conversions the reader flags as wrong (Debug › Units in
+#. book › long-press › Flag). Kept as plain text so it can be pulled off the
+#. device over USB and discussed/fixed on a computer.
+#. Error reporting to the developer's collector (report-server/, a Cloudflare
+#. Worker + D1). Flags queue locally as JSON lines (_FLAG_FILE's sibling
+#. "report_queue.jsonl") and flush in a subprocess when a POST succeeds —
+#. e-readers are offline most of the time, so the queue IS the design. Upload
+#. happens only when the user turns on "Long-press units to send errors to
+#. the developer" (Advanced; default off). Pure helpers only in this table (no
+#. side effects at load) so the headless test extractor can pick it up.
+#. The deployed worker URL INCLUDING the /report path (see
+#. report-server/README.md). Empty = reporting disabled regardless of the
+#. user toggle. Can be overridden at runtime via the
+#. "footcream_report_url" reader setting.
+#. Minimal JSON string escaper for the hand-built report lines: escapes
+#. backslash, double quote, and all control characters (\n in sentence
+#. context being the common one).
+#. Blocking HTTPS POST (called from a subprocess only). True on HTTP 200.
+#. Icon-less replacement for ConfirmBox (which hard-codes a notice-question
+#. icon with no way to disable it): left-aligned prompt text over a
+#. Cancel/OK button row. Tap outside dismisses, like ConfirmBox. A class
+#. attribute rather than a chunk local — the main chunk sits near LuaJIT's
+#. 200-locals ceiling.
+#. cancel_callback (optional) runs when the user declines — via the Cancel
+#. button OR by dismissing the dialog with a tap outside. Used by the convert
+#. question to undo a picker-originated mode change.
+#. Headless test driver: accept every confirmation without showing the
+#. dialog. Set only by the VM verification runs (like KO_MULTIUSER, the
+#. variable never exists on a device).
+#: main.lua:1544
+msgid "Cancel"
+msgstr ""
+
+#. Developer marker: if this file exists, dev-only features turn on (currently the
+#. scan report). It lives in the same Mac↔VM shared debug folder that the report
+#. and other diagnostics already write to (/mnt/macos/debug = <repo>/debug on the
+#. Mac), so dev mode is flipped from the Mac side and never exists on a user's
+#. device. Enable:  touch <repo>/debug/.dev     Disable:  rm <repo>/debug/.dev
+#. Class attribute, not a local: this file is at the 200-local ceiling.
+#. True when the developer marker file is present.
+#. TEMP DIAGNOSTIC: append a timestamped step to a trace file in the (writable)
+#. data dir so we can localize a UI freeze. Remove once the freeze is found.
+#. Monotonic-ish wall clock in fractional seconds, for profiling scan phases.
+#. Drop the calling process's CPU priority to the minimum. Called inside the
+#. forked scan child so a single-core e-reader keeps cycles for the parent UI
+#. (page turns stay responsive) while the heavy whole-book findAllText runs.
+#. All failure modes are swallowed — niceing is best-effort, never required.
+#. Byte size of a file (cheap: seek to end, no read). Used as a stable proxy for
+#. a book's text volume when estimating scan duration for the progress bar —
+#. stable across font/layout changes, unlike page count.
+#. Seconds of scan time per epub byte, used to estimate the progress-bar ETA.
+#. Self-calibrated after every scan (footcream_scan_rate); this is just the
+#. first-ever-scan fallback, tuned for a slow single-core e-reader. Over-/under-
+#. estimates self-correct on the next book.
+#. Class attribute, not a local: this file is at the 200-local ceiling.
+#. PRIO_PROCESS, self, lowest niceness
+#. Set to a doc path when "Rescan book" is run on a converted book: after the
+#. revert reloads the document, onReaderReady picks this up and does the rescan +
+#. re-convert. Module-level so it survives the reloadDocument UI teardown that a
+#. scheduled callback on the old instance does not.
+#. ── GitHub auto-update ────────────────────────────────────────────────────────
+#. Installed version, read from this plugin folder's _meta.lua (single source).
+#. "v1.2" / "1.2.0" → {1,2,(0)}; numeric, dot-separated, leading v optional.
+#. is version a strictly newer than b?
+#. fallback if rapidjson is unavailable
+#. HTTPS GET. With dest_path, streams the body to that file (for the zip);
+#. otherwise returns the body string. Follows redirects manually (GitHub asset
+#. URLs 302 to a CDN host, which luasec won't re-handshake automatically).
+#. KOReader's standard short timeouts (10s/op, 30s total) — socketutil has
+#. globally overridden socket.tcp, so these bound connect/read. Our old 120s
+#. total could leave the network task hanging for two minutes on a bad
+#. connection. (DNS getaddrinfo still isn't bounded by these — it's a
+#. pre-socket system call — so a momentary DNS hiccup can still briefly
+#. block; that's a device/network state issue, not ours.)
+#. handled below
+#. DNS/host-resolution failures surface as "host or service not provided"
+#. — make that actionable rather than cryptic.
+#. After unzipping, find the directory that holds both main.lua and _meta.lua,
+#. wherever it sits in the archive (asset-zip root, "<name>.koplugin/", or the
+#. source zip's "<repo>-<tag>/plugin/"). Returns that path or nil.
+#. Shared by the subprocess and Android-synchronous update-install paths:
+#. download -> unzip -> swap the plugin dir in place. Returns "OK" or
+#. "ERR:<reason>". No UIManager use inside — the subprocess path can't.
+#. (Class attribute, not a local: this file is at the 200-local ceiling.)
+#: main.lua:1752
+msgid "Download failed: %1"
+msgstr ""
+
+#: main.lua:1756
+msgid "Update package didn't contain the plugin files."
+msgstr ""
+
+#: main.lua:1762
+msgid "Install failed — restored the previous version."
+msgstr ""
+
+#. Shared: interpret _do_install_update's result, offering a restart on
+#. success or surfacing the error otherwise.
+#: main.lua:1774
+msgid "Updated to %1.\n"
+"Restart KOReader now to load it?"
+msgstr ""
+
+#: main.lua:1775
+msgid "Restart"
+msgstr ""
+
+#: main.lua:1775
+msgid "Later"
+msgstr ""
+
+#: main.lua:1778
+msgid "Update failed."
+msgstr ""
+
+#. Path of the patch record for a given book (defined here so _SIDECAR_DIR is set).
+#. Path of the converted->original reverse-lookup sidecar for a given book.
+#. Path of the tiny file recording which scanner (CACHE_VERSION) produced a
+#. book's in-text conversion. On open, a converted book compares this with the
+#. current CACHE_VERSION; if the scanner has since improved, it can revert +
+#. rescan + reconvert so the conversion isn't stuck on stale logic.
+#. `total` (optional) is the book's hint count at conversion time. A converted
+#. book's _all_matches holds only the rewrite's leftovers, but the menu status
+#. line must keep reporting the full unit count in every mode (user-specified),
+#. so the pre-conversion count is stamped here alongside the version.
+#. `mode` (optional) is the tap mode the conversion was applied in (2 = the
+#. conversion appended alongside the original, 3 = replaced) so open/mode-
+#. switch flows know whether the on-disk text matches the active mode.
+#. `direction` is the preferred-units setting the conversion was made under
+#. ("metric"/"us"/"uk") — a converted book must revert when the preference
+#. changes, since the baked-in text is for the other system (us vs uk also
+#. differ: stones, imperial pints).
+#. The scanner version a converted book was made with, or nil if unknown (an
+#. older conversion predating this record — treated as stale so it updates
+#. once). Second return: the conversion-time hint count; third: the tap mode
+#. it was applied in (nil for conversions predating the stamp — those were
+#. mode 3, the only convert mode at the time); fourth: the conversion's
+#. direction (nil for stamps predating it — those were always "metric", the
+#. only in-text direction at the time).
+#. Escape ERE metacharacters so a converted string (e.g. "1.8 m") can be used
+#. as a literal alternative inside a findAllText regex pattern.
+#. xpointers look like ".../text().162" — split into the node path and the
+#. trailing character offset so overlapping matches on the same text node
+#. can be compared numerically.
+#. A match whose xpointer path runs through a heading element (h1–h6) lives in a
+#. chapter title or the book title, never body prose. crengine renders headings
+#. as "/h2/span/text()" etc., so the path contains "/hN" followed by "/" or "[".
+#. Such matches are dropped at scan time → never underlined, never rewritten.
+#. (Inlined at the two scan chokepoints as `(xp or ""):find("/h[1-6][%[/]")` to
+#. stay under Lua's 200-locals-per-chunk limit — no top-level helper slot.)
+#. Numeric document-order key for an xpointer: the sequence of integers it
+#. contains (DocFragment index, element indices, char offset). Comparing these
+#. numerically orders e.g. DocFragment[7] before DocFragment[10] — a plain
+#. string compare would wrongly put "[10]" first.
+#. Drop matches that overlap an already-kept match on the same text node,
+#. preferring the longer match (e.g. "9.30 m" over the substring "30 m").
+#. Needed because findAllText's alternation can return overlapping hits when
+#. one converted value is itself a substring of another.
+#. ── Donut progress indicator ──────────────────────────────────────────────────
+#. Pre-computed ring pixel list (built once, reused every frame).
+#. Angle from top, clockwise: 0 at top, 2π at top again
+#. Clear the circle area with white so we paint over page content cleanly
+#. Draw ring: filled arc = black, unfilled arc = light grey
+#. ── SVG scan-progress loader ──────────────────────────────────────────────────
+#. Custom artwork in assets/loader/<pct>%.svg (0..100 in 5% steps) replaces the
+#. hand-drawn donut. Each bucket's tile is rendered once and cached.
+#. Class attribute, not a local: this file is at the 200-local ceiling.
+#. on-screen size before DPI scaling
+#. Map a 0..1 progress fraction to the nearest available 5% bucket (0,5,..,100).
+#. Rendered Blitbuffer for a bucket, or false if it couldn't render (cached
+#. either way so we don't retry every repaint).
+#. Paint the loader at top-left (x, y). Falls back to the donut if the SVG
+#. can't be rendered. progress is 0..1.
+#. White disc behind the ring so it paints cleanly over page text.
+#. ── Underline styling ────────────────────────────────────────────────────────
+#. The underline is drawn 10% darker than the chosen intensity, for more contrast
+#. across the board (the menu still shows 10/20/30/40%, but 10% renders like 20%,
+#. … 40% like 50%). Applied in both the solid and wavy render paths.
+#. Greyscale underline color from a percent intensity: higher percent = darker
+#. line. 0% would be white, 100% would be black.
+#. The wavy underline tiles plugin/assets/wiggly-line.svg horizontally. The
+#. raw SVG (stroke="black", with or without a stroke-width attribute) is
+#. recolored and restroked per (raw underline-width, color %) combination,
+#. rendered once, and cached.
+#. Returns a rendered Blitbuffer tile, or false if rendering failed (cached
+#. either way so we don't retry every repaint).
+#. Template has no stroke-width attribute (defaults to 1) — add one.
+#. Render at the SVG's own aspect ratio (read from its root <svg width=.. height=..>),
+#. so a landscape tile isn't stretched/cropped into a square.
+#. 1 SVG unit = 1 scaled pixel, so stroke-width="raw_width" renders as
+#. raw_width actual pixels rather than being stretched by tile_w/svg_w.
+#. Draw a styled underline beneath `box` (screen coordinates).
+#. style: "solid" | "wavy"; width is in (already-scaled) pixels.
+#. raw_width/color_pct are the unscaled settings (1/2 Thin/Thick, 10-20-30-40), used to
+#. build the wavy SVG tile.
+#. Centre the tile's stroke on the same line as the solid
+#. underline's centre (box.h - width/2), not flush with the
+#. bottom of the box.
+#. Fall through to solid if the tile failed to render.
+#. ── Popup pointer arrow ─────────────────────────────────────────────────────
+#. A small triangular "speech bubble" pointer drawn row-by-row. The two
+#. slanted edges get a border stripe; the base (which overlaps the popup
+#. card) is left border-free so it visually merges into the card.
+#. "up": apex on top, base on bottom; "down": reverse
+#. apex x position, relative to the widget's left edge
+#. ── Underline preview widget ────────────────────────────────────────────────
+#. Renders just the underline (via _draw_underline) inside a widget the size
+#. of the sample word, so the Styling dialog can show a live preview.
+#. Radio marker, drawn (not a font glyph) so the fills and dark-mode behaviour
+#. are exact. Selected: a big filled-black disc with a smaller solid-white disc
+#. inside. Unselected: a thin black ring (empty). Drawn black-on-white always;
+#. KOReader's global night-mode inversion flips it to white-on-black for free.
+#. A class attribute (not a chunk local — the 200-locals ceiling), shared by
+#. the Styling dialog and the Mode picker. Edges are anti-aliased by per-pixel
+#. coverage (paintCircle is hard-edged and looked jagged at this size):
+#. coverage ≈ how far the pixel is inside the relevant radius, blended over
+#. the white background as a grey value.
+#. outer radius
+#. centre on the pixel grid
+#. inner white radius
+#. ring inner edge (unselected)
+#. 1 inside, 0 outside, linear across the edge
+#. final grey 0..255; nil = leave background untouched
+#. black-disc coverage
+#. white-inner coverage
+#. white bg → black disc
+#. white inner over the disc
+#. ring = outer minus hole
+#. Record the epub's mtime AS THE SIDECAR SEES IT, so staleness can be
+#. judged by equality against a later reading of the same value. Comparing
+#. epub mtime > sidecar mtime is broken on the VM/e-reader whenever the
+#. book lives on a network/shared mount whose clock differs from the
+#. device's: a freshly saved sidecar can look "older" than an epub stamped
+#. by the other clock, and gets discarded in an endless rescan loop.
+#. A scan of a CONVERTED (mode-3) book records only the leftovers the
+#. rewrite skipped — valid while the book stays converted, but poison
+#. after a revert: the revert's no-rescan optimization would resurrect it
+#. against the restored ORIGINAL text ("loaded 32 match(es)" on an
+#. imperial book, at converted-text positions). Mark it so the revert
+#. knows to delete rather than revalidate.
+#. Scan direction: an imperial-preference scan found METRIC units; its
+#. matches are meaningless under another preference (absent = "metric",
+#. the classic direction — backward compatible).
+#. Decimal mark used by the cached `converted` strings below. They are
+#. FORMATTED at scan time, so switching KOReader's UI language between a
+#. comma-decimal and a period-decimal locale leaves them stale ("1.8 m"
+#. in a German UI). Same staleness contract as `direction` above; absent
+#. means "." (every sidecar written before this existed).
+#. Core fields always written
+#. Vague-quantifier band ("a few hundred pounds"): flag it so Mode 3
+#. knows to skip it after a reload (the band can't be rewritten inline).
+#. For simple factor/offset matches: store raw unit+num+factor so
+#. UK volume recalculation can happen without a rescan.
+#. Load raw matches from sidecar — no settings applied yet.
+#. Call _apply_settings_to_matches() after this.
+#. Direction mismatch (preference flipped since the scan): the matches are
+#. for the other system entirely — rescan. Keep the file on a CONVERTED
+#. book (it's the preserved pre-conversion scan; the revert path needs it,
+#. and the post-revert load lands here again and deletes it then).
+#. UI language switched between a comma-decimal and a period-decimal
+#. locale since the scan: the cached `converted` strings carry the old
+#. decimal mark. Same handling as the direction mismatch above.
+#. Discard the sidecar if the epub has been modified since it was saved —
+#. its xpointers would point into text that no longer exists. The sidecar
+#. records the epub mtime it was scanned against; staleness is INEQUALITY
+#. between that and the current mtime (two readings of the same clock).
+#. Never compare epub mtime against the sidecar file's own mtime: when the
+#. book lives on a shared/network mount, its timestamps come from a
+#. different clock than the device's, and a mere few seconds of skew makes
+#. every freshly saved sidecar look "older" than the epub — an endless
+#. discard-and-rescan loop.
+#. While the book is CONVERTED, the sidecar on disk is the ORIGINAL-text
+#. scan: stale against the rewritten epub (mtime mismatch), but exactly
+#. what a future revert needs — the revert restores byte-identical text
+#. and re-stamps the recorded mtime, making this sidecar valid again with
+#. no rescan. So in metric mode a stale sidecar is unusable but must be
+#. KEPT on disk; only unconverted books delete stale caches (that removal
+#. is what forces the legitimate rescan after external file changes).
+#. Legacy sidecar without the recorded mtime: fall back to the old
+#. cross-clock comparison (better than accepting stale xpointers).
+#. for pounds classifier
+#. for pounds classifier
+#. for UK volume recalculation
+#. numeric value (nil for compound matches)
+#. US/default factor (nil for compound)
+#. offset (nil for compound)
+#. vague-quantifier band → Mode 3 skips it
+#. Write the converted->original map immediately after a metric edition is applied.
+#. Write the `map` block: each converted string maps to its category and an
+#. ordered list of the original phrases that produced it, one entry per
+#. occurrence in document order. Keeping the list (rather than a single
+#. "first writer wins" original) lets two different originals that round to the
+#. same converted string each recover their own text by position (6.2).
+#. Same recorded-mtime staleness model as _save_sidecar: equality against
+#. a later reading of the epub's own mtime, never a cross-clock comparison
+#. (see _load_sidecar_raw).
+#. Load the reverse map (and cached position scan, if present). Discards if
+#. the epub has been modified since the reverse sidecar was written.
+#. Recorded-mtime equality — see _load_sidecar_raw for why the old
+#. "epub newer than file" comparison is wrong across mount clocks.
+#. Rewrite the reverse sidecar with cached, fully-resolved match positions
+#. added, so future opens skip the one-time findAllText scan. Each cached entry
+#. already carries the specific original text for that position (resolved via
+#. document order), so the load path needs no further map lookup.
+#. Read the book's declared language tag (lowercased), empty string if unknown.
+#. True for en-*, or when language is unknown — empty or the ISO
+#. "undetermined" tag ("und", e.g. The Bell Jar's OPF) → don't block.
+#. True specifically for en-GB / en-UK (UK Imperial volumes).
+#. Human-readable label for the book's English-language variant, e.g.
+#. "UK English" / "US English". Returns nil for unknown/non-regional "en".
+#: main.lua:2481
+msgid "US English"
+msgstr ""
+
+#: main.lua:2482 main.lua:2483
+msgid "UK English"
+msgstr ""
+
+#: main.lua:2484
+msgid "Canadian English"
+msgstr ""
+
+#: main.lua:2485
+msgid "Australian English"
+msgstr ""
+
+#: main.lua:2486
+msgid "New Zealand English"
+msgstr ""
+
+#: main.lua:2487
+msgid "Irish English"
+msgstr ""
+
+#: main.lua:2488
+msgid "South African English"
+msgstr ""
+
+#: main.lua:2489
+msgid "Indian English"
+msgstr ""
+
+#. Apply current settings to a raw match list (no findAllText needed).
+#. Returns a new filtered+adjusted list. Safe to call multiple times.
+#. UK volume recalculation: if unit+num+factor stored, recompute with UK factor
+#. Pounds classifier: suppress when currency context clearly wins.
+#. Only the spelled-out "pound(s)" is ambiguous with £ sterling — the
+#. "lbs"/"lb" abbreviation is unambiguously weight (currency is never
+#. abbreviated "lbs"), so it must never be suppressed by money context
+#. (e.g. "one hundred lbs ... a month's wages" is still a weight).
+#. ── Unit conversion table ────────────────────────────────────────────────────
+#. Unit string → conversion data ({factor, offset, target, cat} or {converter,…}).
+#. The fast scan looks units up here after anchoring on the unit word.
+#. Land league = 3 statute miles (4.828 km). Common in 19th-c. prose
+#. (Frankenstein, Verne). The nautical league (5.556 km) is rarer; land is
+#. the safe default for general fiction.
+#. Ancient/biblical length: 1 cubit = 18 in = 45.72 cm. Appears in scripture,
+#. historical and fantasy prose ("three hundred cubits").
+#. Bare "degrees" (no F/Fahrenheit qualifier): ambiguous unit, gated by
+#. _degrees_temperature_cue at scan-finish (bare_degrees marks it so the
+#. gate can tell it apart from the unambiguous "degrees F"/"Fahrenheit"
+#. entries above, which never need the cue check).
+#. Longest-first so "miles per hour" matches before "miles", etc.
+#. Active direction picks the suffix set: imperial preference scans
+#. METRIC units (tests pass `list` explicitly).
+#. Extract measurement number from the tail of prev_text.
+#. Tries the last 1-4 words as a phrase to handle "three hundred", "a dozen", etc.
+#. Range converter: identifies unit from matched_text tail, splits on and/or/to.
+#. En/em dashes and a comma+space are range separators too ("five–six miles",
+#. "seven, eight feet"); see _detect_back_range. They're displayed as " to "
+#. (matching the word-range output) rather than echoed back verbatim.
+#. "four and a half feet" — separator is "and", second number is a
+#. fraction (0 < n2 < 1): treat as addition, not a range.
+#. "four and five feet" still has n2 ≥ 1 → handled as range below.
+#. Compound number addition: "a hundred and fifty" = 150.
+#. When n1 is a round hundred/thousand and n2 < n1, it's addition.
+#. Shared-scale correction: "two or three hundred yards" means
+#. 200–300 not 2–300. When n1 is a small integer and n2 is a
+#. round hundred/thousand whose leading digit exceeds n1, scale up.
+#. ~24 patterns. Compound entries first (win start-position dedup).
+#. broad=true / range_broad=true: unit identified from matched_text at scan time.
+#. kw = plain strings: ANY must appear in book text or pattern is skipped.
+#. kw_pat = Lua pattern: checked in addition to kw (OR logic).
+#. Safety guarantee: if a keyword is absent, the pattern CANNOT match.
+#. "five-hundred-and-eleven-foot" → 511 feet → metric.
+#. Defined here (after _UNIT_CONV) so the table lookup is in scope.
+#. ── Scan ──────────────────────────────────────────────────────────────────────
+#. The only scan path: do ONE findAllText over the unit alternation, then
+#. classify each unit hit in Lua from the number that precedes it. ~40x faster
+#. than per-pattern passes (measured: Lonesome Dove 108s -> 2.5s) because the cost
+#. is the per-call document walk, not the matching. Compounds (feet+inches,
+#. pounds+ounces, "6 foot 4", "nine stone four"), ranges, fractions, and prime/°F
+#. notation are all handled (the last two via dedicated literal passes below).
+#. The unit alternation is built from the FULL unit list (longest-first). "°F" is
+#. handled separately (a word boundary around "°F" doesn't behave); bare "in" is
+#. intentionally not in _UNIT_SUFFIXES — too easily the English preposition.
+#. "°F" (the degree-symbol form) is deliberately NOT anchored here: a leading
+#. dash/minus and the range forms can't be read reliably from prev_text, so
+#. °F is handled entirely by dedicated literal passes (_TEMP_PATS) instead.
+#. Left anchor: \b OR a digit lookbehind — regex \b never fires between a
+#. digit and a letter (both are \w), so fused forms ("260lbs", "6ft")
+#. produced no hit at all. The lookbehind keeps matched_text to just the
+#. unit, so the number path reads "…of 260" from prev_text unchanged.
+#. Metric-direction twin of _FAST_UNIT_PAT — exactly its shape, minus the
+#. one-letter aliases. "m"/"g" can't ride in this alternation at all:
+#. * a plain \b anchor lets "I'm" hit "m" via the apostrophe boundary,
+#. blowing the 2000-hit budget on every novel;
+#. * a branch-leading lookbehind ((?<=[0-9])[ ]?m) makes crengine return a
+#. CORRUPT START for its first match (smoketest6 caught a "match" running
+#. from a chapter heading to the first "1.8m");
+#. * a branch-leading digit class ([0-9][0-9.,]*[ ]?m) comes back with the
+#. start off by a character ("1.8m" reported as "8m", "500g" as "00g"),
+#. which the glued-number fallback then "fixes" into a truncated value
+#. (1.8 m read as 1 m, 500 g as 5 g).
+#. They run as dedicated literal passes instead (unit_pats below) — the
+#. standalone digit-leading shape is the proven _TEMP_PATS one.
+#. Single-letter metric aliases as literal passes (see above). The number is
+#. part of the match, so the value comes from _parse_num(matched_text) like
+#. the °F/°C passes. "m" takes an optional space ("1.8 m", "180m"); "g" only
+#. glued tight ("500g" — a spaced "5 g" is usually g-force, deliberately not
+#. matched). money=true arms the run_passes currency veto ("$50 m" = fifty
+#. million dollars; the symbol can share the word with the digits, so the
+#. veto raw-reads the characters just before the hit).
+#. Is this token part of a number phrase? (digit, number-word, or connector word
+#. like "a"/"and" that glue multi-word numbers such as "a hundred and fifty").
+#. A match's prev_text is the context before the UNIT, so it ends with the
+#. measurement's own number ("…his own two" for "two feet"). To test the word
+#. BEFORE the number — for idioms like "own two feet" / "with one foot" — strip
+#. the trailing number word(s) first, then return the last remaining word.
+#. The number phrase immediately before the unit, and how many words it spans.
+#. Walks back ONLY over consecutive number words, so "stood 5 feet 3" yields just
+#. "3" (1 word) — not "5 feet 3" — and "a hundred" yields 2 words.
+#. Spaced U+2044 fraction slash ("2 1 ⁄ 2 -inch plank", Sailor's Word-Book):
+#. collapse "N ⁄ M" to "N⁄M" so the word-walk below doesn't stall on the
+#. bare "⁄" token (it's not a number word). Digit-bounded, so ordinary
+#. prose is untouched; _parse_num accepts the spaced form directly.
+#. An em-dash or ellipsis glued to the number ("too far—eleven feet",
+#. "off course by…sixty miles", "park—four acres") fuses it into one
+#. non-number token and the walk bails. Both glyphs are pure separators
+#. here — neither joins compound numbers, and _detect_back_range matches
+#. its em-dash range connector on the RAW prev before this ever runs.
+#. (The en-dash is left alone: it IS a range connector glyph.)
+#. Fractional "<frac> of a/an [unit]" form ("two thirds of a mile"): the
+#. word-walk below can't cross "of", so handle it up front. The fraction is
+#. the word(s) just before "of a/an"; _parse_num knows these (e.g. prefix
+#. "two thirds of a" = 2/3). Span includes the trailing "of a" (2 words).
+#. Nested multiplicative fraction: "half a quarter of a mile" = ½ × ¼ = ⅛.
+#. The "<f1> a/an <f2>" shape means f1 OF a f2, so the values multiply
+#. (½ of ¼ mile, not ½ + ¼). Both parts must be sub-1 fractions.
+#. span covers "<f1> a <f2> of a" = 5 words.
+#. Additive "N and a/<frac> [unit]" form ("four and a half feet",
+#. "one and three-quarter leagues"): value = whole N + fraction. The fraction
+#. must sit at the END of prev (adjacent to the unit) and be only 1–2 words —
+#. otherwise a distant "…seven and a half yards … thirty-five" would wrongly
+#. bind "thirty-five" to that far-off fraction. Greedy `(.*)` takes the "and"
+#. closest to the unit. Returned with a third result `true` so the caller pins
+#. the conversion (matched_text's own _parse_num would prefix-match just N).
+#. span: <int> and <frac words>
+#. Leading-article fraction adjacent to the unit ("half a foot", "half an
+#. inch", "a quarter mile"): the trailing article ("a"/"an") breaks the
+#. number-word walk below, which needs the LAST word to be a number word, so
+#. it would bail. Parse the 2-word tail directly. Only a genuine sub-1
+#. fraction counts (½, ¼, ⅓), so the bare "a foot"/"an inch" idiom (value 1)
+#. is untouched, and "two and a half feet" still takes the additive path
+#. above first. This is what lets foot/inch (absent from _ART_DIST_UNITS)
+#. convert "half a foot" = ~15 cm, matching the "six inches" it equals.
+#. Both words must carry the fraction ("half a", "half an", "a
+#. quarter") — _parse_num prefix-reads, so "half long" (from "a mile
+#. and a half LONG and 1000 ft") would otherwise return 0.5 here and
+#. spawn a bogus 0.5–1000 back-range that eats the "1000 ft" match.
+#. Stop at a comma-terminated word: it belongs to a previous measurement, not
+#. this one ("five feet nine, two hundred thirty pounds" — the weight's number
+#. is "two hundred thirty", not "nine, two hundred thirty"). The window is
+#. wide enough for a long spelled compound ("seven thousand five hundred and
+#. twenty-four" = 6 words); the comma guard still bounds runaway reads.
+#. A clause-joining "and" must not START the span: "…feet long and four
+#. hundred and fifty feet" — the leading "and" connects two measurements, it
+#. is not part of this number. (Internal "and", as in "four hundred AND
+#. fifty", is kept — the walk merely stopped here, it didn't start here.)
+#. "a hundred" / "a thousand" / "a dozen": the article scales the following
+#. multiplier but isn't a number word on its own, so the walk above stops at
+#. "hundred". Pull "a"/"an" into the span when it forms a known "a <mult>"
+#. number (value is unchanged — "a hundred" == "hundred" == 100 — so this
+#. only widens the match to cover the article, no false positives).
+#. A digit mixed fraction ("2 1⁄2" / "2 1/2") is ONE number, not two
+#. adjacent numbers — the spelled composer below can't fold digit tokens,
+#. so the uncombinable-numbers advance would wrongly strand just the
+#. fraction ("1⁄2" → 1). Parse it whole and return early.
+#. Two adjacent but uncombinable numbers ("one fifteen feet" — "one [shark],
+#. fifteen feet") leave a leading number the composer can't fold in. Keep the
+#. UNIT-ADJACENT (rightmost) number: advance until the span composes whole.
+#. A spelled "minus" immediately before the number phrase negates it
+#. ("minus seventy degrees" = -70), the word form of the ASCII/Unicode
+#. dash signs _parse_num already honors before bare digits.
+#. Parse a leading "<number> [inches|ounces]" or bare "<number>" from next_text
+#. (the tail of a compound). Returns (value, "inch"|"oz"|"bare") or nil.
+#. A sentence boundary is NOT a compound separator. "Ten feet. Five." is a
+#. countdown, not "ten feet five inches" — reading the next number as inches
+#. produced "3.17 m". A period followed by whitespace + a capital letter is a
+#. new sentence; an abbreviation dot ("5 ft. 4 in") is followed by a digit,
+#. so it is still read as a compound.
+#. Strip leading spaces/commas/hyphens AND a stray period (from an abbreviated
+#. "ft." before the inches number), so the second number is found.
+#. A spelled-out "inch(es)"/"ounce(s)" marks a compound tail handled by the
+#. backward merge. The bare "in"/"in." abbreviation is reported separately
+#. ("in_abbr") so the caller can accept it ONLY right after a feet/ft unit —
+#. the one context where "in" reliably means inches, not the preposition.
+#. "clear" = "in" is the final token ("in." / "in," / "in"<end>), so it's
+#. safe to draw under the highlight. "in <word>" (a preposition like "in
+#. his socks") still counts as inches but its "in" is NOT highlighted.
+#. Words a number immediately after "or"/"to" belongs to — so it is NOT a second
+#. inches value. "five foot four or five minutes" must stay a single height, not
+#. become a 5'4"–5'5" range. Length units (feet/miles/yards/pounds) are included
+#. because "or six feet" is a separate measurement; "inch(es)" is deliberately
+#. absent ("five foot five or six inches" reinforces the height reading).
+#. After a feet+inches compound ("five foot five"), detect an "or/to K" tail that
+#. is a second inches value → a height RANGE ("five foot five or six" = 5'5"–5'6").
+#. `first_inch` is the already-parsed inches number; `next_text` is the text after
+#. the foot unit. Returns (K, connector) — K an integer 1..11, connector "or"/"to"
+#. — or nil. Guarded against a trailing noun the number really belongs to.
+#. new sentence, not a range tail
+#. the first inch token
+#. connector + remainder
+#. Forward "or/to M" range tail with NO repeated unit: "a mile or two",
+#. "one mile or two". The second operand must be a bare number NOT followed by a
+#. unit/noun it belongs to (so "three miles, or four miles" stays two separate
+#. matches, and "a mile or so" — _parse_num fails on "so" — is left as a single).
+#. Returns (M, connector "or"/"to") or nil.
+#. new sentence
+#. A thousands-separated continuation ("…miles, or 5,250 French leagues") is a
+#. restatement in another unit, NOT an "or two"-style range endpoint. The comma
+#. truncates mtok to "5", so detect the ",<digit>" right after it and bail.
+#. Forward "by M" dimension tail: "twenty feet by ten" → a 20×10 two-axis
+#. measurement in the SAME unit (the second number is bare). Rejected when the
+#. second number carries an inch/foot/yard unit of its own ("feet by ten inches"
+#. is the feet-by-inches path) or a noun it belongs to. Returns (M, phrase) or nil.
+#. Build a "phrase = converted" string for a known numeric value `val`. Used
+#. when matched_text's own _parse_num would disagree (e.g. additive "four and a
+#. half" prefix-parses as just 4), so the cached _converted carries the right value.
+#. Post-unit fractional tail: "two miles and a half" → +0.5, "ten feet and a
+#. quarter" → +0.25, "... and three quarters" → +0.75. This is the variant where
+#. the fraction trails the unit; the pre-unit additive form ("four and a half
+#. feet") is handled on the back side in _prev_num_words. Hyphens are normalised
+#. to spaces so "and three-quarters" matches. Returns (fraction, phrase) or nil;
+#. `phrase` is the space-normalised tail used to walk the match end forward.
+#. Require a word boundary after the phrase so "and a halfpenny" or
+#. "and a quartermaster" don't read as a fraction.
+#. Dynamic "and <numerator> <denominator>" tail not in the table above
+#. ("and three tenths" = 0.3, "and five eighths" = 0.625).
+#. ── Area ("square <unit>") ────────────────────────────────────────────────────
+#. "two or three square miles" reads as miles (length) without this — the cue
+#. word "square" between number and unit flips it to an area. Factors are the
+#. imperial area units in square metres.
+#. League already converts as a length (_UNIT_CONV, 4.82803 km); square of
+#. that same land-league factor (report #10: "twenty-three square leagues"
+#. was a straight miss — "square" ate the cue but no area factor existed,
+#. so the number-before-"square" word-walk had nothing to land on).
+#. Format a square-metre value with an auto-picked unit (km² / m² / cm²) and a
+#. ~2-sig-fig "nice" rounding (areas are inherently approximate).
+#. Area string for a single value or a range. `conn` (e.g. " or ", " to ") is the
+#. original connector so a range reads as prose. Both endpoints share the unit
+#. chosen for the larger one.
+#. Pick scale from the larger endpoint, scale both the same way.
+#. Range "N <conn> M [unit]" (unit appears once, e.g. "five to ten miles",
+#. "1 to 30 miles", "twenty or thirty miles"): detect from the lowercased
+#. prev_text. Returns (n1, n2, span-from-N-to-unit) or nil. "and" only ranges
+#. when M >= 1 — "N and a half" is the additive form handled in _prev_num_words.
+#. Multi-endpoint chain: "eight or ten to twelve and fifteen inches" — three or
+#. more numbers strung together by range/additive connectors. The author's intent
+#. is genuinely ambiguous, so we collapse to the OUTER endpoints (8–15) and let
+#. _range_conv_unit render the span from the full matched text. Only fires for 3+
+#. distinct numbers; a plain two-number range falls through to the pairwise logic
+#. below. Returns (min, max, span) or nil. Additive compounds ("one hundred and
+#. twelve") merge to a single value and so report <2 endpoints → nil.
+#. need ≥3 numbers + ≥2 connectors
+#. Longest suffix run of number-words / connectors only.
+#. Trim leading/trailing connectors off the run.
+#. Split the run into number segments on connector tokens; remember the
+#. connector that introduced each segment so additive "X hundred and Y" merges.
+#. Merge additive "<round hundred/thousand> and <small>" pairs into one value.
+#. a non-number snuck in → not a pure chain
+#. Word connectors, typographic range dashes (en/em), and a comma (the
+#. colloquial "seven, eight feet" = 7–8). A connector forms a range only
+#. between two numbers — the `n1 and n2` check below enforces that, so
+#. "five-foot" / "the giant, eight feet" can't become ranges. The ASCII hyphen
+#. is deliberately NOT a connector: it collides with spelled compound numbers
+#. ("twenty-five" → 20 and 5). The comma form requires a trailing SPACE (", ")
+#. so a thousands separator ("5,000 feet") isn't read as "5 to 000".
+#. The second operand is the rest after the connector (not just one token)
+#. so a scaled endpoint like "three–four hundred" (→ "four hundred") is
+#. captured; _parse_num prefix-reads its leading number. _range_conv_unit
+#. re-parses matched_text and decides range vs additive ("a hundred and
+#. fifty") and applies the shared-scale fix ("two or three hundred").
+#. EXCEPTION: the comma is the colloquial "seven, eight feet" form, which
+#. takes a SINGLE second number — a multi-word second operand there would
+#. read a height+weight ("five feet nine, two hundred thirty pounds") as a
+#. 9–230 range instead of two separate measurements.
+#. A foot/feet word right before the comma marks a feet+inches height
+#. ("five-foot, seven inches"), NOT a "5 to 7" range — leave it for the
+#. compound-tail merge so it reads 5'7" rather than a 5–7 inch range.
+#. Greedy `(.+)` matches the connector CLOSEST to the unit (rightmost),
+#. so an earlier same-word connector elsewhere in the window doesn't
+#. swallow the real range: "…can live, twelve or fifteen miles" must
+#. read "twelve or fifteen", not the "or" back in "can live, or …".
+#. "N unit <conn> M unit" form: N is followed by the unit word, so
+#. strip it before reading the first number ("5 miles to 10 miles").
+#. The second operand must sit RIGHT BEFORE the unit: after its
+#. number words, only the unit (or nothing) may remain. Otherwise a
+#. number far from the unit forms a bogus range — "four or five
+#. laborers on the foot[-path]" prefix-read "five …" as the endpoint
+#. and attached it to a unit five words away. (Comma form already
+#. captures a single trailing token, so it's exempt.)
+#. Enumeration guard: "gave 95, 128, and 103 fathoms" — when the
+#. word right before the first endpoint is itself a comma-terminated
+#. NUMBER ("95,"), the connector joins items of a LIST, not the two
+#. ends of a range. Bail entirely: the normal single path then
+#. converts the unit-adjacent value ("103 fathoms"). Genuine ranges
+#. ("between fifty and a hundred", "…can live, twelve or fifteen
+#. miles") have a non-number word there and are unaffected.
+#. "a"/"an" are accepted: they article a multiplier ("…and a
+#. hundred fathoms" → 50–100). Everything else must be a number.
+#. Any numbers qualify (incl. 0 / negative, e.g. "−10°F and 0°F").
+#. The additive "N and a half" form is excluded structurally: its
+#. connector is followed by two tokens ("a half"), not the single
+#. token mtok matches. _range_conv_unit sorts out range vs additive.
+#. The comma form is a colloquial consecutive estimate ("seven,
+#. eight feet") — the two values are always close. A large gap
+#. means it isn't a range at all, e.g. "aged about forty-four, six
+#. feet" (age, then height). Cap the comma range at a 3× ratio.
+#. "N and <fraction>" is the ADDITIVE form, not a range: "one and
+#. three-quarter leagues" = 1.75, "four and a half feet" = 4.5.
+#. Bail so _prev_num_words composes the whole value.
+#. "<scale> and <small>" is one ADDITIVE number, not a range:
+#. "one hundred and twelve" = 112, "eight thousand and ninety-two"
+#. = 8092, "thirteen hundred and eighty-two" = 1382. The "and"
+#. joins parts of a single number, so bail and let the normal
+#. single-number path read the whole compound (correct value AND
+#. span). A true range keeps n1 off a round hundred ("ten and
+#. twenty") or n2 ≥ 100 ("between one hundred and two hundred").
+#. Vague quantified amounts: "a few hundred pounds", "some dozen feet". The
+#. WRITTEN number is just the multiplier (hundred/thousand/dozen), so a single
+#. point conversion is false precision — the real quantity is the multiplier
+#. scaled by an indefinite band ("a few" ≈ 2–5×). We convert it as a metric band
+#. instead. Multiplier words whose bare value (and nothing more) carries the
+#. amount; "score"/archaic forms deliberately omitted.
+#. Quantifier → {low, high} multiplier band. low==high renders as a single "≈ X".
+#. Longest-first so "a couple of" beats "couple", "a few" beats "few".
+#. Given the lowercased prev_text (which ends with the multiplier word, the
+#. written number for these matches), return {qlow, qhigh, qword, mult} when it
+#. is a vague-quantified amount, else nil. Engages ONLY when the written number
+#. is a BARE multiplier ("a few hundred", not "a few two hundred") preceded by a
+#. vague quantifier — so precise amounts ("two hundred pounds") are untouched.
+#. drop the multiplier word itself
+#. char before the quantifier
+#. Is this unit hit the FIRST unit of an "N unit <conn> M unit" range? (Detected
+#. from next_text starting "<conn> M <same-unit>".) If so it's skipped — the
+#. second unit hit emits the whole range, avoiding a duplicate "15°F"/"5 miles".
+#. °F: unit fused into the number
+#. Latitude/longitude coordinates ("47° 24′", "69° 50′ 72″") use the arcminute
+#. (′) and arcsecond (″) marks — the SAME glyphs as feet/inches — so a prime pass
+#. would mis-convert "24′" to 7.3 m. Detect the coordinate context and skip.
+#. ° U+00B0
+#. crengine drops the ° byte that sits immediately before the matched prime (its
+#. own degrees mark), so we can't rely on it being in prev_text. Instead scan the
+#. whole prev+next window for coordinate signals — in a "<n>° <n>′ … <n>° <n>′"
+#. run the OTHER component's ° (and the lat/long vocabulary) survives. All signals
+#. are abbreviation-safe: a real feet/inch prime ("the room was 12′ long",
+#. "6′ tall") carries none of them.
+#. A degree symbol anywhere in the window (the paired component's °).
+#. Coordinate vocabulary — full words and the safe abbreviations only.
+#. "lat" / "lat." (not "flat"/"later")
+#. "deg"/"deg." (degrees)
+#. "W. long" / "E. long" — a directional letter guards the otherwise-risky
+#. "long" (so the adjective in "12′ long" is NOT matched).
+#. Astronomy: arc-minutes/-seconds of celestial measurements ("the
+#. acceleration of the moon is 56″", "the constant of aberration … 20″")
+#. use the same glyphs as feet/inches. These nouns have no plausible
+#. co-occurrence with a real feet/inches prime measurement.
+#. Prime/apostrophe notation (6′8″, 3″, 5'11", 4′ × 2″) isn't anchored on a unit
+#. word, so these run as their own findAllText passes (longest-first so the
+#. feet+inches form claims "6′8″" before the bare feet/inches forms).
+#. All °F (degree-symbol form) handling runs as dedicated literal passes, like
+#. the prime passes — the unit-anchored stage can't reliably read a leading dash
+#. from prev_text (it would drop the sign, or emit the two endpoints as separate
+#. singles), so °F is intentionally absent from _FAST_UNIT_PAT. Longest-first:
+#. both-°F range, then trailing-°F range, then the bare value. Each number takes
+#. an optional dash prefix covering "−10°F"/"–10°F"/"—10°F"/"-10°F".
+#. °F  (U+00B0 'F')
+#. "−10°F and 0°F" / "15°F to 75°F"
+#. "15 to 75°F" (only the trailing endpoint carries the symbol)
+#. "98°F" / "−10°F"
+#. Metric-direction twin: °C literal passes (imperial preference only). Same
+#. degree-symbol anchoring problem as °F; same longest-first structure.
+#. °C
+#. Does prev_text end with "<unit> [,/and] <number>"? Confirms a compound tail
+#. even with a comma or "and" connector ("two pounds, four ounces",
+#. "5 feet and 3 inches"), not just a plain space.
+#. Separator after the foot/pound word may be a space, comma OR hyphen — the
+#. last covers fully-hyphenated compounds like "six-foot-five-inch", whose
+#. prev_text ends "...six-foot-five-" (no space/comma before the inches).
+#. "a/an <unit>" read as the number 1 — but ONLY for distance units that rarely
+#. read figuratively, AND only when a spatial cue sits right beside it. This
+#. catches "a league from the city" / "a mile distant" / "a league in width"
+#. while leaving the homonyms alone ("a league of nations", "go the extra mile",
+#. "a foot in the door" — foot isn't even in the set). Article = 1 is otherwise
+#. not honoured (parse_num("a") is nil); "a hundred miles" already works via the
+#. multiplier path.
+#. first word AFTER the unit
+#. "a mile or two" (range, still a distance)
+#. Directional continuations: "a mile down the road", "a league up the
+#. coast", "a mile out". (Corpus-sweep misses: Bury Our Bones' dialogue
+#. -initial "A mile down the road".)
+#. FALSE entries are attributive compound tails: "ran a mile RELAY" /
+#. "a mile RACE" — the unit modifies the following noun ("a [mile relay]",
+#. not a distance), so no prev cue may force a conversion. (CH31 spec:
+#. "ran a mile relay" must NOT match — the motion-verb prev cues would
+#. otherwise fire on "ran".) Kept in this table to respect the Lua
+#. 200-locals ceiling; _article_distance_one checks == false explicitly.
+#. "<unit> in <dim>"
+#. phrase ending right before the article
+#. "for a mile" — extent of an action ("carried for a mile", "stretched
+#. for a mile"): practically always a genuine distance (Tainted Cup
+#. corpus-sweep miss; user-approved 2026-07-06).
+#. Motion verbs: "go a mile", "walked a league", "rode a mile" — a motion
+#. verb directly before "a <distance-unit>" always reads as distance (KJV
+#. corpus-sweep miss: "compel thee to go a mile"). Matched with a word
+#. frontier below, so "ago" can never satisfy "go".
+#. Returns true if `unit` is "a/an <distance-unit>" with an adjacent spatial cue.
+#. bare article only
+#. "<digit-token> of a <unit>" is a FRACTION of the unit — the OCR-mangled
+#. "3 4's of a mile" (= ¾ of a mile) or "1⁄120 of a mile" — not the
+#. article-as-one shape; "a mile = 1.6 km" would overstate the distance.
+#. Spelled fractions ("three quarters of a mile") parse upstream and never
+#. reach this path, so only digit-bearing tokens need rejecting.
+#. spatial cue FOLLOWING the unit (== false marks an attributive tail —
+#. "a mile relay" — which blocks the prev cues too)
+#. spatial cue PRECEDING the article ("distance of a", "more than a", …).
+#. %f[%a] frontier: the cue must start a word ("ago" must not satisfy "go").
+#. 15 context words each side (was 8): the pound currency classifier reads
+#. the full width to catch £ cues that sit beyond 8 words. Everything else
+#. (number/range/span logic, the legacy filters) trims back to 8 via
+#. _last_words/_first_words so its behaviour is unchanged. (Corpus measure:
+#. 15 is the sweet spot — recovers ~10 out-of-window currency cases with no
+#. genuine-weight loss; wider starts crossing sentence boundaries.)
+#. Active direction: imperial preference scans METRIC units (metric →
+#. imperial); the default scans imperial as always. Read once per scan —
+#. the subprocess inherits the parent's settings snapshot.
+#. Soft-hyphen books break the REGEX findAllText path: hits near U+00AD
+#. words come back span-shifted or go missing entirely (probe-confirmed on
+#. The Rise and Fall of the Dinosaurs: "Indianapolis is 1,700 miles"
+#. produced NO hit; "seven-ton" surfaced as the garbled "en-t"; a bare
+#. alternation without \b is equally broken, so it's the regex engine
+#. itself, not the anchors). The PLAIN (non-regex) search path handles the
+#. same text correctly, so such books scan with one plain pass per unit
+#. alias instead — slower, but correct. Detection: file-level, via
+#. metric_epub's libarchive reader — no crengine text API exposes the
+#. character (context extraction strips it; the plain search path skips it
+#. for matching, so it can't even be searched for). (Known limitation: the
+#. prime/°F literal passes below stay regex, so prime notation adjacent to
+#. soft-hyphenated words can still skew in such books — not seen in
+#. practice.)
+#. start xpointer -> true (longest alias wins)
+#. One-letter metric aliases are excluded from the shy plain
+#. passes: a PLAIN search for "m"/"g" matches every occurrence of
+#. the letter (known limitation for soft-hyphen books).
+#. True \b on BOTH sides, by reading the adjacent character in the
+#. node: plain-path prev_text/next_text are WORD-based (they stop at
+#. word boundaries), so a mid-word hit ("15 mi|nutes", "one kn|ows",
+#. "s|mile|s") looks clean in its contexts and would sail through
+#. every string guard. A digit on the left stays allowed ("260lbs" —
+#. mirrors the regex path's digit lookbehind).
+#. Per-alias passes lose document order; the compound-merge logic
+#. (feet+inches etc.) depends on it. Restore it.
+#. Real scan progress (read by the parent's _pollFastScan over
+#. _SCAN_PROGRESS_FILE). findAllText above is one opaque pass, but the per-hit
+#. loop below is the dominant cost and its length (#hits) is known now, so we
+#. report i/#hits as genuine progress. _tA1 (the findAllText duration) is sent
+#. alongside so the parent can size the pre-loop band proportionally. Writes
+#. are atomic (tmp + rename) so a torn read can never mis-parse; every failure
+#. is ignored (the parent just falls back to its time-based estimate).
+#. crengine word-navigation wrappers: pcall-guarded, return nil on failure.
+#. Extend a start xpointer back over the number, validating by text so it
+#. crosses hyphens (which getPrevVisibleWordStart treats as word breaks, so
+#. "six-foot-four" would otherwise stop the underline at "-foot-"). Returns
+#. the position where the text begins with `num`; falls back to the plain
+#. word-count position if no exact text match is found.
+#. Never extend the number across a sentence boundary: in "…not one
+#. hundred miles from Shanghai. A hundred miles" the earlier "hundred"
+#. (=100) belongs to the previous sentence, so without this the span
+#. merged both. A boundary is [.!?] + space + a capital (an "ft. 4"
+#. abbreviation is followed by a digit, so it doesn't trip this).
+#. Validate by parsing the WHOLE span text, not just the first token:
+#. a space-separated spelled compound ("seven thousand five hundred and
+#. twenty-four") only equals `num` once the entire phrase is covered,
+#. and getPrevVisibleWordStart splits hyphenated parts ("twenty-four"
+#. → "twenty" + "four"), so the old first-token + step-count check
+#. stalled mid-number. _parse_num reads the leading number of `t` and
+#. stops at the unit, so it grows 524 → 1524 → 7524 as we step back and
+#. matches only at the true start. The i >= span gate still defers a
+#. match whose last word alone equals num ("one hundred" → stop at
+#. "one", not "hundred"; "a hundred" → include the "a").
+#. Range lower-endpoint rescue: a range like "fifty and a hundred
+#. fathoms" has its two numbers glued by "and", so _parse_num(t)
+#. composes the whole span multiplicatively ("fifty … hundred" =
+#. 5000) and never equals the range's first number (50). Accept the
+#. candidate when the text UP TO THE FIRST range connector parses to
+#. num — that's the start of the lower endpoint. ("or"/"to" ranges
+#. already match at line above because _parse_num stops at those.)
+#. Offset fallback: when the unit was matched as a SUBSTRING of a
+#. hyphen-fused token ("five-thousand-five-hundred-mile"), the unit's
+#. start is mid-word and getPrevVisibleWordStart can't step back through
+#. it, so the loop above gives up at "-mile". The number and unit share one
+#. text node, so jump straight back by the length of the trailing number
+#. text in prev_text and confirm by re-reading the text (a wrong guess
+#. simply isn't accepted). Tries a couple of connector widths ("-"/none).
+#. Cross-node fallback: the number lives in one or more text nodes
+#. BEFORE the unit's node — the unit was wrapped in an inline
+#. element (<span>/<i>), or a <br/>/soft-break split the compound
+#. across nodes. Same-node offset math (above) can't reach a prior
+#. node, and the word walker stalls at the first hyphen. So step
+#. back NODE by NODE: at each earlier node, read its text up to the
+#. unit and look for the known number surface (numtext). Accept the
+#. LAST occurrence (the one adjacent to the unit), re-validated by
+#. text — a wrong guess is simply not returned.
+#. The number's first token ("five" of "five-thousand-…", "four"
+#. of "four-and-a-half"). Searched literally; the FULL value is
+#. then confirmed by parsing the text from that point to the unit,
+#. which tolerates an internal break char a <br/> may inject (a
+#. newline splits the tokens but _parse_num composes them anyway).
+#. All start offsets of `head` in this node, latest first
+#. (the occurrence adjacent to the unit is the right one;
+#. "five-thousand-five-hundred" has two — the earlier
+#. validates, the later "five-hundred" doesn't).
+#. Step into the previous node: one visible-word step back from
+#. this node's start crosses the boundary.
+#. Extend an end xpointer forward to include the second number of a compound
+#. ("six-foot-|four", "6 foot |4"). With include_in, also pull a trailing
+#. "in"/"in." inch abbreviation under the highlight ("five ft. seven |in.").
+#. Returns the original end if the second number isn't found.
+#. The second number of a compound — read from the text BETWEEN the first
+#. match's end and the unit hit (exactly the inches/ounces number, robust to
+#. a fused "4-oz" token that a prev_text word-walk mis-reads as "1-lb 4"→1).
+#. Falls back to the single word just before the unit.
+#. Metric-direction money guard: "$50 m" / "£3m" / "€2 m" is a money
+#. abbreviation (millions), not meters/grams — the currency symbol
+#. glued to the number gives it away. The number is usually INSIDE
+#. matched_text (the m/g pattern branches include it), leaving
+#. prev_text ending on the bare symbol — hence the optional digits.
+#. skip heading/title text
+#. A fraction DENOMINATOR right before the unit is not the measurement
+#. value — e.g. the OCR-mangled "not over 1 /10; inch" (= one-tenth inch)
+#. ends its context "...1 /10; " and would otherwise read "10 inch" =
+#. 25 cm. The "<num> / <num>" shape (optionally trailing ";") can't be
+#. reliably recovered, so suppress rather than emit a wrong value (cf.
+#. CH18 mangled fractions).
+#. (space REQUIRED before the slash: that's the OCR-mangled signature
+#. "1 /10; inch". A tight "19-3/10 miles" / "1-3/8 inches" is a clean
+#. ASCII mixed fraction and must convert — sweep batch 2.)
+#. Range "N <conn> M unit" — reuse the classic _range_conv_unit for
+#. the actual conversion. No _unit/_num is set, so the sidecar keeps
+#. the range string verbatim (UK-volume recalc would otherwise
+#. collapse it to a single value).
+#. Area: "two or three square miles" / "fifty square feet" — the cue
+#. word "square" sits between the number and the unit, so the length
+#. path would mis-read it as miles/feet. Convert to metric area
+#. (km²/m²/cm², auto). Sets range_done so the length branches skip.
+#. Hyphenated adjectival compounds ("a three-million-square-foot
+#. cave", "a 250,000-square-foot room") glue "square" to the unit
+#. with a hyphen, not a space, so the cue check needs the same
+#. hyphen-to-space normalization _prev_num_words/_compose_spelled
+#. already do internally — otherwise this falls through to the
+#. plain length path with the LINEAR foot factor, badly wrong and
+#. missing the ² (report #22-24: 250,000-square-foot → 76 000 m
+#. instead of ~23 000 m²).
+#. Original connector for prose ("two or three" → " or ").
+#. Range detection reads breadth of prev_text, so feed it the legacy
+#. 8-word slice (the wider window is for the pound classifier only).
+#. Extend back to the FIRST position whose text parses to rn1
+#. (span = 1). A fixed span miscounts when the connector isn't a
+#. word: "seven, eight feet" puts "seven" one step nearer than
+#. "five to ten" does, and the old span overshot past it, so the
+#. range collapsed to just "eight feet".
+#. Restore a dropped leading minus: extend_start can land AFTER a
+#. U+2212/"−" it couldn't text-validate, so mt would read "10°F"
+#. and _range_conv_unit would flip the negative first endpoint.
+#. Compound TAIL: inches/ounces right after a feet/pounds match —
+#. merge into the previously emitted match instead of standing alone.
+#. Dimension "feet by inches": "four feet by two inches" → ONE unit
+#. ("1.2 m by 5.1 cm"). Unlike a feet+inches height (summed), this is
+#. two independent measurements, so pin _converted via _conv_ft_by_in
+#. rather than the _num/_num2 height path.
+#. block single-unit recompute
+#. Fused digit+unit ("260lbs", "9mm"): the digits share the
+#. hit's own WORD, so crengine's word-based prev_text ends
+#. before them ("…must weigh upwards of "). Read the raw
+#. characters just before the hit and take a glued trailing
+#. number. Probed FIRST — a glued digit IS the measurement,
+#. and a spelled number further back is a count: "It takes
+#. two 9mm…" used to read as 2 mm (Nesbø sweep). The span is
+#. extended by exact offset (validated by re-reading the
+#. text), not by word-walking.
+#. Bare-article "a million miles" is hyperbole, not measurement
+#. ("walked a million miles to get a coffee", "a million miles
+#. an hour/away") — user-approved suppression, 2026-07-06 sweep:
+#. all 7 corpus occurrences were figurative. Only the bare form:
+#. digits ("1,000,000 miles") and real multiples ("two million
+#. miles", "ninety-three million miles") still convert. "half a
+#. million miles" is DELIBERATELY caught too: the composer reads
+#. it as bare million (1e6, 2x the real value), so suppressing
+#. beats emitting a wrong number.
+#. (miles-family covers the speed aliases too: "miles an hour"/
+#. "miles per hour"/"mph" are their own unit hits, not "miles".)
+#. Vague bands are metric-direction-deferred ("a few hundred
+#. meters" → band) — stage 2 of the imperial direction.
+#. Vague quantified amount ("a few hundred pounds") → convert
+#. as a metric BAND ("≈ 90–230 kg") rather than a false-precise
+#. point. Always rounded (vagueness demands it, regardless of
+#. the Smart Rounding toggle). Flagged _vague so Mode 3 skips it
+#. — "a few hundred pounds" can't be cleanly rewritten in place.
+#. Forward compound: "6 foot 4" (height) / "nine stone four".
+#. An inches component is always < 12 (12+ would be another
+#. foot). Capping it stops a bare trailing number that isn't
+#. really inches from being absorbed — e.g. "ten feet, twenty"
+#. (a metaphor) was read as 10 ft 20 in = 3.56 m; now it stays
+#. "ten feet". Legit "5 feet, 4 inches" (4 < 12) is untouched.
+#. "six foot four" / "five ft. seven in." → feet+inches height.
+#. Range tail: "five foot five or six" → 1.65 or 1.68 m.
+#. Only for a bare inch, guarded against "or five minutes".
+#. Keep the connector word so it reads as prose, not "1.65–1.68".
+#. Fractional inch tail: "six feet, one and a half inches"
+#. → 1.5" (the bare merge above only took the integer "one").
+#. Only honoured when an "inch(es)" word actually follows the
+#. fraction, so "six feet, one and a half MILES" isn't read as
+#. 1.5 inches. Grows the span to cover "<frac> inches" too.
+#. "5 ft 7 in" — accept the abbreviation only with an
+#. explicit "in" tail; a bare "5 ft 200" is NOT a height.
+#. "10x10 feet" → "3 × 3 m": NxN dimension, both values
+#. converted (vs the single-value path that ignored the x10).
+#. "N-foot-by-M-foot" dimension adjective ("a twenty-foot-
+#. by-hundred-foot rectangle", The Gene) — convert BOTH
+#. sides ("6 × 30 m"); the single path read only the first
+#. foot and showed a bare "6 m".
+#. "84 degrees Fahrenheit instead of 86" → a 84–86 range (the
+#. writer contrasts two temperatures). Scoped to temperature:
+#. "instead of" is too unusual a connector to treat as a range
+#. for distances/weights. The forward walk is parse-based so it
+#. spans a hyphenated spelled second value ("eighty-six").
+#. Post-unit fractional tail: "two miles and a half" → 2.5.
+#. Walk the end forward to swallow the tail words, then pin the
+#. value to num+frac. Skipped if a compound/range already claimed
+#. the slot, and only for plain factor units (not foot+inch).
+#. Forward "or M" range tail with no repeated unit: "one mile
+#. or two" → 1–2. (The article form "a mile or two" is handled
+#. in the article branch.) Distance/length only, to avoid
+#. re-reading weight/temperature "or" as a range here.
+#. Forward "by M" dimension tail: "twenty feet by ten" →
+#. "6 × 3 m" (both axes share the unit; second number is bare).
+#. "not two miles away" — a negation directly before the number
+#. marks the distance as vague/approximate, so round the
+#. converted value to a whole number in its display unit
+#. (3.2 km → 3 km). Plain single length values only, and only
+#. when Smart Rounding is on (exact mode stays exact).
+#. If matched_text's own _parse_num would disagree with the
+#. value we computed (e.g. additive "four and a half" parses
+#. as just 4), pin the conversion to the right value.
+#. "1,800 lbs." / "18 lb." — pull a trailing abbreviation
+#. period into the span (cleaner Mode-3 rewrite + underline).
+#. Skip a sentence-ending period (". " + a capital), which is
+#. punctuation, not part of the "lbs." abbreviation.
+#. "a/an <distance-unit>" → value 1, either with a spatial cue
+#. ("a mile away") OR a post-unit fraction ("a mile and a half"
+#. = 1.5), which is itself a measurement even with no separate
+#. cue. Extend the start back to swallow the article; accept
+#. only if the span really begins with "a "/"an ".
+#. "a mile and a half" → 1 + fraction. Walk the end forward
+#. over the "and a half" tail and pin the value.
+#. "a mile or two" → range 1–M. Walk the end forward over
+#. the "or two" tail and render as a prose range. (Capture
+#. BOTH returns with a plain if — the `a and f() or nil`
+#. idiom truncates f()'s 2nd value, leaving conn nil and
+#. crashing the "<conn>" concatenation below.)
+#. per-hit loop done; the prime/°F tail below is the last sliver
+#. Prime notation — skip these extra passes ONLY when we can positively
+#. confirm the book has no prime/apostrophe-inch notation. The gate text is
+#. read via getPageXPointer, which can fail in the forked subprocess (paging
+#. not resolved) even though findAllText works fine — so if bt is
+#. unavailable, run the passes rather than silently dropping primes.
+#. Literal-match passes (primes, °F): run longest-first, deduped by start AND
+#. end xpointer so a range claims its span before the single-value pass can
+#. re-match an endpoint. seen_end is shared with the main unit loop above.
+#. Headings (h1–h6: chapter/book titles) are never converted.
+#. A lat/long coordinate prime (′ arcminute / ″ arcsecond)
+#. is not feet/inches — claim the span so no pass converts it.
+#. The hit window is only 5 words; dictionary/astronomy
+#. prose can hold the giveaway noun further back
+#. ("ABERRATION. In astronomy, … the progressive motion
+#. of light, is established 20″" — 20 words). Re-run the
+#. vocab check on the tail of the match's own paragraph.
+#. Currency veto ("$50 m" = fifty million dollars, not
+#. fifty meters). The symbol often shares the hit's own
+#. WORD with the digits, hiding it from the word-based
+#. prev_text — so also read the raw characters just
+#. before the hit (same trick as the glued-number
+#. fallback in the main loop).
+#. block tail sub-matches
+#. Literal passes are direction-specific: primes and °F are imperial
+#. SOURCE notations; °C is the metric-direction twin.
+#. Single-letter aliases ("1.8m", "500g") — see unit_pats for why
+#. these can't ride in the main alternation.
+#. Drop overlapping spans. The main loop only deduped by END xpointer
+#. (seen_end), so a compound height that didn't merge — e.g. a "foot" hit
+#. ("six-foot") plus the orphaned "inch" hit ("six-foot-five-inch") that
+#. shares its start, or a "feet, one" compound plus an overlapping "one and a
+#. half inches" — left two partially-overlapping matches. This collapses each
+#. such pair to a single match (longest span at a shared start wins, which is
+#. the foot-anchored compound), the same interval filter the reverse path uses.
+#. ── Init ──────────────────────────────────────────────────────────────────────
+#. Developer mode (hidden from users via a marker file). Drives the scan
+#. report; future dev-only tooling can gate on self._dev_mode too.
+#. set true once a scan/sidecar-load completes (6.1)
+#. _enabled is PER-BOOK ("Enable Footcream in this book"): loaded from the
+#. book's doc_settings in onReaderReady, default true. It is independent
+#. of the conversion mode: switching modes (or reverting/removing a
+#. book's data) must never silently flip it. The old GLOBAL
+#. footcream_enabled setting is retired (it meant "global" in mode 1 but
+#. "this book" in modes 2/3 — user-flagged as confusing 2026-07-14);
+#. clean up the stale key so nothing resurrects it.
+#. Distinguish pounds (weight vs £) and UK volumes are always on — their
+#. menu toggles were removed to slim the plugin down.
+#. Smart Rounding of Converted Units: default ON (nil treated as true)
+#. Show unit icon in tooltip: default ON (nil treated as true)
+#. Tooltip size: small / medium / large. Default "large" (the original look,
+#. so existing users see no change). Validated against the presets table.
+#. Underline styling: solid/wavy, 10/20/30/40% grey, Thin/Thick (1px/2px)
+#. Migrate stale 5%/25% (removed/renumbered options) to the nearest new value.
+#. Migrate stale 3px/4px (removed options) to "Thick" (2).
+#. Show original units (tooltip) for converted values in "Convert directly
+#. in the text" mode: default OFF.
+#. ── Scan ─────────────────────────────────────────────────────────────────────
+#. A mode change from the picker can convert/revert the book, which
+#. reloads the document and replaces this plugin instance — close any
+#. picker left open by the previous instance (its rows point at dead
+#. state). Class attribute for exactly that reason.
+#. Footcream only works on reflowable crengine documents (EPUB & co.).
+#. Paged formats (PDF/DjVu via mupdf) lack the whole API this plugin is
+#. built on — findAllText, xpointers, getCurrentPage — so the paintTo
+#. wrapper's doc:getCurrentPage() call crashed the entire reader on the
+#. first repaint after opening a PDF. Bail before hooking anything; the
+#. flag also disables the scan menu entries for this document.
+#. Wrap paintTo and tap up front so the view is ready whenever highlights arrive.
+#. Detect page turns so the background scan can pause gracefully
+#. Long-press on an underline → flag dialog (_handleHold). Falls through
+#. to KOReader's own hold handling (text selection, dictionary) whenever
+#. the hold is NOT on one of our underlines.
+#. "⚑ Flag to Footcream" in KOReader's text-selection menu (the dialog
+#. that already hosts Dictionary / Translate / Highlight). The only flag
+#. path that can report a unit the scanner missed entirely — the reader
+#. selects the missed text themselves. "13_" sorts it after the built-in
+#. "12_search", i.e. last in the menu.
+#: main.lua:4751
+msgid "⚑ Flag to Footcream"
+msgstr ""
+
+#. Same gate as hold-to-flag: only offered once the user has
+#. opted into sending errors to the developer.
+#. ── Recover from inconsistent leftover states before loading anything ────
+#. Orphaned conversion record: the record stores the converted epub's byte
+#. size, and a different on-disk size means the FILE WAS REPLACED since the
+#. conversion (re-download, sync, regenerated test book). The book is not
+#. actually converted — treating it as metric here would hide underlines,
+#. and any revert/refresh path would splice the old backup into an
+#. unrelated file. Drop the record and continue as an ordinary book.
+#. An "apply in progress" marker means a previous conversion was interrupted
+#. (process killed mid-write), so the book may be half-converted. Restore
+#. the original text from the saved backup before doing anything else.
+#. Per-book opt-out ("Enable Footcream in this book" unchecked, stored in
+#. the book's own metadata): no scanning, loading, prompting or drawing
+#. for this book. Placed after the recovery blocks above (safety-critical
+#. regardless) — and a disabled book that is somehow still converted
+#. (e.g. a dismissed revert) gets its original text back first.
+#. Book is converted, but in a different mode than the active one — an
+#. inconsistent leftover (e.g. mode changed while a different book was
+#. open). Mode 1 must not draw imperial-position highlights over converted
+#. text, and mode 2's appended text differs from mode 3's replaced text —
+#. so restore the original for consistency. If the active mode is itself a
+#. convert mode (2⇄3 switch), queue the re-apply in the new style: the
+#. _pending_rescan flow reverts → rescans → applies with the current mode.
+#. pre-stamp conversions were always mode 3
+#. pre-stamp conversions were always metric
+#. Same for the direction: the baked-in text is for another preferred
+#. system (us vs uk count too — stones, imperial pints). Revert, then
+#. re-apply in the active direction: the preserved sidecar fails the
+#. direction check on reload, so the reapply leg falls back to a
+#. fresh scan before converting.
+#. "Rescan book" on a converted book reverted it; now that the restored text
+#. is loaded, rescan it and re-apply the conversion (so it stays converted
+#. with fresh data). Driven here, not from a post-revert timer, because the
+#. reload recreated the reader UI.
+#. Mode switch (2⇄3, or the different-mode consistency revert): the revert
+#. restored the original text byte-for-byte AND revalidated the preserved
+#. original-text sidecar, so re-apply straight from it — no rescan. Falls
+#. back to the fresh-scan path when the sidecar didn't survive (deleted,
+#. or written by a different scanner version).
+#. A converted (mode-3) book whose in-text conversion was produced by an older
+#. scanner. The matching/idiom logic improves over releases, but the metric
+#. text baked into the EPUB is frozen — so those improvements would otherwise
+#. never reach already-converted books (the worry that prompted this). The
+#. conversion is stamped with the CACHE_VERSION that made it; a lower (or
+#. absent) stamp means it's stale. With auto-scan on we refresh it
+#. automatically (revert → rescan → reconvert); otherwise we offer to. Guarded
+#. per-session so a failed/declined refresh doesn't re-fire on the same open.
+#. (If we reached here in metric mode, tap_mode is already 3 — the ~= 3 case
+#. reverted and returned above.)
+#: main.lua:4925
+msgid "Footcream improved — updating this book's conversions…"
+msgstr ""
+
+#: main.lua:4930
+msgid "Footcream's converter has improved — update this book's in-text conversions?"
+msgstr ""
+
+#: main.lua:4931
+msgid "Update now"
+msgstr ""
+
+#: main.lua:4931
+msgid "Not now"
+msgstr ""
+
+#. ── Load sidecar or wait for user to trigger scan ─────────────────────────
+#. The book has been scanned (even if it yielded zero matches). This
+#. distinguishes "scanned, no imperial units" from "never scanned" so
+#. the status line and convert-guard can tell them apart (6.1).
+#. Converted book: the on-disk sidecar is the preserved original-
+#. text scan (kept stale for a no-rescan revert/mode-switch), and
+#. scanning the converted text finds nothing the convert modes
+#. actually use — this "echo scan" was a full second scan after
+#. every convert. Skip it. The menu count reads the stamped total;
+#. announce the conversion from the stamp too, since no scan
+#. notice will fire.
+#. Skip auto-scan for a book whose data the user JUST removed: the
+#. removal's revert reloads the document, and without this the rescan/
+#. convert prompt would pop right back up. Session-only (class table).
+#. In "Convert directly in the text" mode, offer the conversion
+#. automatically once this fresh scan finishes — the user enabled
+#. auto-scan + convert mode and expects the "Convert?" prompt on
+#. opening a new book, not to toggle Enable in the menu per book.
+#. Only on a fresh scan (first time a book is scanned): a book that
+#. was scanned before and left unconverted shouldn't keep re-asking.
+#. Flush any error reports queued while offline (no-op unless sharing is
+#. on and the queue file exists).
+#. ── Filter + save (called after async scan completes) ─────────────────────────
+#. Re-query each unique matched_text at 15 context words and key by xpointer.
+#. The scan itself always runs at 5 words; this separate pass is report-only.
+#. Tooltip size presets (the "Subtle" scale). Each controls font, icon, padding,
+#. corner radius, icon↔text gap, and border thickness; the pointer arrow's WIDTH
+#. and HEIGHT stay fixed across sizes (only its border tracks the card's). Values
+#. are pre-scale design units (run through Screen:scaleBySize at use). Attached to
+#. the FootFree table rather than a top-level local (the main chunk is at Lua's
+#. 200-locals ceiling). _show_styling_dialog's live preview reads the same table.
+#. left/right padding
+#. top/bottom padding
+#. Right: converted value (large bold)
+#. Horizontal row: icon (optional) | spacer | text
+#. Left: icon centred in its own box
+#. Rounded bordered card
+#. Position near the tapped word: below if it fits, otherwise above.
+#. below the word
+#. above the word
+#. Pointer arrow: points toward the tapped word, flipped depending on
+#. whether the popup landed below or above it.
+#. arrow size is fixed across tooltip sizes
+#. apex on top, base merges into the card's top edge
+#. apex on bottom, base merges into the card's bottom edge
+#. Full-screen input overlay — tap anywhere to dismiss
+#. Settings dialog with a live preview of the underline styling on a sample
+#. word. Each control closes and re-opens the dialog so the preview reflects
+#. the change immediately.
+#. Preserve the dragged position across the close+reopen that a setting
+#. change triggers, so toggling an option doesn't snap the modal back to
+#. centre. Stashed on the plugin because refresh() recurses into a fresh
+#. _show_styling_dialog call.
+#. Preview: a worked example ("Five foot six") with its underline
+#. rendered live, plus an always-visible tooltip showing the conversion
+#. exactly as it would appear when tapped in the book.
+#: main.lua:5262
+msgid "Five foot six"
+msgstr ""
+
+#. Tooltip card mirrors _show_conversion_popup's styling for the SELECTED
+#. size, so the preview is true WYSIWYG. The real popup shows _metric_only's
+#. "converted value only" form (e.g. "1.68 m"), so match that here.
+#: main.lua:5285
+msgid "%1 m"
+msgstr ""
+
+#. Pointer arrow, base merging into the tooltip card's bottom edge —
+#. same overlap trick as _show_conversion_popup (arrow's top border row
+#. lands exactly on the card's bottom border row). Arrow size is fixed;
+#. only its border tracks the card's so the join stays seamless.
+#. Shared drawn radio marker (see the class-level definition by
+#. _UnderlinePreview — also used by the Mode picker dialog).
+#. One option = the radio dot + its label, both wrapped in a single tappable
+#. container so a tap anywhere on the item (dot OR label) selects it. The dot
+#. gets padding so its hit area isn't a tiny circle.
+#. FrameContainer (not WidgetContainer) records its absolute screen
+#. rect in .dimen on every paint, so the tap GestureRange tracks the
+#. item wherever the modal is dragged to.
+#: main.lua:5383
+msgid "Solid"
+msgstr ""
+
+#: main.lua:5384
+msgid "Wavy"
+msgstr ""
+
+#: main.lua:5401
+msgid "Thin"
+msgstr ""
+
+#: main.lua:5402
+msgid "Thick"
+msgstr ""
+
+#: main.lua:5409
+msgid "Small"
+msgstr ""
+
+#: main.lua:5410
+msgid "Medium"
+msgstr ""
+
+#: main.lua:5411
+msgid "Large"
+msgstr ""
+
+#. Manually stack tooltip card, arrow, and example, centred horizontally.
+#. The preview frame stretches to match the widest option row below (so
+#. it fills the modal's width), but never shrinks below what the worked
+#. example itself needs.
+#: main.lua:5436
+msgid "Show Unit Icon"
+msgstr ""
+
+#. Close spans the full width of the preview frame below it. Pass the "ui"
+#. refresh type to close() so the uncovered area (reader page or file-manager
+#. list) actually repaints on e-ink — context-independent, so it works both
+#. in a book and in the library (where there's no ReaderView to setDirty).
+#. Forget the dragged position so the next fresh open re-centres
+#. (only refresh() should carry position over).
+#. Make the Close button 20% taller than its natural height (text stays
+#. vertically centred; "Close" can't truncate at full_w, so no font reflow).
+#. FrameContainer (not WidgetContainer) records its absolute screen
+#. rect in .dimen on every paint, so the tap GestureRange tracks the
+#. row wherever the modal is dragged to.
+#. The dot is top-aligned with the row and boxed to the SAMPLE line's
+#. height, so it centres on the heading rather than on the whole
+#. sample+captions block (user feedback 2026-07-14).
+#. Sample→caption gap trimmed to 40% of the original
+#. sc(5) (user feedback 2026-07-14).
+#. Close spans the options' full width (measured after construction).
+#: main.lua:5461 main.lua:5463 main.lua:5777 main.lua:5779 main.lua:7490
+#: main.lua:8034
+msgid "Close"
+msgstr ""
+
+#. "PREVIEW" label in the top-left corner of the preview frame.
+#: main.lua:5478
+msgid "PREVIEW"
+msgstr ""
+
+#. 20% more contrast vs white than COLOR_DARK_GRAY (0x88): the
+#. white-difference 255-0x88=119 grows ×1.2 to ~143, so 255-143 ≈ 0x70.
+#. Hairline border frames the whole worked example.
+#: main.lua:5518
+msgid "Underline style"
+msgstr ""
+
+#: main.lua:5521
+msgid "Underline Intensity"
+msgstr ""
+
+#: main.lua:5524
+msgid "Underline thickness"
+msgstr ""
+
+#: main.lua:5527
+msgid "Tooltip size"
+msgstr ""
+
+#. Wrap the card so it can be dragged around the screen (Hold + pan, or
+#. swipe). The preview area is the natural grab handle — it's the one large
+#. non-interactive region; the option buttons still take taps normally.
+#. Re-apply any position carried over from a refresh (see refresh() above).
+#. Pass the "ui" refresh type to show() so the modal's region paints on
+#. e-ink directly, rather than relying on the reader view (nil in the file
+#. manager). Without this, reopening the dialog after an option tap (the rows
+#. close + reopen the dialog) didn't refresh in the library, so the selection
+#. dot and live preview looked frozen.
+#. Visual mode picker: one worked sentence rendered the three ways — a live
+#. underline in the user's styling, the parenthetical gloss, and the in-place
+#. replacement — each row tappable. Shown OVER the open Footcream menu (the
+#. caller doesn't close it, and the Mode item sets keep_menu_open): closing
+#. the picker drops the user back into the menu instead of onto the bare
+#. page. Direction-aware: under an imperial preference the sample flips to a
+#. metric original with imperial output. touchmenu_instance (optional) is the
+#. TouchMenu the Mode item lives in — used to refresh its labels after a mode
+#. change while it stays open behind the picker.
+#. Worked example, direction-aware: under an imperial preference the
+#. book's original text is metric and the conversion is imperial.
+#: main.lua:5598
+msgid "The hallway was "
+msgstr ""
+
+#: main.lua:5601
+msgid " wide."
+msgstr ""
+
+#. Only one picker at a time (a mode change re-renders it in place by
+#. closing + reopening — see pick()).
+#. Row 1's sample carries a live underline under the original phrase, in
+#. the user's current styling (same widget the Styling preview uses).
+#: main.lua:5640
+msgid "Underline only — tap it to see %1."
+msgstr ""
+
+#: main.lua:5641
+msgid "The book file is never changed."
+msgstr ""
+
+#: main.lua:5645
+msgid "Both units, written into the book's text."
+msgstr ""
+
+#: main.lua:5646 main.lua:5650
+msgid "Reversible."
+msgstr ""
+
+#: main.lua:5649
+msgid "Converted only, written into the book's text."
+msgstr ""
+
+#. User-initiated close (Close button, Back, tap outside): only the
+#. picker closes — the user lands back in the still-open menu (user
+#. feedback 2026-07-14). If a mode change happened, the book catches up
+#. when the MENU closes: _reconcileModeWithBook is armed on the menu's
+#. close_callback (TouchMenu's tap-outside/✕ paths run it), so the
+#. convert question / revert appears over the book, never over menu or
+#. picker.
+#. If the convert question comes up and the user declines, it
+#. restores the mode from before the picker (nil = no change to
+#. restore, e.g. picks that netted out back to the start).
+#. No menu to wait for — reconcile right away.
+#. Arm once per menu instance; the flags live on the plugin so a
+#. second picker session in the same menu just updates the pending
+#. state (keeping the FIRST session's restore mode — the last mode
+#. the book was actually stable in).
+#. The picker only changes the mode SETTING — instantly (dot moves,
+#. menu label refreshes via touchmenu_instance:updateItems()) — and
+#. stays open, as does the menu behind it. All document work (the
+#. convert question, revert/re-apply) is deferred to close_overlay
+#. via _mode_reconcile_pending. The flag lives on the instance: the
+#. re-render below replaces this closure's upvalues.
+#. Re-render with the dot on the new mode, keeping the dragged
+#. position across the close + reopen.
+#. Caption grey: dark enough to read comfortably on e-ink (0x55 was too
+#. dim — user feedback 2026-07-14).
+#: main.lua:5728
+msgid "How should conversions appear?"
+msgstr ""
+
+#. movable declared up top so pick() can read the dragged offset before
+#. the re-render; the offset survives the close + reopen.
+#. Tap anywhere outside the card closes the picker (and lands you
+#. back in the still-open menu). Inside the card the tap falls
+#. through to the option rows.
+#. inside the card: let the rows take it
+#. Words that may follow a *weight* "N stone" — anything else following it
+#. (a concrete noun: cuffs, spheres, foundation, wall) marks it as the rock,
+#. not the unit. A number ("twelve stone six") or clause end also keep it.
+#. A definite/demonstrative determiner right before "stone" marks it as the
+#. rock, not the unit ("to the stone", "this stone"). A weight is always
+#. "<number> stone". "a"/"an" are excluded — "half a stone" is a real weight.
+#. Screens/TVs are conventionally sized in inches and readers expect that, so
+#. an inch measurement near one of these is left unconverted.
+#. Drink/serving context where a pint→litre conversion erases the reader's
+#. sense of "how many glasses": keep pints for milk/blood/etc., drop them here.
+#. Body-action verbs before "foot"/"feet" that mark it as a body part/idiom.
+#. "put/set/place one foot upon …" — moving a foot, not a measurement.
+#. "<count>-toed/-legged/-clawed/… feet/foot" describes anatomy (how many
+#. toes/legs/etc. per foot), not a distance. The shared _parse_num word
+#. fallback treats a hyphen right after a number word as an ordinary
+#. compound-number boundary ("three-toed" reads as 3, the same mechanism
+#. that composes "twenty-three") — report #9: "sticky and soft
+#. three-toed feet" (lizard mounts) read as 91 cm.
+#. Full 15-word window (lowercased) — used ONLY by the pound currency
+#. block below. All other filters use the legacy 8-word slice.
+#. "<length> at a time" — a rate/gradual idiom ("one inch at a time",
+#. "one foot at a time"), describing increments of progress, not a
+#. measured distance. Length units only (target m/cm/km). Gated to
+#. values ≤ 2, same rationale as the foot positional cues: "hauled in
+#. relays, about sixty yards at a time" (South!) is a genuine 55 m
+#. distance per relay, not a gradual-progress idiom.
+#. "stone" as rock/material, not the weight unit: an ordinary word follows
+#. it. Kept as weight when followed by a number ("twelve stone six"), a
+#. clause end / period ("weighs twelve stone."), or a weight-continuation
+#. word (and/odd/exactly/…). The %s* (not skipping ".") means a sentence
+#. end leaves nw nil → kept, which is the correct reading for a weight.
+#. Rock, not weight: "…to the stone", "this stone" (vs "<number> stone").
+#. "one pounds" is the verb "to pound" (3rd-person singular); never a measurement.
+#. Spelled "pound(s)": suppress at scan time ONLY on HARD currency cues —
+#. those with no weight reading: the £ symbol (U+00A3 = bytes \194\163),
+#. a coin denomination / "sterling" (_pound_hard_currency), "N pounds on
+#. account" (a payment; kept tight so it doesn't hit "on account of …"),
+#. or a "prize" (sterling). The SOFT money cues (paid/worth/sum/wager/…)
+#. are NOT dropped here — they vote in the weighted classifier in
+#. _apply_settings_to_matches(), where strong weight context can outvote
+#. them ("the crate, worth a fortune, weighed two hundred pounds"). This
+#. keeps the soft-currency matches in the sidecar so the decision can be
+#. re-made on load (and re-tuned) without a rescan.
+#. Bare "degrees" (no F/Fahrenheit qualifier): ambiguous unit (angle,
+#. rotation, proof, heading, latitude…). Convert only when nearby
+#. context plausibly reads as temperature — opposite polarity from
+#. the pounds classifier above: here the default is suppress, and a
+#. cue is required to opt IN.
+#. "N degrees below zero": the true value is negative even though
+#. the spelled/digit number itself is positive. Getting the sign
+#. right needs the underline to reach past "degrees" into next_text,
+#. which this filter (post-span) can't safely do — so rather than
+#. emit a wrong-signed conversion, suppress it as a documented
+#. residual (a miss, not a wrong answer).
+#. "ten degrees CELSIUS" — the scale is stated, it's just stated
+#. AFTER the alias, so the bare-"degrees" entry grabbed it first and
+#. read an already-metric figure as Fahrenheit (10 °C came out as
+#. -12 °C). The temperature cue gate can't catch this: the sentence
+#. is genuinely about temperature, which is exactly why the cue
+#. fires. Found 2026-08-07 in smoketest6 ("The water was ten degrees
+#. Celsius, cold enough to steal your breath"). Bare "c" is included
+#. for "40 degrees C"; the %f[%A] frontier keeps it off "cold".
+#. PATTERNS MUST BE LOWERCASE: nxt_full is :lower()ed where it's
+#. built (see prev_full/nxt_full above). The first version of this
+#. guard used "[Cc]elsius"/"[Cc]entigrade"/"C" — the character
+#. classes worked by accident and the uppercase-only "C" could
+#. never fire, so "minus eighteen degrees C" sailed through. Caught
+#. by verify_scan.py, NOT by testing the patterns in isolation
+#. (which passed, against raw-case text that never reaches here).
+#. "N-mile-an-hour" is a speed expressed as a compound adjective, not a distance.
+#. Gradient/scale ratio: "112 feet to the mile", "one inch to the mile",
+#. "30 feet per mile" — the number belongs to the NUMERATOR unit and the
+#. mile is just the denominator, so it's not a standalone distance. (Here
+#. the "mile" hit's back-range even mis-read the compound "one hundred and
+#. twelve" as 100–12 via its inner "and", attaching 112 to the mile.) Drop
+#. the mile; the numerator unit still matches on its own (112 feet → 34 m).
+#. Suppress numeric tail of a hyphenated compound number when prev_text reaches
+#. back far enough to expose the "-and-" connector (short compounds only).
+#. "five-hundred-and-eleven-foot" is accepted as an imperfect match (rare form).
+#. "foot"/"feet" as a body part or idiom, not a measurement.
+#. word BEFORE the number ("own", "with")
+#. Positional cues ("into the water", "over the threshold", "on the
+#. path") read as a MOVED/PLACED body part only when the value is
+#. one or two — a larger value is a distance that legitimately
+#. precedes these prepositions ("rose two hundred feet into the
+#. air", "measured three hundred feet over all" — the corpus-sweep
+#. misses in Treasure Island / 20k Leagues). Behavioral verbs
+#. (shuffling, stomping…) stay ungated: they never follow distances.
+#. "one foot in front of the other" (anchored: not "…foot tower in front of the cabin")
+#. "(his/your) own two feet"; "lifted/raised/hopping/… one foot".
+#. "with one foot" / "on one foot" (hopping/standing), but keep a real
+#. "with one foot of clearance".
+#. "one's feet" / "one's foot" — possessive, never a count. The number
+#. "one" is glued to an apostrophe-s (straight ' or curly ’ = U+2019).
+#. "shifting/swaying weight from one foot to the other/another" —
+#. idiom, not a distance. Anchored on "the other"/"another" so
+#. "one foot to the left" survives. ("to another" ×3 in the Nesbø
+#. translations — first metric corpus, 2026-07-13.)
+#. "one hand, then one foot" (climbing) — enumerated limbs, and a
+#. hand this close to a lone "one foot" is never a distance.
+#. "moving under one foot" / "Move one foot to just outside …" — a
+#. single covered/placed body part. "under one foot of snow" (real
+#. depth) survives via the "of" tail; larger values ("under six
+#. feet of earth") are ungated by footn == 1.
+#. "with two feet instead of four" — a leg/limb-count comparison: the
+#. trailing cardinal is bare (no unit, closed by a comma/period), so
+#. it's anatomy, not a length. A genuine distance restated would carry
+#. its unit ("…instead of three hundred feet"), so that survives.
+#. "count … on the fingers/toes of one foot" — joke, not a measurement.
+#. "<count>-toed/-legged/-clawed/… feet/foot" — anatomy, not a
+#. distance (report #9). matched_text is exactly "<hyphenated
+#. compound> feet"/"foot" here (span=1 word from the fallback
+#. that read "three-toed" as 3), so the compound is the FIRST
+#. (and only) token before the unit word.
+#. Allow trailing hyphen: "six-foot-[five-inch]" has prev ending "foot-"
+#. Suppress the inches half of compound prime heights like 5'11" or 5′9″
+#. (or the curly-quoted 5’9”, most commercial EPUBs). The _ND boundary
+#. char is the prime/apostrophe between the feet digit and inches
+#. digit, so matched_text starts with one of these marks.
+#. This never happens for a legitimate standalone inches measurement.
+#. "N oz" immediately after "lbs?" is the tail of a compound like "1-lb 4-oz"
+#. Suppress mid-word false positives: if next_text starts with a letter
+#. immediately (no leading space/punctuation), the match ended inside a
+#. longer word. e.g. "mi" matching the first 2 chars of "minutes".
+#. Exception: prime/quote matches end in a non-letter symbol (″ ′ " ' ’ ”)
+#. so they can't be mid-word; "3″ in diameter" legitimately precedes a
+#. letter and must not be dropped here.
+#. A bare feet-mark ending (single apostrophe/prime — NOT the double-
+#. prime/quote inches ending, which a possessive/plural 's' never
+#. follows) immediately followed by "s" is a year/decade possessive
+#. or plural, not a feet marker — "2001's Ghosts of Mars" read as
+#. 2001 ft (600 m). Without this, the _ends_prime exemption right
+#. below waves it through as "can't be mid-word", which is only
+#. true for the unambiguous double-prime/quote glyphs, not a bare
+#. apostrophe (issue #2 / reports #11-13).
+#.
+#. Read the ACTUAL next character from the document rather than
+#. trusting next_text: crengine builds the context word by word, and
+#. "2001’s" is a single word token, so the possessive "s" is swallowed
+#. — next_text starts at " Ghosts of Mars", and an "^[sS]" test on it
+#. can NEVER fire. (That was the original form of this guard; it
+#. compiled, passed check.sh, and silently did nothing — VM-verified
+#. 2026-08-07.) Same one-character xpointer read as the mid-word guard
+#. just below. A genuine height reads a space here ("6’ wide").
+#. The letter can also come from the NEXT BLOCK: when the match
+#. ends at its node's last character (sign/label paragraphs —
+#. "ELEVATION: 2,200 FEET" then "POPULATION: ZERO"), crengine's
+#. next-context starts with the following block's text and no
+#. separator. Only drop when the letter is truly adjacent in the
+#. SAME text node; at a node boundary it can't be mid-word.
+#. Mirror of the guard above, for the LEFT boundary. crengine's \b
+#. doesn't honor a leading word boundary either, so the unit alternation
+#. matches an alias glued to the END of a longer word: "ft" in "left"/
+#. "aft"/"swift", "mile"/"mi" in "smile"/"semi"/"Naomi", "pt" in "except"/
+#. "Sept", "pound" in "compound". The unit token is the trailing token of
+#. matched_text; reject when the character right before it is a letter. A
+#. real measurement has a digit, space, hyphen, prime or punctuation there
+#. ("6ft", "6 ft", "six-foot"), so this never drops a genuine unit.
+#. NOTE: pounds classifier and UK volume recalculation happen in
+#. _apply_settings_to_matches(), called after _finishScan saves the sidecar.
+#. Suppress fractional tail: "a half pounds" / "half pounds" when prev
+#. ends with "and" — it is the second half of "N and a half pounds".
+#. Suppress the inches-half of a dimension like "4′ × 2″" only when the
+#. "×" *immediately* precedes this match (prev ends in "× "). Matching
+#. "×" anywhere in the context window wrongly dropped a separate inch
+#. measurement that merely followed a dimension — e.g. the 3″ in
+#. "4′ × 2″. The pipe was 3″ in diameter." (The seen_end/seen_start
+#. dedup in _fast_scan_matches already blocks the true inches-half, so
+#. this is a belt-and-suspenders guard for the pat1-didn't-fire case.)
+#. Decimal false positive: _ND uses [^0-9,] as boundary, so the "."
+#. in "0.5 inches" also creates a spurious ".5 inches" match.
+#. Suppress when matched_text starts with the boundary char "." (period).
+#. Middle-dot decimal (Victorian British: "·485″" = 0.485″): the mid-dot
+#. U+00B7 is an _ND boundary char, so the digits parse as an integer and
+#. the value comes out 1000× too large. No mid-dot decimal support in
+#. _parse_num, so suppress rather than show a wrong value.
+#. Closing quotation mark read as an inches/feet glyph: the prime-pass
+#. number tolerates trailing punctuation, so '"January 1836." ' matches
+#. ' 1836."' → 4 700 cm. A real prime/quote measurement has a DIGIT
+#. immediately before the glyph ("6'", '3.5"'); a quote right after
+#. ./,/;/etc. is punctuation ending quoted text.
+#. Product model numbers: a comma between the number and the unit (e.g.
+#. "VTS989, kn") never appears in real measurements.
+#. URL path fragments: a slash directly between the number and the
+#. unit ("…gamasutra.com/view/news/178650/League_of_Legends…" read
+#. "178650/League" as 860 000 km — Hooked's endnotes). Never prose;
+#. ASCII fractions are digit/digit, so "19-3/10 miles" doesn't trip.
+#. Geographic coordinates ("37°18'32\" N 115°36'52\" W"): the degree
+#. symbol leads the match because the degrees figure sits before it, so a
+#. length match never begins with ° (a real prime height like 5'9" starts
+#. with a digit). Drop anything whose matched_text opens with ° (U+00B0).
+#. Screen/TV sizes: inches near a screen word stay imperial (readers think
+#. of TVs in inches). Scan the surrounding context for a screen noun.
+#. Pints in a drink/serving context: drop, to preserve "number of glasses".
+#. Mangled vulgar fraction: some EPUBs render "¾" as "3 4'" — a lone
+#. numerator digit, a space, then a single-digit "foot" prime (denominator).
+#. crengine DROPS the lone "3" from prev_text (it's saved as "…still ", no
+#. digit), so read the few chars immediately before the match span instead.
+#. Numerator < denominator (¾, ⅔, ½ …) confirms the fraction; real prose
+#. almost never writes a lone digit immediately before a single-digit prime.
+#. in case it IS in prev
+#. Collapse overlapping spans — but only now, AFTER the legacy false-positive
+#. filters above have run. Doing it on the raw scan output would let a
+#. soon-to-be-rejected over-catch (e.g. "fifteen-foot-wide stone") win the
+#. overlap and evict the legit match ("fifteen-foot") that the stone guard
+#. would have kept. Among survivors, the longest span at a shared start wins,
+#. which collapses an un-merged foot+inch compound (a "six-foot" hit plus the
+#. overlapping "six-foot-five-inch" hit) to a single match.
+#. Dev-only diagnostics, gated behind dev mode. Both the scan report and the
+#. per-book report write to the Mac↔VM shared debug folder (/mnt/macos/debug),
+#. which doesn't exist on a user's device — gating keeps every user scan from
+#. spawning a shell and leaving a stray /mnt/macos/debug dir behind.
+#. Apply current settings (UK volumes, pounds classifier) to the
+#. just-scanned matches and update the live display.
+#. a scan just completed (even if 0 matches) (6.1)
+#. Scan-completion notice, contextual to the active mode (user-specified
+#. wording): a converted (mode-3) book reports the CONVERSION — the scan that
+#. just ran there is the post-apply leftovers pass, and "32 units found" reads
+#. as the scanner losing units — using the book's full unit count, same as the
+#. menu status line. Mode 1 reports the underlines. A mode-3 book not yet
+#. converted keeps the neutral wording (transient — the auto-apply follows).
+#. NOT `local _, stamped` — `_` is gettext (required at the top of this
+#. file), and discarding into it shadows the module for the rest of the
+#. block, so the _.ngettext below indexes a number and the reader dies:
+#. main.lua:6389: attempt to index local '_' (a number value)
+#. The i18n pass introduced `_` as a module name into a file that used
+#. the `local _` discard idiom in five places; this was the one where
+#. the two overlapped. builder/check_gettext_shadow.py now fails the
+#. build on any recurrence.
+#: main.lua:6399
+msgid "Converted %1 unit in book"
+msgid_plural "Converted %1 units in book"
+msgstr[0] ""
+msgstr[1] ""
+
+#: main.lua:6401
+msgid "Scan complete: %1 unit found"
+msgid_plural "Scan complete: %1 units found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: main.lua:6403
+msgid "Underlined %1 unit in book"
+msgid_plural "Underlined %1 units in book"
+msgstr[0] ""
+msgstr[1] ""
+
+#. ── Metric edition — apply / revert ──────────────────────────────────────────
+#. Words that, when they immediately follow an ambiguous "foot" phrase, mark it
+#. as a body-part idiom ("one foot in front of the other") rather than a
+#. measurement. The in-place rewrite replaces by surface text book-wide, so
+#. without this guard a real "one foot deep" match would also convert every
+#. idiom "one foot" elsewhere. Mirrors the scanner's "one foot" exclusion so
+#. mode 1 (highlight) and mode 3 (convert) stay consistent.
+#. cancel_restore_mode (optional): mode to fall back to when the user
+#. DECLINES the confirm — set only for picker-originated changes, so a
+#. canceled pick snaps back to the mode the picker opened with instead of
+#. stranding the book unconverted in a convert mode. Book-originated prompts
+#. (new book under an established convert mode, Enable toggle, tap) pass
+#. nothing: declining those means "not this book", not "change my mode".
+#. Arm the "Convert?" prompt to fire once the scan in flight completes.
+#.
+#. EVERY path that kicks off a scan while a convert mode is active needs this.
+#. It used to be copy-pasted at the two call sites that had it and simply
+#. missing from the third — the menu's "Rescan book" — so rescanning a book in
+#. mode 2/3 scanned happily and then did nothing at all. The log read
+#. "321 match(es) found … subprocess complete" and the book never changed,
+#. with no error and no prompt, which is indistinguishable from the plugin
+#. being broken. Found on the VM 2026-08-07.
+#.
+#. The 0.5s delay is load-bearing: shown in the same tick, the scan's queued
+#. full-view refresh paints the page OVER the ConfirmBox, leaving a
+#. half-visible "ghost" dialog whose buttons don't take taps. The Enable
+#. toggle guards against the same failure with its own settle delay.
+#.
+#. Conditions are re-checked inside the closure, not just here: a scan is
+#. async, and the mode, the per-book enable, or the document itself can all
+#. change while it runs.
+#. Which way this conversion goes ("metric"/"imperial"), for the dialogs.
+#. Run the EPUB rewrite (pure Lua, libarchive) in a dismissable subprocess so
+#. the UI doesn't freeze — the rewrite takes a few seconds on a real book. The
+#. rewriter guards partial writes with an .inprogress marker + a backup of the
+#. original epub, so an interrupted run is safely auto-reverted on next open.
+#. Captured before the subprocess closure: mode 2 appends the gloss (the
+#. rewriter needs its two-phase pass), mode 3 replaces.
+#: main.lua:6464 main.lua:6478 main.lua:6634 main.lua:8185
+msgid "imperial"
+msgstr ""
+
+#: main.lua:6464 main.lua:6478 main.lua:6634 main.lua:8185
+msgid "metric"
+msgstr ""
+
+#: main.lua:6467
+msgid "This book is already converted.\n"
+"Use 'Remove Footcream data from this book' (Advanced) first."
+msgstr ""
+
+#. Distinguish "scanned, genuinely no units" from "not scanned yet" —
+#. the two used to share the misleading "scan first" message.
+#: main.lua:6477
+msgid "No %1 measurements found in this book — nothing to convert."
+msgstr ""
+
+#: main.lua:6479
+msgid "No hints yet — scan the book first."
+msgstr ""
+
+#. Both convert modes rewrite the book's own text. Confirm first — this is
+#. easy to trigger inadvertently (e.g. via the Enable toggle while the
+#. global mode happens to be set to convert).
+#. One line only — the how/undo details live in the Mode picker captions
+#. and the long-press help texts (the old second paragraph read as
+#. clutter; user feedback 2026-07-14).
+#: main.lua:6499
+msgid "Kept mode: %1"
+msgstr ""
+
+#: main.lua:6506
+msgid "Add %1 conversions alongside this book's measurements?"
+msgstr ""
+
+#: main.lua:6508
+msgid "Convert this book's measurements to %1?"
+msgstr ""
+
+#: main.lua:6510
+msgid "Convert"
+msgstr ""
+
+#. Breadcrumb: distinguishes "tap never registered" (ghost
+#. dialog) from "apply failed" when diagnosing a stuck convert.
+#. Process matches in document order so the reverse map records each
+#. converted value's original phrase in reading order. The load path
+#. re-scans the converted text (also document order) and pairs the Nth
+#. occurrence of a converted string with the Nth original here — so two
+#. different originals that round to the same string ("two pounds three
+#. ounces" and "two pounds, four ounces" → "1.0 kg") each recover their
+#. own text instead of both showing the first one (6.2).
+#. Build the replacement list (deduped by surface text — the in-place
+#. rewrite replaces all occurrences of each phrase) and a converted->original
+#. reverse map (one original per occurrence, in order) for "show original".
+#. surface text -> number of KEPT (weight) matches
+#. surface text -> its rep (to stamp .expected later)
+#. Captured now: after the reload, _all_matches holds only the rewrite's
+#. leftovers, but the menu status line keeps showing this full count.
+#. Vague quantities ("a few hundred pounds") are left as the original
+#. imperial text in Mode 3: an inline "≈ 90–230 kg" reads as an awkward
+#. parenthetical, not natural prose. They still show their band on tap in
+#. Mode 1. (Skipping here also avoids the old "over a few 45 kg" break.)
+#. Mode 2 ("Metric alongside original") APPENDS the conversion
+#. as a parenthetical gloss instead of replacing the text:
+#. "six feet (1.8 m)". Same rewrite machinery, different `to`.
+#. This is also the reverse-map key: the map is keyed on the
+#. string that actually stands in the converted book, since
+#. that's what the position scan re-locates for hold-to-flag.
+#. Currency/weight homonym guard for the in-place rewrite. A spelled pound
+#. phrase ("ten pounds") can be a genuine weight in one place and sterling
+#. currency (£) elsewhere in the same book. The scanner suppresses the
+#. currency occurrences positionally (Mode 1), but the in-place rewrite is
+#. global surface-string replacement and can't see positions, so it would
+#. convert the currency uses too ("ten pounds (£10)" → "4.5 kg (£10)").
+#. Stamp the number of KEPT weight matches; the rewriter skips any phrase
+#. whose textual occurrences OUTNUMBER them (= some occurrence was currency).
+#. Converting currency is worse than leaving a colliding genuine weight as
+#. imperial — and that weight still converts in the positional Mode 1.
+#. Imperial direction: the same collision exists for money-vetoed metric
+#. occurrences ("$2m" is millions; "9mm" next to a count word is handled
+#. positionally; enumerations are skipped positionally). The scanner
+#. suppresses those per-occurrence, but the global rewrite can't — so
+#. stamp EVERY rep with its kept count and let the rewriter skip any
+#. phrase whose textual occurrences outnumber the scanner-approved ones.
+#. Leaving a colliding genuine measurement unconverted beats converting a
+#. money amount (same trade-off as the pounds guard above).
+#. on_done (optional) runs after a successful revert + reload (used by callers
+#. that need to act on the restored text, e.g. rescan).
+#: main.lua:6619 main.lua:6698
+msgid "Could not load the metric converter module."
+msgstr ""
+
+#: main.lua:6638
+msgid "Converting to %1…"
+msgstr ""
+
+#. dismissed by the user
+#. Had measurements to convert, but the in-place rewrite matched
+#. NONE of them in the book's raw markup — i.e. the scanner's text
+#. and the file's bytes diverge (unusual markup/format). Surface it
+#. instead of silently reloading unchanged (which looks like the
+#. convert "refused"). This is the diagnostic for the Kobo report.
+#: main.lua:6652
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
+"The '%2' mode still works for this book."
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
+"The '%2' mode still works for this book."
+msgstr[0] ""
+msgstr[1] ""
+
+#. The sidecar stays on disk untouched: its xpointers are stale
+#. against the rewritten text (the load path won't use it while
+#. converted), but a revert restores byte-identical text and
+#. re-stamps the recorded mtime — making it instantly valid again,
+#. which is what lets mode switches skip the rescan entirely.
+#. Persist the converted->original map: in replace mode (3) it
+#. powers "show original units" AND hold-to-flag; in append mode
+#. (2) the original is already visible in the gloss, so the map's
+#. only consumer is hold-to-flag's position hit-testing.
+#. Stamp the scanner version into the book's conversion, so a later
+#. CACHE_VERSION bump is detected on open and the book can refresh.
+#. The pre-conversion hint count rides along so the menu status line
+#. keeps reporting the book's full unit count while converted, and
+#. the applied mode so open/mode-switch flows can tell the styles apart.
+#. Marks the post-reload onReaderReady (fresh plugin instance —
+#. hence the class field) to announce the conversion from the
+#. stamp: with the echo scan gone, no scan notice will fire.
+#. Reload document (seamless — keeps xpointer position)
+#: main.lua:6684
+msgid "Could not convert this book."
+msgstr ""
+
+#. Run the EPUB restore (pure Lua, libarchive) in a dismissable subprocess so
+#. the UI doesn't freeze. The rewriter restores the original epub byte-for-byte
+#. from its backup, refusing if the on-disk file changed since conversion.
+#: main.lua:6710
+msgid "Restoring original text…"
+msgstr ""
+
+#. Dismissed by the user. If a refresh chain (revert → rescan →
+#. reconvert) queued this revert, abort the whole chain: a stale
+#. _pending_rescan would otherwise fire on a later open and
+#. auto-CONVERT (skip_confirm) a book whose revert never happened.
+#. Same for the mode-switch _pending_reapply chain.
+#. Same chain-abort on every failed outcome below: only a successful
+#. revert may proceed to the rescan+reconvert leg. This is what silently
+#. reconverted a regenerated smoketest5 — the revert refused ("file
+#. changed since conversion", record rightly dropped), but the pending
+#. flag survived and the next onReaderReady rescanned and re-applied.
+#. The revert just rewrote the epub (byte-identical text, new
+#. mtime). The sidecar's recorded epub_mtime no longer matches, so
+#. _load_sidecar_raw would discard it on reload even though its
+#. xpointers are still valid — update the recorded value to the
+#. restored file's mtime. (The full-content rewrite also bumps the
+#. sidecar file's own mtime, which keeps legacy sidecars alive.)
+#. EXCEPT a metric_scan sidecar: that one was scanned against the
+#. CONVERTED text (the post-apply leftovers pass), so against the
+#. restored original it is both incomplete and mispositioned —
+#. delete it and let the next open rescan the original text.
+#. After a byte-exact revert the restored text is identical to the
+#. original, so the sidecar's xpointer positions are valid again — no
+#. rescan needed. (Rescanning a converted book is separately prevented
+#. in the "Rescan book" handler, which reverts first.)
+#. Announce the clean-up (user request — the revert was silent).
+#. Scheduled after the reload's repaint so the toast isn't wiped;
+#. if a rescan follows, its own notice simply takes over.
+#: main.lua:6773
+msgid "Restored original units in book"
+msgstr ""
+
+#. The on-disk file is no longer the one we converted (it was replaced
+#. externally — e.g. a re-download or sync of a different edition under
+#. the same filename). Restoring our saved chapters into it would splice
+#. unrelated content together. Leave the book untouched and just drop the
+#. now-stale conversion record so it isn't stuck appearing "converted".
+#: main.lua:6789
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr ""
+
+#: main.lua:6794
+msgid "Could not revert."
+msgstr ""
+
+#. Bring the open book in line with the ACTIVE mode (self._tap_mode, already
+#. saved by the caller). State-based and idempotent — handles every starting
+#. point: unconverted + convert mode → apply (with its confirm question);
+#. converted in the SAME mode → nothing; converted in another mode (or in a
+#. convert mode while mode 1 is active) → revert, and for convert modes the
+#. _pending_reapply flow re-applies from the preserved sidecar after the
+#. reload. Called when the mode picker CLOSES: the picker changes the mode
+#. setting instantly, but document work — and the convert question — waits
+#. until the user is back at the book (user request 2026-07-14). The "Enable
+#. Footcream" preference is deliberately left untouched.
+#. A per-book-disabled book never converts (its underlines are hidden
+#. and it was restored on disable) — mode changes only take effect here
+#. once the book is re-enabled.
+#. Re-apply from the preserved original-text sidecar after the revert
+#. (no rescan); _pending_rescan is reserved for the flows that WANT a
+#. fresh scan (version refresh, manual "Rescan & reconvert").
+#. Apply after the menu closes; _applyMetricEdition handles the
+#. "no scan data yet" case gracefully. Declining its convert question
+#. restores cancel_restore_mode (the pre-picker mode) so a canceled
+#. picker change doesn't strand the book in an unconverted convert
+#. mode.
+#. Back to mode 1 on an unconverted book: repaint so the underlines
+#. show right away.
+#. "Convert units to" switch (metric / us / uk). Flips the conversion
+#. direction: the open book rescans, and a converted book reverts first, then
+#. reconverts in the new direction (revert → the reload's direction-mismatch
+#. sidecar check forces a fresh scan → re-apply in the active mode).
+#. Per-book-disabled book: the setting is saved (it steers every other
+#. book), but this book is left alone — no rescan, no conversion.
+#. Converted in the old direction — restore the original text, then
+#. the reapply leg rescans and reconverts under the new preference.
+#. Rescan the open book in the new direction.
+#. In a convert mode, offer the conversion once the rescan lands —
+#. same flow as opening a new book with auto-scan on.
+#. Build self._reverse_matches: positions of the converted strings in the
+#. text (bare metric values in mode 3, "original (metric)" glosses in mode
+#. 2), each paired with its original imperial text. Loaded whenever a
+#. convert-mode book is converted. Hold-to-flag hit-tests these positions in
+#. both modes; underlines and the tap popup are a mode-3 extra behind the
+#. "show original units" toggle.
+#.
+#. Returns "missing" if the book is converted but the reverse-map sidecar is
+#. gone — e.g. it was deleted while the patches file survived, or the book
+#. was converted before the map covered its mode. The toggle caller surfaces
+#. a message rather than silently doing nothing (5.4). Returns true/nil
+#. otherwise.
+#. The positions have two consumers: hold-to-flag (gated by the
+#. error-reporting opt-in) and, in mode 3, the "show original units"
+#. underline/popup. With neither active, skip the work entirely — the
+#. toggles' callbacks re-invoke this loader when flipped on.
+#. Fast path: positions already resolved (each carries its own original).
+#. First time after applying: scan once for the converted strings, then
+#. cache. findAllText returns hits in document order; for each converted
+#. string we walk its ordered originals list in lockstep so the Nth
+#. occurrence recovers the Nth original (6.2).
+#. First-time scan: run findAllText in a dismissable subprocess so the UI
+#. doesn't freeze; the resolved positions are then cached so future opens hit
+#. the instant fast path above. _filter_overlapping_matches runs in the child
+#. (on the full hit objects); the parent maps each hit to its original.
+#. nil message = Trapper's INVISIBLE trap widget: the work still runs
+#. off the UI thread and a tap still cancels it, but nothing is drawn.
+#. The corner ring carries the "busy" signal instead. If a tap does
+#. cancel it, nothing breaks — the positions simply stay unresolved and
+#. the next open retries (same as dismissing the old message did).
+#. dismissed
+#. ── Broad scan (triggered from menu / auto-scan) ──────────────────────────────
+#. Experimental unit-anchored fast scan. Runs synchronously (~a couple of
+#. seconds even on a huge book) and hands its records to _finishScan, which
+#. applies the same idiom filters and saves the same sidecar as the classic scan.
+#. Re-entrancy guard: a scan subprocess is already running (e.g. the auto-scan
+#. from onReaderReady is still going and the user taps "Scan book", or a
+#. double-tap). Starting another would overwrite self._scan_pid — orphaning the
+#. first child (never reaped, keeps burning CPU on a single-core reader) and
+#. racing it on the progress file + sidecar. Leave the running scan alone.
+#: main.lua:6998
+msgid "A scan is already in progress…"
+msgstr ""
+
+#. show the corner loader while it runs
+#. Estimate scan duration so the progress bar advances ~linearly (a true-ish
+#. ETA) instead of easing exponentially to 90% and stalling there. The rate
+#. is calibrated from past scans on this device; floor the ETA at 2s.
+#. Soft-hyphen books scan via one plain findAllText pass per unit alias
+#. instead of a single regex pass (see _fast_scan_matches), so the ETA —
+#. and the stuck-child deadline derived from it in _pollFastScan — must
+#. scale with the pass count. Without this, The Stand (60k soft hyphens,
+#. 1500 pages) got SIGKILLed at the 60s deadline floor mid-scan.
+#. Clear any progress file a previous crashed/killed scan may have left, so
+#. the poller can't read a stale fraction before the child writes a fresh one.
+#. Run in a subprocess so the UI stays responsive (same as the classic scan).
+#. CHILD: inherits crengine state at fork; no UIManager calls.
+#. Run at lowest CPU priority so the parent UI stays responsive
+#. (page turns) on single-core e-readers during the long scan.
+#. Fallback: synchronous (still only a couple of seconds).
+#. The unit-anchored fast scan is the only scan path now; _startScan delegates
+#. straight to it. (The old multi-pass classic scan was removed.)
+#. Non-crengine document (PDF/DjVu): no findAllText/xpointers — never scan.
+#. ── Poll subprocess completion ─────────────────────────────────────────────────
+#. Shared scan-completion: load the saved sidecar into _all_matches, clear the
+#. progress indicator, and notify. Used by both the classic and fast pollers.
+#. Run (once) an action queued to fire after the next scan finishes — used by
+#. "Rescan book" on a converted book to re-apply the conversion with fresh data.
+#. Scan-complete toast, suppressed when a convert is queued right behind it.
+#.
+#. Without this the reader gets two toasts for one action, moments apart, with
+#. two DIFFERENT numbers — "Scan complete: 321 units found" then "Converted 304
+#. units in book" (the rewriter skips matches the scanner keeps). The second is
+#. the one that describes what actually happened to the book, so the first just
+#. adds noise and invites "why did it lose 17?". Mode 1 always announces: there,
+#. this toast is the only feedback the reader gets. (User feedback 2026-08-07 —
+#. one rescan was producing five separate interruptions.)
+#.
+#. Reads _after_scan BEFORE _runAfterScan consumes it; both call sites announce
+#. first, so the flag is still set here.
+#. Calibrate the per-byte scan rate from this run so the next book's ETA is
+#. accurate. Blend 50/50 with the previous rate so one odd book (e.g. heavy
+#. images) doesn't skew it. Only trust runs long enough to be meaningful.
+#. Shy books run the N-pass fallback (their duration is not the regex-path
+#. rate) — skip them so one shy book doesn't inflate every later ETA.
+#. background scan finished (6.1)
+#. Terminate any in-flight scan subprocess and clear its state WITHOUT running the
+#. normal completion path. Used when the book closes mid-scan so a background scan
+#. can't keep burning CPU after the reader navigates away, nor fire a "scan
+#. complete" notification over the file browser / the next book.
+#. Book closing: stop any background scan (see _cancelScan). The poll loop checks
+#. self._scan_pid at its top, so it halts on its own once this clears it.
+#. Read the scan child's real-progress file (written by _fast_scan_matches):
+#. "<tA1> <frac>" where tA1 is the findAllText duration and frac is the per-hit
+#. loop fraction (0..1). Returns tA1, frac — or nil if absent/unparseable, in
+#. which case the poller falls back to its time-based estimate.
+#. Poll the fast-scan subprocess. The child reports genuine progress for its
+#. dominant phase (the per-hit loop) through _SCAN_PROGRESS_FILE; we map that
+#. onto the bar and only time-estimate the opaque findAllText head and the short
+#. prime/°F tail. Completion hands off to the shared completion handler.
+#. Safety net: never poll forever. isSubProcessDone (waitpid) reaps a crashed
+#. child fine, so the only way we keep polling is a child that is still alive
+#. but stuck — an infinite loop, or (more likely here) blocked on I/O when the
+#. book file changes underneath a network/9p mount mid-scan. Past a generous
+#. deadline, SIGKILL it and finish gracefully so a wedged scan can never leave
+#. the reader frozen on the spinner.
+#. Blend real per-hit-loop progress (when the child has reported it) with
+#. a time estimate for the two opaque ends:
+#. • findAllText head  → time-based, capped below the hand-off point
+#. • per-hit loop (B)  → REAL i/#hits, mapped a1..0.93
+#. • prime/°F tail     → time-creep 0.93..0.97 until the child is done
+#. a1 (the loop's start point) is sized from the child's measured
+#. findAllText duration, clamped 0.10..0.50. Monotonic: the bar never
+#. steps backwards even if an estimate over- or under-shoots.
+#. a1 = the bar position where the finished findAllText head gives way
+#. to real per-hit progress, sized from its MEASURED share of the ETA
+#. (tA1/eta). Empirically findAllText often dominates, so this is left
+#. large (up to 0.90): an A1-dominant book keeps the bar where the time
+#. estimate already had it (no backwards jump), while a hit-dense book
+#. gets a long, genuinely-real loop band.
+#. findAllText still running (no report yet): plain time estimate — the
+#. best available for an opaque C call — capped just shy of the tail.
+#. Animate the corner loader ~3×/s, refreshing ONLY its small top-left
+#. region with a gentle partial ("ui") refresh. Never "fast" (leaves
+#. e-ink ghosting over a long scan) and never "full" (hard black flash —
+#. the thing the user was seeing). The page body is never touched, so the
+#. scan no longer flashes or ghosts; the user's own page turns refresh it.
+#. Repaint ONLY the corner loader's region. Never "fast" (leaves e-ink ghosting
+#. over a long run) and never "full" (hard black flash). The page body is never
+#. touched. Extracted from the scan poll so every phase that shows the ring
+#. refreshes it identically — the tuning here was hard-won and must not be
+#. re-derived per call site.
+#. Indeterminate ring, for work whose progress can't be measured (the reverse-
+#. match resolve is one opaque findAllText call). The scan's ring is a real
+#. percentage; this one sweeps 15%→90% and repeats, so it reads as "busy"
+#. rather than as a stalled 0%.
+#.
+#. Why a ring at all instead of the blocking "Locating converted units…"
+#. message it replaces: this is not a decision the reader has to make, it fires
+#. right after the convert prompt and the convert progress message, and a third
+#. modal in a row is what made a single action feel like it was bombarding
+#. them (user feedback 2026-08-07).
+#. A real scan owns _scan_progress and writes a true percentage into it;
+#. never let a pulse fight it for the same field.
+#. Self-terminate if the book closed under us: the reader UI is torn
+#. down without unwinding this closure, and a tick that keeps
+#. rescheduling itself would run for the rest of the session.
+#. Clear the ring itself; the page body still isn't touched.
+#. ── Settings re-application (instant toggle without rescan) ───────────────────
+#. no sidecar yet — user needs to scan first
+#. Debug (Advanced › Debug › "Units in book"): a scrollable modal listing every
+#. unit found — its converted value and the surrounding sentence — for quickly
+#. auditing discovery + conversion. Tap an entry to jump to it in the book;
+#. long-press to read the full (untruncated) entry.
+#: main.lua:7360
+msgid "No units found in this book yet."
+msgstr ""
+
+#. Reading order (same key the convert/report paths use).
+#. Re-extract the surrounding sentence fresh from each match's (possibly
+#. extended) start/end xpointers, rather than concatenating the saved
+#. prev_text/matched/next_text. For compound and range matches the start/end
+#. were widened after the original 8-word context was captured, so that
+#. concatenation overlapped the widened span — the source of the doubled
+#. words. before = text(start-N words, start) and after = text(end, end+N
+#. words) are disjoint from the matched span by construction, so they can't
+#. double, and N can be larger for a fuller sentence.
+#. Extraction failed (no end xp, or both sides empty) — fall back to the
+#. saved context so the row is never blank.
+#. The detected source number(s) in parentheses after the unit ("three
+#. feet (3)"), so a mis-parse stands out. Handles ranges ("5–6") and
+#. compounds ("6, 4"), not just the leading number.
+#: main.lua:7426
+msgid "%1. %2 (%3)  →  %4\n"
+"…%5…"
+msgstr ""
+
+#: main.lua:7440
+msgid "Units in book (%1)"
+msgstr ""
+
+#. compact: fit more of each sentence per row
+#. Long-press → flag this conversion as wrong (tagging what's off) or jump to
+#. it. Flags are appended to flagged_errors.txt for later off-device review.
+#: main.lua:7479 main.lua:8021
+msgid "⚑ Wrong conversion"
+msgstr ""
+
+#: main.lua:7480 main.lua:8023
+msgid "⚑ Wrong text captured"
+msgstr ""
+
+#: main.lua:7481 main.lua:8025
+msgid "⚑ Not a unit"
+msgstr ""
+
+#: main.lua:7482
+msgid "Go to in book"
+msgstr ""
+
+#. Append a flagged conversion to flagged_errors.txt — a plain-text, USB-pullable
+#. record (book title, what was detected, what it became, the sentence, and the
+#. xpointer) so faulty units can be discussed/fixed on a computer.
+#: main.lua:7516
+msgid "Couldn't write the flag file."
+msgstr ""
+
+#. With sharing on, the flag also queues for upload to the developer's
+#. collector (see _REPORTING). Queue first, then try to flush — offline
+#. just leaves it queued for a later open.
+#: main.lua:7542
+msgid "Flagged: %1"
+msgstr ""
+
+#. Upload queued error reports (batch of ≤20 per POST, matching the server
+#. cap) in a subprocess — LuaSocket blocks, and a flaky connection must not
+#. freeze the UI for the full socket timeout. The CHILD deletes the sent
+#. lines on HTTP 200 (keeping any that were appended meanwhile); on any
+#. failure the queue survives untouched for the next attempt. No network
+#. prompt: if the device is offline the POST just fails quietly.
+#. Reap the child (waitpid via isSubProcessDone); poll a few times,
+#. then let go — a still-running child just gets reaped by the next
+#. flush attempt's poll.
+#. Flush queued error reports the moment connectivity returns — and at
+#. launch, when Wi-Fi is already up (NetworkMgr broadcasts an initial
+#. NetworkConnected then). The plugin also lives in the file browser (not
+#. doc-only) and _flushReports touches nothing document-specific, so queued
+#. flags go out from either state, not just on book open.
+#. Debug › "View flagged errors": show the accumulated flag log on-device.
+#: main.lua:7631
+msgid "No flagged errors yet."
+msgstr ""
+
+#: main.lua:7636
+msgid "Flagged errors"
+msgstr ""
+
+#. Debug › "Clear flagged errors": delete the log after it's been pulled off.
+#: main.lua:7644
+msgid "No flagged errors to clear."
+msgstr ""
+
+#: main.lua:7647
+msgid "Delete all flagged errors?"
+msgstr ""
+
+#: main.lua:7647
+msgid "Delete"
+msgstr ""
+
+#: main.lua:7649
+msgid "Flagged errors cleared."
+msgstr ""
+
+#. ── Draw ──────────────────────────────────────────────────────────────────────
+#. Digit matches include a leading boundary char (the [^0-9,] the _ND pattern
+#. requires), so r.start points at the space/punctuation *before* the number,
+#. not the number itself. When that leading char wraps onto the previous line,
+#. crengine's per-segment box for the first line fragment is computed wrong (or
+#. missing) — the cause of the "15°F has no underline / wrong token underlined"
+#. bug on wrapped range matches. Start the box at the real first character.
+#. (A leading minus sign is kept — we want to underline it.)
+#. Optional diagnostics: when developer mode is on (the .dev marker file), dump the screen
+#. boxes for every match drawn on the current page so wrap/geometry issues can
+#. be inspected from the file rather than guessed at.
+#. Class attribute, not a local: this file is at the 200-local ceiling.
+#. Cheap, fully data-derived signature of everything that affects WHERE the
+#. underline boxes land. The resolved-box cache (below) is valid only while this
+#. is unchanged: page turn / scroll (getCurrentPage/Pos), reflow or font/style
+#. change (getDocumentRenderingHash), rotation (screen dims), and the plugin-side
+#. inputs that change which matches resolve (enabled, tap mode, the match-set
+#. identity, the category filter). Because every input is read from live state,
+#. no change can be silently missed. Returns nil on any API error, which forces
+#. a rebuild every paint — i.e. degrades to the old always-resolve behaviour.
+#. Resolve the on-screen underline segments for every enabled match into a flat
+#. list of { box, match, _reverse }. This is the expensive part — one crengine
+#. getScreenBoxesFromPositions per match — so its result is cached by
+#. _drawHighlights and only rebuilt when _boxCacheSig changes.
+#. pcall with the method + args directly (no per-match closure) to avoid
+#. allocating a closure for every match on every rebuild.
+#. If advancing past the boundary char yielded nothing (e.g. the char
+#. and the digit were in different text nodes), fall back to the raw
+#. start so we never lose an underline that used to render.
+#. Mode 1 highlights point at imperial-text positions; in mode 3 the book
+#. text is already converted, so those positions are meaningless — never
+#. resolve them there (the reverse-match loop handles mode 3 instead).
+#. Underlines are a mode-1 concept: mode 3 replaced the text and mode 2
+#. carries the conversion inline as a gloss — drawing over either would
+#. just be clutter.
+#. Paint the SVG scan-progress loader directly into the framebuffer.
+#. Sits at the same top-left position as KOReader's reflow progress bar.
+#. If reflow is active (bar occupies x=0..Screen/3), we shift right past it.
+#. Reuse the resolved boxes across repaints of an unchanged view. Popups,
+#. footer ticks and menu dismissals repaint the whole page but don't move
+#. any text, so re-resolving every match's screen position each time is pure
+#. waste; only a real view/state change (sig miss) re-resolves. In dev debug
+#. mode the cache is bypassed so the per-page box report is always written.
+#. nil in debug mode → rebuilds every paint
+#. Draw pass — reads the live style settings, so changing underline
+#. style / colour / width takes effect on the next paint with no cache work.
+#. Reverse boxes are always resolved (hold-to-flag hit-tests them in
+#. both convert modes) but only drawn in mode 3 with "show original
+#. units" on — mode 2's glosses already show everything inline.
+#. ── Tap ───────────────────────────────────────────────────────────────────────
+#. Converted value tapped: show its original imperial text —
+#. mode 3 with "show original units" on, only. Otherwise the
+#. reverse boxes exist purely for hold-to-flag hit-testing, so
+#. the tap must pass through as if we weren't here.
+#. Convert modes: the edition is applied automatically on mode selection.
+#. If tapped before it could run (e.g. no scan data at the time),
+#. try again now.
+#. Option 1 (default): popup
+#. Long-press on Footcream-marked text → the same flag dialog the Units list
+#. offers on long-press, without the trip through Advanced › Debug. Consumes
+#. the hold only when it lands on a known span (normal text selection and
+#. dictionary lookup are untouched everywhere else): mode-1 underlines, and
+#. in "Convert directly in the text" mode the converted values located by
+#. the reverse map — whether or not their underlines are currently shown.
+#. Long-press flagging IS the error-reporting feature: the Advanced
+#. toggle ("Long-press units to send errors to the developer") gates it
+#. entirely. With it off, every hold falls through to KOReader.
+#. Mode-2 gloss spans contain the ORIGINAL English words, so
+#. consuming the hold here hijacks their dictionary lookup —
+#. recover it by offering the held word as a lookup button in
+#. the flag dialog. (Mode 3 spans are bare metric values;
+#. nothing worth looking up.)
+#. 12-word sentence context around a start/end xpointer pair, with `mid`
+#. bracketed in the middle — the same extraction _showUnitList performs for
+#. its rows (kept separate on purpose: the flagging system and its list stay
+#. untouched by these reading-mode entry points). Returns nil when the
+#. document can't resolve the walk; callers supply their own fallback.
+#. Build the same item shape _showUnitList's rows carry (what _flagError
+#. consumes), from a raw match record.
+#: main.lua:7950
+msgid "%1 (%2)  →  %3\n"
+"…%4…"
+msgstr ""
+
+#. Flag item for a reverse match (a converted span held in the reading view:
+#. a bare metric value in mode 3, an "original (metric)" gloss in mode 2).
+#. r._converted carries the ORIGINAL imperial text (that's what mode 3's tap
+#. popup shows); the converted text as it stands in the book is read back
+#. from the xpointers. detected/converted land in the report the same way
+#. round as a mode-1 flag.
+#: main.lua:7975
+msgid "%1  →  %2\n"
+"…%3…"
+msgstr ""
+
+#. Flag item from a reader text selection (the "Flag to Footcream" button in
+#. KOReader's selection menu) — the only path that can report a unit the
+#. scanner MISSED entirely, since a miss has no underline or converted span
+#. to hold. Works in every mode.
+#: main.lua:7993
+msgid "%1\n"
+"…%2…"
+msgstr ""
+
+#. The flag-issue picker: same issue types (and the same _flagError
+#. destination — local flag file + optional upload queue) as the Units list's
+#. long-press dialog. No "Go to in book" here: the reader is already there.
+#. variant == "selection" (the selection-menu button) leads with "Missed
+#. unit" — the one issue only that path can report. dict_word (mode-2 holds)
+#. adds a dictionary-lookup button for the word whose long-press we consumed.
+#: main.lua:8018
+msgid "⚑ Missed unit"
+msgstr ""
+
+#: main.lua:8028
+msgid "Dictionary: %1"
+msgstr ""
+
+#. ── GitHub auto-update (UI flow) ──────────────────────────────────────────────
+#. Entry point (menu callback): ensure we're online, then check the latest
+#. release. Wrapped in Trapper so the network wait shows a dismissable spinner.
+#. Android's ART runtime can't safely fork() a live multi-threaded
+#. process once Binder-backed work (DNS/TLS) runs in the child, and
+#. KOReader's Trapper:dismissableRunInSubprocess always forks — it
+#. crashes the app outright on Android (GitHub issue #4). Run the
+#. check/install inline there instead of through Trapper.
+#. Shared by the subprocess and Android-synchronous paths: interprets the
+#. fetched release JSON and offers to install if a newer version exists.
+#: main.lua:8070
+msgid "Update check failed:"
+msgstr ""
+
+#: main.lua:8070
+msgid "no response"
+msgstr ""
+
+#: main.lua:8075
+msgid "Could not read the latest release info."
+msgstr ""
+
+#: main.lua:8081
+msgid "You're up to date (v%1)."
+msgstr ""
+
+#. Prefer an attached .zip asset; fall back to the source zipball.
+#: main.lua:8094
+msgid "No downloadable release package found."
+msgstr ""
+
+#: main.lua:8098
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
+"Download and install now?"
+msgstr ""
+
+#: main.lua:8100
+msgid "Update"
+msgstr ""
+
+#. Fetch in a subprocess so the UI stays responsive and the message is
+#. dismissable (returns the JSON body, or "ERR:<reason>" on failure).
+#. dismissed by the user
+#. Android has no fork()-safe way to background this, so it runs inline with
+#. a blocking progress message; it's a single small HTTPS request, so a short
+#. UI freeze is an acceptable trade for not crashing.
+#: main.lua:8117 main.lua:8128
+msgid "Checking for updates…"
+msgstr ""
+
+#. Do the whole download → unzip → install in ONE subprocess so the UI never
+#. freezes and the "Updating…" message stays dismissable.
+#. Dismissed → the subprocess was SIGKILLed. If it died mid-copy, restore
+#. from the backup so we never leave a broken plugin; then clean debris.
+#. Android counterpart of _installUpdate: same fork-safety issue, plus the
+#. install itself does a network download. Runs inline with a blocking
+#. progress message — it can't be dismissed mid-flight, but it's short-lived.
+#: main.lua:8146 main.lua:8164
+msgid "Updating to %1…"
+msgstr ""
+
+#. ── Menu ──────────────────────────────────────────────────────────────────────
+#. Mode labels follow the Preferred-units direction: under an imperial
+#. preference the conversions ARE imperial, so "tap for metric" would lie.
+#. (Modes 2/3 stay disabled there, but their greyed labels flip too — a
+#. greyed "Imperial only" reads as "not available yet", which is the truth.)
+#: main.lua:8181
+msgid "%1 only (in text)"
+msgstr ""
+
+#: main.lua:8181 main.lua:8183 main.lua:8319 main.lua:8325 main.lua:8530
+msgid "Metric"
+msgstr ""
+
+#. Conversions are computed at scan time, so a fresh
+#. scan is needed to apply the change. Auto-rescan when
+#. a scan exists and the book isn't converted-in-place
+#. (mode 3 bakes values into the text — re-convert there).
+#. Same invariant as the other entry points: a
+#. scan started while a convert mode is active
+#. offers the conversion when it lands. (This
+#. branch only runs on an UNCONVERTED book, so
+#. in mode 2/3 it would otherwise rescan and
+#. leave the book untouched.)
+#. Names the mode it belongs to, which follows the
+#. preferred units ("Metric only" / "Imperial only").
+#: main.lua:8181 main.lua:8183 main.lua:8530
+msgid "Imperial"
+msgstr ""
+
+#: main.lua:8183
+msgid "%1 alongside original (in text)"
+msgstr ""
+
+#: main.lua:8185
+msgid "Underline units, tap for %1"
+msgstr ""
+
+#: main.lua:8200
+msgid "Length & Distance"
+msgstr ""
+
+#: main.lua:8201
+msgid "Weight"
+msgstr ""
+
+#: main.lua:8202
+msgid "Temperature"
+msgstr ""
+
+#: main.lua:8203
+msgid "Volume"
+msgstr ""
+
+#: main.lua:8204
+msgid "Speed"
+msgstr ""
+
+#: main.lua:8205
+msgid "Area"
+msgstr ""
+
+#. sub_item_table_func rebuilds items on every open so "Show hints"
+#. can appear/disappear based on current mode without a reload.
+#. 1. Hints count (read-only status line)
+#: main.lua:8233
+msgid "No book open"
+msgstr ""
+
+#: main.lua:8235
+msgid "Footcream is off in this book"
+msgstr ""
+
+#. Converted (mode-3) book: _all_matches holds only the
+#. leftovers the rewrite skipped, but this line must keep
+#. reporting the book's FULL unit count in every mode
+#. (user-specified) — use the count stamped at conversion.
+#: main.lua:8249
+msgid "%1 hint found in this %2 book"
+msgid_plural "%1 hints found in this %2 book"
+msgstr[0] ""
+msgstr[1] ""
+
+#. Scanned, but no imperial units — distinct from "never
+#. scanned" so the user isn't stuck re-scanning forever (6.1).
+#: main.lua:8252 main.lua:8256
+msgid "%1 hint found"
+msgid_plural "%1 hints found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: main.lua:8258
+msgid "Not yet scanned"
+msgstr ""
+
+#. 2. Enable Footcream in this book — PER-BOOK opt-out (one
+#. meaning, one scope; the old toggle was global in mode 1 and
+#. per-book in modes 2/3 — user-flagged as confusing 2026-07-14).
+#. The flag lives in the book's own .sdr metadata; the global
+#. mode keeps steering every other book. A true global off is
+#. KOReader's plugin management.
+#: main.lua:8272
+msgid "Enable Footcream in this book"
+msgstr ""
+
+#. Off means untouched text — restore the conversion.
+#. Re-enabled: run the same load-or-scan flow as opening
+#. the book (idempotent; recovery/consistency checks are
+#. no-ops on a clean book). Underlines/conversion offers
+#. come back exactly as on a fresh open.
+#. 3. Convert units to (conversion direction, a.k.a. the preferred
+#. system; both directions support all three modes).
+#: main.lua:8318 main.lua:8334
+msgid "Imperial (US)"
+msgstr ""
+
+#: main.lua:8319 main.lua:8343
+msgid "Imperial (UK)"
+msgstr ""
+
+#: main.lua:8320
+msgid "Convert units to: %1"
+msgstr ""
+
+#. 4. Mode (shows active mode name in the label). Opens the visual
+#. picker — a sample sentence rendered in each of the three modes,
+#. with a real styled underline — because the mode NAMES alone
+#. didn't explain what the modes DO to the page. keep_menu_open +
+#. no CloseReaderMenu: the picker floats OVER the open menu, so
+#. closing it drops the user back into the menu (a plain in-menu
+#. submenu was tried, but TouchMenu rows can't control spacing,
+#. caption color, or show a styled underline). Only an actual mode
+#. change closes the menu (see pick() in _showModeDialog).
+#: main.lua:8365
+msgid "Mode: %1"
+msgstr ""
+
+#. TouchMenu passes itself to callbacks; the picker uses it
+#. to updateItems() after a mode change so the "Mode: <label>"
+#. row refreshes live in the still-open menu. The mode active
+#. at THIS fresh open is what a canceled convert question
+#. restores (recorded here, not in _showModeDialog — the
+#. picker re-renders itself on every pick).
+#. 5. Auto-scan
+#: main.lua:8383
+msgid "Auto-scan when opening a new book"
+msgstr ""
+
+#. 6. Scan / Rescan book
+#: main.lua:8397
+msgid "Rescan book"
+msgstr ""
+
+#: main.lua:8399
+msgid "Scan book"
+msgstr ""
+
+#. Greyed while Footcream is off in this book.
+#. An explicit scan overrides the session suppression
+#. set by "Remove Footcream data from this book".
+#. Without this, rescanning in mode 2/3 scanned and then
+#. did nothing — the one scan entry point that never
+#. armed the convert prompt.
+#: main.lua:8427
+msgid "This book does not appear to be in English (detected: %1).\n\n"
+"Scan it anyway?"
+msgstr ""
+
+#: main.lua:8428
+msgid "This book does not appear to be in English.\n\n"
+"Scan it anyway?"
+msgstr ""
+
+#: main.lua:8429
+msgid "Scan"
+msgstr ""
+
+#. Rescanning a converted (mode-3) book in place corrupts the
+#. sidecar/patches/reverse-map consistency: the scan would run
+#. against metric text and find almost nothing, while the
+#. patch record still describes the old conversion. Restore the
+#. original text first, then scan that. (2.4)
+#. Deferred past the menu-close repaint: shown in the
+#. same tick, the queued full-view refresh paints the
+#. page OVER the dialog — a half-visible "ghost" whose
+#. buttons don't take taps (same failure the Enable
+#. toggle and the after-scan auto-apply guard against
+#. with their own settle delays).
+#: main.lua:8447
+msgid "This book is converted — rescan it and re-apply the conversion?"
+msgstr ""
+
+#: main.lua:8448
+msgid "Rescan & reconvert"
+msgstr ""
+
+#. Revert runs async now; once it finishes and
+#. reloads, scan the restored text (a short delay
+#. lets the reload settle first).
+#. Flag the book; onReaderReady (after the revert's
+#. reload) does the rescan + re-convert. A timer here
+#. is unreliable — reloadDocument recreates the reader
+#. UI, so self.ui.document is gone by the time it fires.
+#: main.lua:8467
+msgid "Styling"
+msgstr ""
+
+#: main.lua:8479
+msgid "Check for updates (v%1)"
+msgstr ""
+
+#. Advanced — kept last
+#: main.lua:8490
+msgid "Advanced"
+msgstr ""
+
+#: main.lua:8494
+msgid "Unit categories"
+msgstr ""
+
+#: main.lua:8499
+msgid "Smart rounding for conversions"
+msgstr ""
+
+#: main.lua:8531
+msgid "Show original unit in tooltip (%1 only mode)"
+msgstr ""
+
+#. Reverse-map data is gone (e.g. deleted)
+#. but the book is still converted, so the
+#. toggle would silently do nothing (5.4).
+#: main.lua:8548
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr ""
+
+#: main.lua:8560
+msgid "Long-press units to send errors to the developer"
+msgstr ""
+
+#. The toggle also gates the reading-mode flag
+#. entry points (hold + selection-menu button), so
+#. (un)load the hold hit boxes to match.
+#. Anything flagged before opting in is queued
+#. locally too? No — only flags made while
+#. sharing is ON are queued; flush whatever the
+#. queue already holds from earlier sessions.
+#: main.lua:8583
+msgid "Flagged errors will be shared anonymously"
+msgstr ""
+
+#: main.lua:8589
+msgid "Remove Footcream data from this book"
+msgstr ""
+
+#. Suppress auto-scan for this book for the rest of
+#. the session (the revert below reloads the document
+#. and would otherwise re-prompt immediately).
+#. sidecar gone (6.1)
+#. The revert announces itself ("Restored
+#. original units in book").
+#: main.lua:8621
+msgid "Footcream data removed from book"
+msgstr ""
+
+#: main.lua:8627
+msgid "Debug"
+msgstr ""
+
+#: main.lua:8631
+msgid "Units in book (list)"
+msgstr ""
+
+#: main.lua:8643
+msgid "View flagged errors"
+msgstr ""
+
+#: main.lua:8651
+msgid "Clear flagged errors"
+msgstr ""
+
