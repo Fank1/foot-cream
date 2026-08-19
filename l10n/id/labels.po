@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-19 13:38+0200\n"
-"PO-Revision-Date: 2026-08-18 13:59\n"
+"PO-Revision-Date: 2026-08-19 11:55\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
@@ -45,11 +45,9 @@ msgstr "Pemasangan gagal — versi sebelumnya dipulihkan."
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
 #: main.lua:1807
-msgid ""
-"Updated to %1.\n"
+msgid "Updated to %1.\n"
 "Restart KOReader now to load it?"
-msgstr ""
-"Diperbarui ke %1.\n"
+msgstr "Diperbarui ke %1.\n"
 "Mulai ulang KOReader sekarang untuk memuatnya?"
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
@@ -305,11 +303,9 @@ msgstr[0] "%1 satuan dalam buku diberi garis bawah"
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
 #: main.lua:7033 main.lua:7111
-msgid ""
-"This book is already converted.\n"
+msgid "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
-msgstr ""
-"Buku ini sudah dikonversi.\n"
+msgstr "Buku ini sudah dikonversi.\n"
 "Gunakan dulu 'Hapus data Footcream dari buku ini' (Lanjutan)."
 
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
@@ -403,26 +399,14 @@ msgstr "Konversi ke satuan %1 terhenti — buku tidak berubah."
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
 #: main.lua:7380
-msgid ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurement was found, but it could not be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgid_plural ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurements were found, but none could be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgstr[0] ""
-"Tidak dapat mengonversi buku ini langsung di berkasnya.\n"
-"\n"
-"%1 ukuran ditemukan, tetapi tidak dapat dicocokkan dengan teks buku — markah "
-"atau formatnya mungkin tidak didukung untuk konversi di dalam teks.\n"
-"\n"
+msgstr[0] "Tidak dapat mengonversi buku ini langsung di berkasnya.\n\n"
+"%1 ukuran ditemukan, tetapi tidak dapat dicocokkan dengan teks buku — markah atau formatnya mungkin tidak didukung untuk konversi di dalam teks.\n\n"
 "Mode '%2' masih berfungsi untuk buku ini."
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
@@ -445,12 +429,8 @@ msgstr "Satuan asli dalam buku telah dipulihkan"
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
 #: main.lua:7550
-msgid ""
-"This book's file changed since Footcream converted it, so the original text "
-"can't be restored. Footcream's conversion record has been cleared."
-msgstr ""
-"Berkas buku ini berubah setelah Footcream mengonversinya, sehingga teks asli "
-"tidak dapat dipulihkan. Catatan konversi Footcream telah dihapus."
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr "Berkas buku ini berubah setelah Footcream mengonversinya, sehingga teks asli tidak dapat dipulihkan. Catatan konversi Footcream telah dihapus."
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
@@ -468,11 +448,9 @@ msgstr "Pemindaian sedang berjalan…"
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
 #: main.lua:8037
-msgid ""
-"Couldn't finish scanning this book.\n"
+msgid "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
-msgstr ""
-"Pemindaian buku ini tidak dapat diselesaikan.\n"
+msgstr "Pemindaian buku ini tidak dapat diselesaikan.\n"
 "Gunakan 'Pindai buku' untuk mencoba lagi."
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
@@ -485,11 +463,9 @@ msgstr "Belum ada satuan yang ditemukan dalam buku ini."
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
 #: main.lua:8563
-msgid ""
-"%1. %2 (%3)  →  %4\n"
+msgid "%1. %2 (%3)  →  %4\n"
 "…%5…"
-msgstr ""
-"%1. %2 (%3)  →  %4\n"
+msgstr "%1. %2 (%3)  →  %4\n"
 "…%5…"
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
@@ -573,33 +549,27 @@ msgstr "Kesalahan yang dilaporkan telah dihapus."
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
 #: main.lua:9143
-msgid ""
-"%1 (%2)  →  %3\n"
+msgid "%1 (%2)  →  %3\n"
 "…%4…"
-msgstr ""
-"%1 (%2)  →  %3\n"
+msgstr "%1 (%2)  →  %3\n"
 "…%4…"
 
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
 #: main.lua:9171
-msgid ""
-"%1  →  %2\n"
+msgid "%1  →  %2\n"
 "…%3…"
-msgstr ""
-"%1  →  %2\n"
+msgstr "%1  →  %2\n"
 "…%3…"
 
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
 #: main.lua:9192
-msgid ""
-"%1\n"
+msgid "%1\n"
 "…%2…"
-msgstr ""
-"%1\n"
+msgstr "%1\n"
 "…%2…"
 
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
@@ -648,15 +618,11 @@ msgstr "Tidak ditemukan paket rilis yang dapat diunduh."
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
 #: main.lua:9324
-msgid ""
-"Update available: %1\n"
-"(installed: v%2)\n"
-"\n"
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
 "Download and install now?"
-msgstr ""
-"Pembaruan tersedia: %1\n"
-"(terpasang: v%2)\n"
-"\n"
+msgstr "Pembaruan tersedia: %1\n"
+"(terpasang: v%2)\n\n"
 "Unduh dan pasang sekarang?"
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
@@ -846,24 +812,16 @@ msgstr "Pindai buku"
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
 #: main.lua:9783
-msgid ""
-"This book does not appear to be in English (detected: %1).\n"
-"\n"
+msgid "This book does not appear to be in English (detected: %1).\n\n"
 "Scan it anyway?"
-msgstr ""
-"Buku ini sepertinya tidak berbahasa Inggris (terdeteksi: %1).\n"
-"\n"
+msgstr "Buku ini sepertinya tidak berbahasa Inggris (terdeteksi: %1).\n\n"
 "Tetap pindai?"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
 #: main.lua:9785
-msgid ""
-"This book does not appear to be in English.\n"
-"\n"
+msgid "This book does not appear to be in English.\n\n"
 "Scan it anyway?"
-msgstr ""
-"Buku ini sepertinya tidak berbahasa Inggris.\n"
-"\n"
+msgstr "Buku ini sepertinya tidak berbahasa Inggris.\n\n"
 "Tetap pindai?"
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
@@ -877,8 +835,7 @@ msgstr "Pindai"
 #. conversion written again.
 #: main.lua:9809
 msgid "This book is converted — rescan it and re-apply the conversion?"
-msgstr ""
-"Buku ini sudah dikonversi — pindai ulang dan terapkan lagi konversinya?"
+msgstr "Buku ini sudah dikonversi — pindai ulang dan terapkan lagi konversinya?"
 
 #. TRANSLATORS: Button that starts the rescan-and-reconvert; the other button is
 #. the shared 'Cancel'.
@@ -928,14 +885,10 @@ msgstr "Tampilkan satuan asli di tooltip (mode 'hanya %1')"
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
 #: main.lua:9940
-msgid ""
-"Original-unit data for this book is missing.\n"
-"To restore it, use 'Remove Footcream data from this book', then convert "
-"again via the Mode menu."
-msgstr ""
-"Data satuan asli untuk buku ini hilang.\n"
-"Untuk memulihkannya, gunakan 'Hapus data Footcream dari buku ini', lalu "
-"konversikan lagi lewat menu Mode."
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr "Data satuan asli untuk buku ini hilang.\n"
+"Untuk memulihkannya, gunakan 'Hapus data Footcream dari buku ini', lalu konversikan lagi lewat menu Mode."
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
@@ -982,15 +935,3 @@ msgstr "Lihat kesalahan yang dilaporkan"
 msgid "Clear flagged errors"
 msgstr "Hapus kesalahan yang dilaporkan"
 
-#~ msgid ""
-#~ "Footcream's converter has improved — update this book's in-text "
-#~ "conversions?"
-#~ msgstr ""
-#~ "Pengonversi Footcream telah ditingkatkan — perbarui konversi di dalam "
-#~ "teks buku ini?"
-
-#~ msgid "Update now"
-#~ msgstr "Perbarui sekarang"
-
-#~ msgid "Not now"
-#~ msgstr "Nanti saja"
