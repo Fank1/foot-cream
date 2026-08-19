@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-19 13:38+0200\n"
-"PO-Revision-Date: 2026-08-18 13:58\n"
+"PO-Revision-Date: 2026-08-19 11:55\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "Language: sv_SE\n"
@@ -45,11 +45,9 @@ msgstr "Installationen misslyckades – den tidigare versionen återställdes."
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
 #: main.lua:1807
-msgid ""
-"Updated to %1.\n"
+msgid "Updated to %1.\n"
 "Restart KOReader now to load it?"
-msgstr ""
-"Uppdaterad till %1.\n"
+msgstr "Uppdaterad till %1.\n"
 "Vill du starta om KOReader nu för att läsa in den?"
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
@@ -308,11 +306,9 @@ msgstr[1] "%1 enheter understrukna i boken"
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
 #: main.lua:7033 main.lua:7111
-msgid ""
-"This book is already converted.\n"
+msgid "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
-msgstr ""
-"Den här boken är redan omvandlad.\n"
+msgstr "Den här boken är redan omvandlad.\n"
 "Använd \"Ta bort Footcream-data från den här boken\" (Avancerat) först."
 
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
@@ -406,33 +402,17 @@ msgstr "Omvandlingen till %1 enheter avbröts — boken är oförändrad."
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
 #: main.lua:7380
-msgid ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurement was found, but it could not be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgid_plural ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurements were found, but none could be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgstr[0] ""
-"Kunde inte omvandla den här boken direkt i filen.\n"
-"\n"
-"%1 mått hittades, men det gick inte att hitta i bokens text – dess markup "
-"eller format stöds kanske inte för omvandling i texten.\n"
-"\n"
+msgstr[0] "Kunde inte omvandla den här boken direkt i filen.\n\n"
+"%1 mått hittades, men det gick inte att hitta i bokens text – dess markup eller format stöds kanske inte för omvandling i texten.\n\n"
 "Läget \"%2\" fungerar fortfarande för den här boken."
-msgstr[1] ""
-"Kunde inte omvandla den här boken direkt i filen.\n"
-"\n"
-"%1 mått hittades, men inget av dem gick att hitta i bokens text – dess "
-"markup eller format stöds kanske inte för omvandling i texten.\n"
-"\n"
+msgstr[1] "Kunde inte omvandla den här boken direkt i filen.\n\n"
+"%1 mått hittades, men inget av dem gick att hitta i bokens text – dess markup eller format stöds kanske inte för omvandling i texten.\n\n"
 "Läget \"%2\" fungerar fortfarande för den här boken."
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
@@ -455,12 +435,8 @@ msgstr "Originalenheterna i boken har återställts"
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
 #: main.lua:7550
-msgid ""
-"This book's file changed since Footcream converted it, so the original text "
-"can't be restored. Footcream's conversion record has been cleared."
-msgstr ""
-"Bokens fil har ändrats sedan Footcream omvandlade den, så originaltexten kan "
-"inte återställas. Footcreams omvandlingsdata har rensats."
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr "Bokens fil har ändrats sedan Footcream omvandlade den, så originaltexten kan inte återställas. Footcreams omvandlingsdata har rensats."
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
@@ -478,11 +454,9 @@ msgstr "En scanning pågår redan…"
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
 #: main.lua:8037
-msgid ""
-"Couldn't finish scanning this book.\n"
+msgid "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
-msgstr ""
-"Det gick inte att scanna klart den här boken.\n"
+msgstr "Det gick inte att scanna klart den här boken.\n"
 "Använd \"Scanna boken\" för att försöka igen."
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
@@ -495,11 +469,9 @@ msgstr "Inga enheter har hittats i den här boken än."
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
 #: main.lua:8563
-msgid ""
-"%1. %2 (%3)  →  %4\n"
+msgid "%1. %2 (%3)  →  %4\n"
 "…%5…"
-msgstr ""
-"%1. %2 (%3)  →  %4\n"
+msgstr "%1. %2 (%3)  →  %4\n"
 "…%5…"
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
@@ -583,33 +555,27 @@ msgstr "Flaggade fel rensade."
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
 #: main.lua:9143
-msgid ""
-"%1 (%2)  →  %3\n"
+msgid "%1 (%2)  →  %3\n"
 "…%4…"
-msgstr ""
-"%1 (%2)  →  %3\n"
+msgstr "%1 (%2)  →  %3\n"
 "…%4…"
 
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
 #: main.lua:9171
-msgid ""
-"%1  →  %2\n"
+msgid "%1  →  %2\n"
 "…%3…"
-msgstr ""
-"%1  →  %2\n"
+msgstr "%1  →  %2\n"
 "…%3…"
 
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
 #: main.lua:9192
-msgid ""
-"%1\n"
+msgid "%1\n"
 "…%2…"
-msgstr ""
-"%1\n"
+msgstr "%1\n"
 "…%2…"
 
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
@@ -658,15 +624,11 @@ msgstr "Inget nedladdningsbart utgåvepaket hittades."
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
 #: main.lua:9324
-msgid ""
-"Update available: %1\n"
-"(installed: v%2)\n"
-"\n"
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
 "Download and install now?"
-msgstr ""
-"Uppdatering tillgänglig: %1\n"
-"(installerad: v%2)\n"
-"\n"
+msgstr "Uppdatering tillgänglig: %1\n"
+"(installerad: v%2)\n\n"
 "Vill du ladda ner och installera nu?"
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
@@ -858,24 +820,16 @@ msgstr "Scanna boken"
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
 #: main.lua:9783
-msgid ""
-"This book does not appear to be in English (detected: %1).\n"
-"\n"
+msgid "This book does not appear to be in English (detected: %1).\n\n"
 "Scan it anyway?"
-msgstr ""
-"Boken verkar inte vara på engelska (identifierat: %1).\n"
-"\n"
+msgstr "Boken verkar inte vara på engelska (identifierat: %1).\n\n"
 "Vill du scanna den ändå?"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
 #: main.lua:9785
-msgid ""
-"This book does not appear to be in English.\n"
-"\n"
+msgid "This book does not appear to be in English.\n\n"
 "Scan it anyway?"
-msgstr ""
-"Boken verkar inte vara på engelska.\n"
-"\n"
+msgstr "Boken verkar inte vara på engelska.\n\n"
 "Vill du scanna den ändå?"
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
@@ -889,9 +843,7 @@ msgstr "Scanna"
 #. conversion written again.
 #: main.lua:9809
 msgid "This book is converted — rescan it and re-apply the conversion?"
-msgstr ""
-"Den här boken är omvandlad – vill du scanna den igen och göra om "
-"omvandlingen?"
+msgstr "Den här boken är omvandlad – vill du scanna den igen och göra om omvandlingen?"
 
 #. TRANSLATORS: Button that starts the rescan-and-reconvert; the other button is
 #. the shared 'Cancel'.
@@ -941,14 +893,10 @@ msgstr "Visa originalenheten i inforutan (läget Endast %1)"
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
 #: main.lua:9940
-msgid ""
-"Original-unit data for this book is missing.\n"
-"To restore it, use 'Remove Footcream data from this book', then convert "
-"again via the Mode menu."
-msgstr ""
-"Data om originalenheterna för den här boken saknas.\n"
-"Återställ den genom att använda \"Ta bort Footcream-data från den här "
-"boken\" och omvandla sedan igen via Läge-menyn."
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr "Data om originalenheterna för den här boken saknas.\n"
+"Återställ den genom att använda \"Ta bort Footcream-data från den här boken\" och omvandla sedan igen via Läge-menyn."
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
@@ -995,15 +943,3 @@ msgstr "Visa flaggade fel"
 msgid "Clear flagged errors"
 msgstr "Rensa flaggade fel"
 
-#~ msgid ""
-#~ "Footcream's converter has improved — update this book's in-text "
-#~ "conversions?"
-#~ msgstr ""
-#~ "Footcreams omvandlare har förbättrats – vill du uppdatera bokens "
-#~ "omvandlingar i texten?"
-
-#~ msgid "Update now"
-#~ msgstr "Uppdatera nu"
-
-#~ msgid "Not now"
-#~ msgstr "Inte nu"
