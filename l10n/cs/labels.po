@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-19 13:38+0200\n"
-"PO-Revision-Date: 2026-08-18 13:58\n"
+"PO-Revision-Date: 2026-08-19 11:54\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -45,11 +45,9 @@ msgstr "Instalace selhala – byla obnovena předchozí verze."
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
 #: main.lua:1807
-msgid ""
-"Updated to %1.\n"
+msgid "Updated to %1.\n"
 "Restart KOReader now to load it?"
-msgstr ""
-"Aktualizováno na %1.\n"
+msgstr "Aktualizováno na %1.\n"
 "Restartovat KOReader nyní, aby se načetla?"
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
@@ -314,11 +312,9 @@ msgstr[3] "V knize bylo podtrženo %1 jednotek"
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
 #: main.lua:7033 main.lua:7111
-msgid ""
-"This book is already converted.\n"
+msgid "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
-msgstr ""
-"Tato kniha je již převedena.\n"
+msgstr "Tato kniha je již převedena.\n"
 "Nejprve použijte „Odebrat data Footcreamu z této knihy“ (Pokročilé)."
 
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
@@ -412,47 +408,23 @@ msgstr "Převod na %1 jednotky byl přerušen — kniha zůstala beze změny."
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
 #: main.lua:7380
-msgid ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurement was found, but it could not be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgid_plural ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurements were found, but none could be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgstr[0] ""
-"Tuto knihu se nepodařilo převést přímo v souboru.\n"
-"\n"
-"Byla nalezena %1 míra, ale nepodařilo se ji najít v textu knihy – její "
-"značkování nebo formát nemusí být pro převod v textu podporován.\n"
-"\n"
+msgstr[0] "Tuto knihu se nepodařilo převést přímo v souboru.\n\n"
+"Byla nalezena %1 míra, ale nepodařilo se ji najít v textu knihy – její značkování nebo formát nemusí být pro převod v textu podporován.\n\n"
 "Režim „%2“ pro tuto knihu stále funguje."
-msgstr[1] ""
-"Tuto knihu se nepodařilo převést přímo v souboru.\n"
-"\n"
-"Byly nalezeny %1 míry, ale žádnou se nepodařilo najít v textu knihy – její "
-"značkování nebo formát nemusí být pro převod v textu podporován.\n"
-"\n"
+msgstr[1] "Tuto knihu se nepodařilo převést přímo v souboru.\n\n"
+"Byly nalezeny %1 míry, ale žádnou se nepodařilo najít v textu knihy – její značkování nebo formát nemusí být pro převod v textu podporován.\n\n"
 "Režim „%2“ pro tuto knihu stále funguje."
-msgstr[2] ""
-"Tuto knihu se nepodařilo převést přímo v souboru.\n"
-"\n"
-"Bylo nalezeno %1 měr, ale žádnou se nepodařilo najít v textu knihy – její "
-"značkování nebo formát nemusí být pro převod v textu podporován.\n"
-"\n"
+msgstr[2] "Tuto knihu se nepodařilo převést přímo v souboru.\n\n"
+"Bylo nalezeno %1 měr, ale žádnou se nepodařilo najít v textu knihy – její značkování nebo formát nemusí být pro převod v textu podporován.\n\n"
 "Režim „%2“ pro tuto knihu stále funguje."
-msgstr[3] ""
-"Tuto knihu se nepodařilo převést přímo v souboru.\n"
-"\n"
-"Bylo nalezeno %1 měr, ale žádnou se nepodařilo najít v textu knihy – její "
-"značkování nebo formát nemusí být pro převod v textu podporován.\n"
-"\n"
+msgstr[3] "Tuto knihu se nepodařilo převést přímo v souboru.\n\n"
+"Bylo nalezeno %1 měr, ale žádnou se nepodařilo najít v textu knihy – její značkování nebo formát nemusí být pro převod v textu podporován.\n\n"
 "Režim „%2“ pro tuto knihu stále funguje."
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
@@ -475,12 +447,8 @@ msgstr "Původní jednotky v knize byly obnoveny"
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
 #: main.lua:7550
-msgid ""
-"This book's file changed since Footcream converted it, so the original text "
-"can't be restored. Footcream's conversion record has been cleared."
-msgstr ""
-"Soubor této knihy se od převodu Footcreamem změnil, takže původní text nelze "
-"obnovit. Data o převodu Footcreamu byla vymazána."
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr "Soubor této knihy se od převodu Footcreamem změnil, takže původní text nelze obnovit. Data o převodu Footcreamu byla vymazána."
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
@@ -498,11 +466,9 @@ msgstr "Skenování už probíhá…"
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
 #: main.lua:8037
-msgid ""
-"Couldn't finish scanning this book.\n"
+msgid "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
-msgstr ""
-"Skenování této knihy se nepodařilo dokončit.\n"
+msgstr "Skenování této knihy se nepodařilo dokončit.\n"
 "Zkuste to znovu pomocí „Naskenovat knihu“."
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
@@ -515,11 +481,9 @@ msgstr "V této knize zatím nebyly nalezeny žádné jednotky."
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
 #: main.lua:8563
-msgid ""
-"%1. %2 (%3)  →  %4\n"
+msgid "%1. %2 (%3)  →  %4\n"
 "…%5…"
-msgstr ""
-"%1. %2 (%3)  →  %4\n"
+msgstr "%1. %2 (%3)  →  %4\n"
 "…%5…"
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
@@ -603,33 +567,27 @@ msgstr "Nahlášené chyby byly vymazány."
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
 #: main.lua:9143
-msgid ""
-"%1 (%2)  →  %3\n"
+msgid "%1 (%2)  →  %3\n"
 "…%4…"
-msgstr ""
-"%1 (%2)  →  %3\n"
+msgstr "%1 (%2)  →  %3\n"
 "…%4…"
 
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
 #: main.lua:9171
-msgid ""
-"%1  →  %2\n"
+msgid "%1  →  %2\n"
 "…%3…"
-msgstr ""
-"%1  →  %2\n"
+msgstr "%1  →  %2\n"
 "…%3…"
 
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
 #: main.lua:9192
-msgid ""
-"%1\n"
+msgid "%1\n"
 "…%2…"
-msgstr ""
-"%1\n"
+msgstr "%1\n"
 "…%2…"
 
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
@@ -678,15 +636,11 @@ msgstr "Nebyl nalezen žádný balíček ke stažení pro tuto verzi."
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
 #: main.lua:9324
-msgid ""
-"Update available: %1\n"
-"(installed: v%2)\n"
-"\n"
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
 "Download and install now?"
-msgstr ""
-"Dostupná aktualizace: %1\n"
-"(nainstalováno: v%2)\n"
-"\n"
+msgstr "Dostupná aktualizace: %1\n"
+"(nainstalováno: v%2)\n\n"
 "Stáhnout a nainstalovat nyní?"
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
@@ -882,24 +836,16 @@ msgstr "Naskenovat knihu"
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
 #: main.lua:9783
-msgid ""
-"This book does not appear to be in English (detected: %1).\n"
-"\n"
+msgid "This book does not appear to be in English (detected: %1).\n\n"
 "Scan it anyway?"
-msgstr ""
-"Tato kniha zřejmě není v angličtině (zjištěno: %1).\n"
-"\n"
+msgstr "Tato kniha zřejmě není v angličtině (zjištěno: %1).\n\n"
 "Naskenovat ji přesto?"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
 #: main.lua:9785
-msgid ""
-"This book does not appear to be in English.\n"
-"\n"
+msgid "This book does not appear to be in English.\n\n"
 "Scan it anyway?"
-msgstr ""
-"Tato kniha zřejmě není v angličtině.\n"
-"\n"
+msgstr "Tato kniha zřejmě není v angličtině.\n\n"
 "Naskenovat ji přesto?"
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
@@ -963,14 +909,10 @@ msgstr "Zobrazit původní jednotku v bublině (režim „Pouze %1“)"
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
 #: main.lua:9940
-msgid ""
-"Original-unit data for this book is missing.\n"
-"To restore it, use 'Remove Footcream data from this book', then convert "
-"again via the Mode menu."
-msgstr ""
-"Data o původních jednotkách této knihy chybí.\n"
-"Obnovíte je pomocí „Odebrat data Footcreamu z této knihy“ a poté převeďte "
-"znovu z nabídky Režim."
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr "Data o původních jednotkách této knihy chybí.\n"
+"Obnovíte je pomocí „Odebrat data Footcreamu z této knihy“ a poté převeďte znovu z nabídky Režim."
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
@@ -1017,15 +959,3 @@ msgstr "Zobrazit nahlášené chyby"
 msgid "Clear flagged errors"
 msgstr "Vymazat nahlášené chyby"
 
-#~ msgid ""
-#~ "Footcream's converter has improved — update this book's in-text "
-#~ "conversions?"
-#~ msgstr ""
-#~ "Převodník Footcreamu byl vylepšen – aktualizovat převody v textu této "
-#~ "knihy?"
-
-#~ msgid "Update now"
-#~ msgstr "Aktualizovat nyní"
-
-#~ msgid "Not now"
-#~ msgstr "Teď ne"
