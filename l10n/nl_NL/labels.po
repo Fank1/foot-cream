@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-19 13:38+0200\n"
-"PO-Revision-Date: 2026-08-18 13:58\n"
+"PO-Revision-Date: 2026-08-19 11:55\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -45,11 +45,9 @@ msgstr "Installatie mislukt – de vorige versie is teruggezet."
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
 #: main.lua:1807
-msgid ""
-"Updated to %1.\n"
+msgid "Updated to %1.\n"
 "Restart KOReader now to load it?"
-msgstr ""
-"Bijgewerkt naar %1.\n"
+msgstr "Bijgewerkt naar %1.\n"
 "KOReader nu herstarten om het te laden?"
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
@@ -137,8 +135,7 @@ msgstr "⚑ Melden aan Footcream"
 #. new version is silently redoing the conversion (auto-scan on).
 #: main.lua:5286
 msgid "Footcream improved — updating this book's conversions…"
-msgstr ""
-"Footcream is verbeterd – de omrekeningen van dit boek worden bijgewerkt…"
+msgstr "Footcream is verbeterd – de omrekeningen van dit boek worden bijgewerkt…"
 
 #. TRANSLATORS: Sample phrase in the Styling preview, shown underlined the way real
 #. measurements will be. Replace it with a short imperial measurement written out
@@ -309,11 +306,9 @@ msgstr[1] "%1 eenheden onderstreept in het boek"
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
 #: main.lua:7033 main.lua:7111
-msgid ""
-"This book is already converted.\n"
+msgid "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
-msgstr ""
-"Dit boek is al omgerekend.\n"
+msgstr "Dit boek is al omgerekend.\n"
 "Gebruik eerst 'Footcream-gegevens uit dit boek verwijderen' (Geavanceerd)."
 
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
@@ -401,42 +396,23 @@ msgstr "Kon de omrekenmodule niet laden."
 #. finished. %1 is 'metric' or 'imperial'. The book is unchanged.
 #: main.lua:7359
 msgid "Converting to %1 was interrupted — the book is unchanged."
-msgstr ""
-"Het omrekenen naar %1 eenheden is onderbroken — het boek is ongewijzigd."
+msgstr "Het omrekenen naar %1 eenheden is onderbroken — het boek is ongewijzigd."
 
 #. TRANSLATORS: Error when the conversion found measurements but couldn't locate
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
 #: main.lua:7380
-msgid ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurement was found, but it could not be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgid_plural ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurements were found, but none could be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgstr[0] ""
-"Kon dit boek niet rechtstreeks in het bestand omrekenen.\n"
-"\n"
-"Er is %1 maat gevonden, maar die kon niet in de tekst van het boek worden "
-"teruggevonden – de opmaak of het formaat wordt mogelijk niet ondersteund "
-"voor omrekening in de tekst.\n"
-"\n"
+msgstr[0] "Kon dit boek niet rechtstreeks in het bestand omrekenen.\n\n"
+"Er is %1 maat gevonden, maar die kon niet in de tekst van het boek worden teruggevonden – de opmaak of het formaat wordt mogelijk niet ondersteund voor omrekening in de tekst.\n\n"
 "De modus '%2' werkt nog steeds voor dit boek."
-msgstr[1] ""
-"Kon dit boek niet rechtstreeks in het bestand omrekenen.\n"
-"\n"
-"Er zijn %1 maten gevonden, maar geen daarvan kon in de tekst van het boek "
-"worden teruggevonden – de opmaak of het formaat wordt mogelijk niet "
-"ondersteund voor omrekening in de tekst.\n"
-"\n"
+msgstr[1] "Kon dit boek niet rechtstreeks in het bestand omrekenen.\n\n"
+"Er zijn %1 maten gevonden, maar geen daarvan kon in de tekst van het boek worden teruggevonden – de opmaak of het formaat wordt mogelijk niet ondersteund voor omrekening in de tekst.\n\n"
 "De modus '%2' werkt nog steeds voor dit boek."
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
@@ -459,13 +435,8 @@ msgstr "Oorspronkelijke eenheden in het boek hersteld"
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
 #: main.lua:7550
-msgid ""
-"This book's file changed since Footcream converted it, so the original text "
-"can't be restored. Footcream's conversion record has been cleared."
-msgstr ""
-"Het bestand van dit boek is gewijzigd sinds Footcream het omrekende, dus de "
-"oorspronkelijke tekst kan niet worden hersteld. De omrekengegevens van "
-"Footcream zijn gewist."
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr "Het bestand van dit boek is gewijzigd sinds Footcream het omrekende, dus de oorspronkelijke tekst kan niet worden hersteld. De omrekengegevens van Footcream zijn gewist."
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
@@ -483,11 +454,9 @@ msgstr "Er loopt al een scan…"
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
 #: main.lua:8037
-msgid ""
-"Couldn't finish scanning this book.\n"
+msgid "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
-msgstr ""
-"Dit boek kon niet volledig worden gescand.\n"
+msgstr "Dit boek kon niet volledig worden gescand.\n"
 "Gebruik 'Boek scannen' om het opnieuw te proberen."
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
@@ -500,11 +469,9 @@ msgstr "Nog geen eenheden in dit boek gevonden."
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
 #: main.lua:8563
-msgid ""
-"%1. %2 (%3)  →  %4\n"
+msgid "%1. %2 (%3)  →  %4\n"
 "…%5…"
-msgstr ""
-"%1. %2 (%3)  →  %4\n"
+msgstr "%1. %2 (%3)  →  %4\n"
 "…%5…"
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
@@ -588,33 +555,27 @@ msgstr "Gemelde fouten gewist."
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
 #: main.lua:9143
-msgid ""
-"%1 (%2)  →  %3\n"
+msgid "%1 (%2)  →  %3\n"
 "…%4…"
-msgstr ""
-"%1 (%2)  →  %3\n"
+msgstr "%1 (%2)  →  %3\n"
 "…%4…"
 
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
 #: main.lua:9171
-msgid ""
-"%1  →  %2\n"
+msgid "%1  →  %2\n"
 "…%3…"
-msgstr ""
-"%1  →  %2\n"
+msgstr "%1  →  %2\n"
 "…%3…"
 
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
 #: main.lua:9192
-msgid ""
-"%1\n"
+msgid "%1\n"
 "…%2…"
-msgstr ""
-"%1\n"
+msgstr "%1\n"
 "…%2…"
 
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
@@ -663,15 +624,11 @@ msgstr "Geen downloadbaar pakket voor deze versie gevonden."
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
 #: main.lua:9324
-msgid ""
-"Update available: %1\n"
-"(installed: v%2)\n"
-"\n"
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
 "Download and install now?"
-msgstr ""
-"Update beschikbaar: %1\n"
-"(geïnstalleerd: v%2)\n"
-"\n"
+msgstr "Update beschikbaar: %1\n"
+"(geïnstalleerd: v%2)\n\n"
 "Nu downloaden en installeren?"
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
@@ -863,24 +820,16 @@ msgstr "Boek scannen"
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
 #: main.lua:9783
-msgid ""
-"This book does not appear to be in English (detected: %1).\n"
-"\n"
+msgid "This book does not appear to be in English (detected: %1).\n\n"
 "Scan it anyway?"
-msgstr ""
-"Dit boek lijkt niet in het Engels te zijn (herkend: %1).\n"
-"\n"
+msgstr "Dit boek lijkt niet in het Engels te zijn (herkend: %1).\n\n"
 "Toch scannen?"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
 #: main.lua:9785
-msgid ""
-"This book does not appear to be in English.\n"
-"\n"
+msgid "This book does not appear to be in English.\n\n"
 "Scan it anyway?"
-msgstr ""
-"Dit boek lijkt niet in het Engels te zijn.\n"
-"\n"
+msgstr "Dit boek lijkt niet in het Engels te zijn.\n\n"
 "Toch scannen?"
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
@@ -894,8 +843,7 @@ msgstr "Scannen"
 #. conversion written again.
 #: main.lua:9809
 msgid "This book is converted — rescan it and re-apply the conversion?"
-msgstr ""
-"Dit boek is omgerekend – opnieuw scannen en de omrekening opnieuw toepassen?"
+msgstr "Dit boek is omgerekend – opnieuw scannen en de omrekening opnieuw toepassen?"
 
 #. TRANSLATORS: Button that starts the rescan-and-reconvert; the other button is
 #. the shared 'Cancel'.
@@ -945,14 +893,10 @@ msgstr "Oorspronkelijke eenheid in het infovenster tonen (modus 'Alleen %1')"
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
 #: main.lua:9940
-msgid ""
-"Original-unit data for this book is missing.\n"
-"To restore it, use 'Remove Footcream data from this book', then convert "
-"again via the Mode menu."
-msgstr ""
-"De gegevens over de oorspronkelijke eenheden van dit boek ontbreken.\n"
-"Gebruik 'Footcream-gegevens uit dit boek verwijderen' om ze te herstellen en "
-"reken daarna opnieuw om via het menu Modus."
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr "De gegevens over de oorspronkelijke eenheden van dit boek ontbreken.\n"
+"Gebruik 'Footcream-gegevens uit dit boek verwijderen' om ze te herstellen en reken daarna opnieuw om via het menu Modus."
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
@@ -999,15 +943,3 @@ msgstr "Gemelde fouten bekijken"
 msgid "Clear flagged errors"
 msgstr "Gemelde fouten wissen"
 
-#~ msgid ""
-#~ "Footcream's converter has improved — update this book's in-text "
-#~ "conversions?"
-#~ msgstr ""
-#~ "De omrekener van Footcream is verbeterd – de omrekeningen in de tekst van "
-#~ "dit boek bijwerken?"
-
-#~ msgid "Update now"
-#~ msgstr "Nu bijwerken"
-
-#~ msgid "Not now"
-#~ msgstr "Niet nu"
