@@ -20,7 +20,6 @@ msgstr ""
 #. TRANSLATORS: Long-press explainer for the 'Length & Distance' category. The unit
 #. names are English measurement words - use your language's names for the same
 #. units.
-#: main.lua:9806
 msgid ""
 "Inches, feet, yards, miles, fathoms, furlongs, leagues, cubits — and in the "
 "imperial direction: millimeters, centimeters, meters, kilometers."
@@ -30,7 +29,6 @@ msgstr ""
 
 #. TRANSLATORS: Long-press explainer for the 'Weight' category. Tons are left alone
 #. on purpose because the word means several different quantities.
-#: main.lua:9809
 msgid ""
 "Ounces, pounds and stone — and in the imperial direction: grams and kilos. "
 "Tons are deliberately not converted (the word is too ambiguous)."
@@ -39,7 +37,6 @@ msgstr ""
 "Tonneja ei muunneta tarkoituksella (sana on liian monimerkityksinen)."
 
 #. TRANSLATORS: Long-press explainer for the 'Temperature' category.
-#: main.lua:9811
 msgid ""
 "°F and \"degrees Fahrenheit\" — and in the imperial direction, °C and "
 "\"degrees Celsius\"."
@@ -49,7 +46,6 @@ msgstr ""
 
 #. TRANSLATORS: Long-press explainer for the 'Volume' category. UK and US pints and
 #. gallons are different sizes, hence the note about the book's origin.
-#: main.lua:9814
 msgid ""
 "Pints, quarts, gallons and fluid ounces — and in the imperial direction, "
 "liters and milliliters. UK and US gallons differ; Footcream picks the right "
@@ -60,7 +56,6 @@ msgstr ""
 "Footcream valitsee oikean kirjan perusteella."
 
 #. TRANSLATORS: Long-press explainer for the 'Speed' category.
-#: main.lua:9816
 msgid ""
 "Miles per hour and knots — and in the imperial direction, km/h and meters "
 "per second."
@@ -69,7 +64,6 @@ msgstr ""
 "sekunnissa."
 
 #. TRANSLATORS: Long-press explainer for the 'Area' category.
-#: main.lua:9818
 msgid ""
 "Acres and square miles/feet/yards — and in the imperial direction, hectares "
 "and square kilometers/meters/centimeters."
@@ -79,7 +73,6 @@ msgstr ""
 
 #. TRANSLATORS: Long-press explainer for the hint-count line at the top of 'Menu >
 #. Footcream'.
-#: main.lua:9915
 msgid ""
 "How many measurements Footcream found in this book. The count always shows "
 "everything that was found, whichever mode you are in."
@@ -88,7 +81,6 @@ msgstr ""
 "löydetyn riippumatta käytössä olevasta tilasta."
 
 #. TRANSLATORS: Long-press explainer for 'Enable Footcream in this book'.
-#: main.lua:9930
 msgid ""
 "Turn Footcream off for this book only: no underlines, no conversions, no "
 "prompts — and a converted book gets its original text back. Other books are "
@@ -102,7 +94,6 @@ msgstr ""
 "KOReaderin lisäosien hallintaa."
 
 #. TRANSLATORS: Long-press explainer for 'Convert units to'.
-#: main.lua:9988
 msgid ""
 "The unit system you want to read in. Metric converts imperial measurements "
 "(feet, miles, °F) to metric. The Imperial options do the reverse: they find "
@@ -117,7 +108,6 @@ msgstr ""
 "palautetaan ja muunnetaan uudelleen, kun vaihdat."
 
 #. TRANSLATORS: Long-press explainer for the 'Metric' choice.
-#: main.lua:9997
 msgid ""
 "Convert imperial measurements (feet, miles, pounds, °F, gallons…) to metric."
 msgstr ""
@@ -127,7 +117,6 @@ msgstr ""
 #. TRANSLATORS: Long-press explainer for the 'Imperial (US)' choice. The quoted
 #. measurements are examples of the output; 'm', 'ft' and 'in' are unit symbols and
 #. are not translated.
-#: main.lua:10011
 msgid ""
 "Convert metric measurements to US units: meters become feet and inches "
 "(\"1.8 m\" → \"5 ft 11 in\"), kilometers become miles, kilos become pounds, "
@@ -140,7 +129,6 @@ msgstr ""
 #. TRANSLATORS: Long-press explainer for the 'Imperial (UK)' choice. The quoted
 #. measurements are examples of the output; 'kg', 'st' and 'lb' are unit symbols
 #. and are not translated.
-#: main.lua:10026
 msgid ""
 "Like Imperial (US), but with UK measures: body weights in stones (\"75 kg\" "
 "→ \"11 st 11 lb\") and volumes in imperial pints and gallons."
@@ -149,7 +137,6 @@ msgstr ""
 "(”75 kg” → ”11 st 11 lb”) ja tilavuudet brittiläisinä pintteinä ja gallonina."
 
 #. TRANSLATORS: Long-press explainer for the 'Mode' entry.
-#: main.lua:10053
 msgid ""
 "How conversions are shown while you read. Opens a picker showing a sample "
 "sentence in each of the three modes; the change is applied to the book when "
@@ -167,7 +154,6 @@ msgstr ""
 
 #. TRANSLATORS: Long-press explainer for 'Auto-convert when opening a new book'.
 #. Shown only in the in-text modes, which rewrite the book's own text.
-#: main.lua:10092
 msgid ""
 "Convert every new book automatically when you open it, without asking first "
 "— this rewrites the book's own text. Only English books are converted; other "
@@ -181,7 +167,6 @@ msgstr ""
 "kirja”, joka kysyy ennen aloittamista."
 
 #. TRANSLATORS: Long-press explainer for 'Auto-scan when opening a new book'.
-#: main.lua:10095
 msgid ""
 "Scan every new book automatically when you open it. Only English books are "
 "scanned — other languages are left alone. Turn this off to scan books one by "
@@ -192,7 +177,6 @@ msgstr ""
 "käytöstä, jos haluat skannata kirjat yksitellen toiminnolla ”Skannaa kirja”."
 
 #. TRANSLATORS: Long-press explainer for the 'Scan book' / 'Rescan book' entry.
-#: main.lua:10119
 msgid ""
 "Scan this book now, or scan it again from scratch. The scan runs in the "
 "background, so you can keep reading while it works. Results are saved, so "
@@ -203,7 +187,6 @@ msgstr ""
 "joten kirjan avaaminen myöhemmin uudelleen on välitöntä."
 
 #. TRANSLATORS: Long-press explainer for 'Styling'.
-#: main.lua:10203
 msgid ""
 "Customise how underlines look (solid or wavy, intensity, thickness) and the "
 "tooltip (size, unit icon), with a live preview. Drag the dialog around if it "
@@ -214,7 +197,6 @@ msgstr ""
 "kanssa. Vedä ikkunaa sivuun, jos se peittää tekstin, jonka haluat nähdä."
 
 #. TRANSLATORS: Long-press explainer for 'Check for updates'.
-#: main.lua:10219
 msgid ""
 "Check GitHub for a newer Footcream release and install it in place. Needs Wi-"
 "Fi; you'll be asked to restart KOReader when it's done."
@@ -223,7 +205,6 @@ msgstr ""
 "yhteyden; lopuksi sinua pyydetään käynnistämään KOReader uudelleen."
 
 #. TRANSLATORS: Long-press explainer for the 'Advanced' submenu.
-#: main.lua:10232
 msgid ""
 "Extra options: unit categories, rounding, original-unit tooltips, error "
 "reporting to the developer, per-book cleanup, and debug tools."
@@ -233,7 +214,6 @@ msgstr ""
 "ja vianmääritystyökalut."
 
 #. TRANSLATORS: Long-press explainer for 'Unit categories'.
-#: main.lua:10239
 msgid ""
 "Choose which kinds of measurements are converted. Anything you untick is "
 "ignored everywhere — no underlines, popups or in-text conversions for that "
@@ -245,7 +225,6 @@ msgstr ""
 
 #. TRANSLATORS: Long-press explainer for 'Smart rounding for conversions'. The
 #. quoted values are examples; 'm' is the metre symbol, not translated.
-#: main.lua:10248
 msgid ""
 "Round conversions to friendly, readable values — \"90 m\" instead of \"91.44 "
 "m\". Turn off if you prefer exact numbers."
@@ -254,7 +233,6 @@ msgstr ""
 "Poista käytöstä, jos haluat tarkat luvut."
 
 #. TRANSLATORS: Long-press explainer for 'Show original unit in tooltip'.
-#: main.lua:10290
 msgid ""
 "In the \"only (in text)\" mode, underline the converted values so you can "
 "tap any of them and see the original text. Handy if you want to double-check "
@@ -266,7 +244,6 @@ msgstr ""
 
 #. TRANSLATORS: Long-press explainer for 'Long-press units to send errors to the
 #. developer'.
-#: main.lua:10325
 msgid ""
 "Flag bad conversions while you read: long-press a unit (or select text "
 "Footcream missed) and the error is sent anonymously to the developer. Each "
@@ -281,7 +258,6 @@ msgstr ""
 "jonotetaan ja lähetetään, kun olet yhteydessä."
 
 #. TRANSLATORS: Long-press explainer for 'Remove Footcream data from this book'.
-#: main.lua:10359
 msgid ""
 "Undo everything for this book: restore the original text, remove all "
 "underlines and delete the saved scan. The book file goes back to exactly how "
@@ -292,7 +268,6 @@ msgstr ""
 "täsmälleen sellaiseksi kuin se oli ennen kuin Footcream kosketti sitä."
 
 #. TRANSLATORS: Long-press explainer for the 'Debug' submenu.
-#: main.lua:10401
 msgid ""
 "See exactly what the scan found in this book, and manage errors you've "
 "flagged on this device."
@@ -301,7 +276,6 @@ msgstr ""
 "laitteella ilmoittamiasi virheitä."
 
 #. TRANSLATORS: Long-press explainer for 'Units in book (list)'.
-#: main.lua:10408
 msgid ""
 "Every measurement found in this book, with its detected value and "
 "conversion. Long-press an entry to flag it as wrong."
@@ -311,7 +285,6 @@ msgstr ""
 
 #. TRANSLATORS: Long-press explainer for 'View flagged errors'. The path in
 #. parentheses is a file location - leave it as it is.
-#: main.lua:10423
 msgid ""
 "Show the errors you've flagged on this device. They're kept in a plain-text "
 "file (koreader/footcream/flagged_errors.txt) that you can also attach to a "
@@ -322,7 +295,6 @@ msgstr ""
 "liittää GitHub-ilmoitukseen."
 
 #. TRANSLATORS: Long-press explainer for 'Clear flagged errors'.
-#: main.lua:10433
 msgid ""
 "Delete the local flagged-errors file. Reports that were already sent to the "
 "developer are not affected."

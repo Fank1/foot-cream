@@ -20,31 +20,26 @@ msgstr ""
 #. TRANSLATORS: Right-hand button of every Footcream confirmation dialog; dismisses
 #. it without doing anything. Used as the default when a caller doesn't pass its
 #. own wording.
-#: main.lua:1642
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. TRANSLATORS: Error after 'Menu > Footcream > Check for updates' when downloading
 #. the release package fails. %1 is the network error, untranslated.
-#: main.lua:1852
 msgid "Download failed: %1"
 msgstr "Error de descarga: %1"
 
 #. TRANSLATORS: Error after 'Menu > Footcream > Check for updates': the downloaded
 #. ZIP didn't contain a plugin, so nothing was installed.
-#: main.lua:1858
 msgid "Update package didn't contain the plugin files."
 msgstr "El paquete de actualización no contenía los archivos del complemento."
 
 #. TRANSLATORS: Error after 'Menu > Footcream > Check for updates': copying the new
 #. version in failed and the old one was put back. Nothing is broken.
-#: main.lua:1866
 msgid "Install failed — restored the previous version."
 msgstr "Error de instalación: se restauró la versión anterior."
 
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
-#: main.lua:1880
 msgid ""
 "Updated to %1.\n"
 "Restart KOReader now to load it?"
@@ -54,235 +49,196 @@ msgstr ""
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
 #. immediately so the new version loads.
-#: main.lua:1883
 msgid "Restart"
 msgstr "Reiniciar"
 
 #. TRANSLATORS: Right button on the 'Updated to ...' dialog; closes it and keeps
 #. reading. The update loads at the next restart either way.
-#: main.lua:1886
 msgid "Later"
 msgstr "Más tarde"
 
 #. TRANSLATORS: Fallback error when a self-update fails without a specific reason
 #. ('Menu > Footcream > Check for updates').
-#: main.lua:1891
 msgid "Update failed."
 msgstr "Error al actualizar."
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this US English book'.
 #. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2590
 msgid "US English"
 msgstr "inglés estadounidense"
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this UK English book'.
 #. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2594 main.lua:2598
 msgid "UK English"
 msgstr "inglés británico"
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this Canadian English
 #. book'. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2602
 msgid "Canadian English"
 msgstr "inglés canadiense"
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this Australian
 #. English book'. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2606
 msgid "Australian English"
 msgstr "inglés australiano"
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this New Zealand
 #. English book'. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2610
 msgid "New Zealand English"
 msgstr "inglés neozelandés"
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this Irish English
 #. book'. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2614
 msgid "Irish English"
 msgstr "inglés irlandés"
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this South African
 #. English book'. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2618
 msgid "South African English"
 msgstr "inglés sudafricano"
 
 #. TRANSLATORS: Name of the English variant detected from the book's metadata,
 #. shown inside the hint-count menu line: '12 hints found in this Indian English
 #. book'. Keep it short; it must read naturally inside that sentence.
-#: main.lua:2622
 msgid "Indian English"
 msgstr "inglés indio"
 
 #. TRANSLATORS: Entry Footcream adds to KOReader's own text-selection popup (the
 #. menu you get after highlighting text). Tapping it opens Footcream's
 #. error-reporting dialog for the selected words. The flag is a symbol, keep it.
-#: main.lua:5423
 msgid "⚑ Flag to Footcream"
 msgstr "⚑ Informar a Footcream"
 
 #. TRANSLATORS: Toast shown when a book was converted by an older Footcream and the
 #. new version is silently redoing the conversion (auto-scan on).
-#: main.lua:5613
 msgid "Footcream improved — updating this book's conversions…"
 msgstr "Footcream ha mejorado: actualizando las conversiones de este libro…"
 
 #. TRANSLATORS: Sample phrase in the Styling preview, shown underlined the way real
 #. measurements will be. Replace it with a short imperial measurement written out
 #. in words in your language (it is an example, not a literal quote).
-#: main.lua:5997
 msgid "Five foot six"
 msgstr "Cinco pies seis pulgadas"
 
 #. TRANSLATORS: Preview of the tap tooltip in the Styling dialog. %1 is a number;
 #. 'm' is the metre symbol and is not translated.
-#: main.lua:6022
 msgid "%1 m"
 msgstr "%1 m"
 
 #. TRANSLATORS: Styling dialog, 'Underline style' option: a plain straight
 #. underline.
-#: main.lua:6122
 msgid "Solid"
 msgstr "Continuo"
 
 #. TRANSLATORS: Styling dialog, 'Underline style' option: a squiggly underline.
-#: main.lua:6124
 msgid "Wavy"
 msgstr "Ondulado"
 
 #. TRANSLATORS: Styling dialog, 'Underline Intensity' option: the lighter/finer of
 #. the two line weights.
-#: main.lua:6143
 msgid "Thin"
 msgstr "Fino"
 
 #. TRANSLATORS: Styling dialog, 'Underline Intensity' option: the heavier line
 #. weight.
-#: main.lua:6146
 msgid "Thick"
 msgstr "Grueso"
 
 #. TRANSLATORS: Styling dialog, 'Tooltip size' option: smallest tap-popup text.
-#: main.lua:6154
 msgid "Small"
 msgstr "Pequeño"
 
 #. TRANSLATORS: Styling dialog, 'Tooltip size' option: middle tap-popup text size.
-#: main.lua:6156
 msgid "Medium"
 msgstr "Mediano"
 
 #. TRANSLATORS: Styling dialog, 'Tooltip size' option: largest tap-popup text.
-#: main.lua:6158
 msgid "Large"
 msgstr "Grande"
 
 #. TRANSLATORS: Checkbox in the Styling dialog. When ticked, the tap tooltip shows
 #. a small icon for the kind of measurement (length, weight, ...).
-#: main.lua:6185
 msgid "Show Unit Icon"
 msgstr "Mostrar icono de unidad"
 
 #. TRANSLATORS: Button that closes a Footcream dialog without changing anything.
 #. Used on the Styling dialog, the mode picker and the long-press report popups.
-#: main.lua:6212 main.lua:6216 main.lua:6560 main.lua:6564 main.lua:9008
-#: main.lua:9615
 msgid "Close"
 msgstr "Cerrar"
 
 #. TRANSLATORS: Corner label on the framed sample area of the Styling dialog,
 #. marking it as a live preview rather than part of the book.
-#: main.lua:6233
 msgid "PREVIEW"
 msgstr "VISTA PREVIA"
 
 #. TRANSLATORS: Section heading in the Styling dialog, above the Solid/Wavy choice.
-#: main.lua:6274
 msgid "Underline style"
 msgstr "Estilo del subrayado"
 
 #. TRANSLATORS: Section heading in the Styling dialog, above the underline darkness
 #. choice (how strongly the line stands out from the text).
-#: main.lua:6279
 msgid "Underline Intensity"
 msgstr "Intensidad del subrayado"
 
 #. TRANSLATORS: Section heading in the Styling dialog, above the Thin/Thick choice.
-#: main.lua:6283
 msgid "Underline thickness"
 msgstr "Grosor del subrayado"
 
 #. TRANSLATORS: Section heading in the Styling dialog, above the Small/Medium/Large
 #. choice for the tap tooltip.
-#: main.lua:6288
 msgid "Tooltip size"
 msgstr "Tamaño del recuadro"
 
 #. TRANSLATORS: First half of the sample sentence in the mode picker; a measurement
 #. and the second half (' wide.') follow it. Keep the trailing space so the
 #. sentence reads 'The hallway was 1.8 m wide.'
-#: main.lua:6362
 msgid "The hallway was "
 msgstr "El pasillo medía "
 
 #. TRANSLATORS: Second half of the mode-picker sample sentence, after the
 #. measurement. Keep the leading space; see 'The hallway was '.
-#: main.lua:6367
 msgid " wide."
 msgstr " de ancho."
 
 #. TRANSLATORS: Mode picker, caption under the mode 1 sample. %1 is a converted
 #. measurement such as '1.8 m'. This mode only draws an underline.
-#: main.lua:6408
 msgid "Underline only — tap it to see %1."
 msgstr "Solo subrayado: tócalo para ver %1."
 
 #. TRANSLATORS: Mode picker, second caption line for mode 1 - the reassurance that
 #. this mode never edits the book file, unlike modes 2 and 3.
-#: main.lua:6411
 msgid "The book file is never changed."
 msgstr "El archivo del libro nunca se modifica."
 
 #. TRANSLATORS: Mode picker, caption under the mode 2 sample: the conversion is
 #. written into the book next to the original measurement.
-#: main.lua:6417
 msgid "Both units, written into the book's text."
 msgstr "Ambas unidades, escritas en el texto del libro."
 
 #. TRANSLATORS: Mode picker, second caption line under the two modes that write
 #. into the book's text: the change can be undone later with 'Remove Footcream data
 #. from this book'.
-#: main.lua:6421 main.lua:6430
 msgid "Reversible."
 msgstr "Reversible."
 
 #. TRANSLATORS: Mode picker, caption under the mode 3 sample: the original
 #. measurement is replaced by the conversion in the book's text.
-#: main.lua:6426
 msgid "Converted only, written into the book's text."
 msgstr "Solo la conversión, escrita en el texto del libro."
 
 #. TRANSLATORS: Title of the mode picker, opened from the 'Mode: ...' menu entry.
-#: main.lua:6509
 msgid "How should conversions appear?"
 msgstr "¿Cómo deben mostrarse las conversiones?"
 
 #. TRANSLATORS: Toast after a scan of a book whose text has already been converted.
 #. %1 is the number of measurements.
-#: main.lua:7313
 msgid "Converted %1 unit in book"
 msgid_plural "Converted %1 units in book"
 msgstr[0] "%1 unidad convertida en el libro"
@@ -290,7 +246,6 @@ msgstr[1] "%1 unidades convertidas en el libro"
 
 #. TRANSLATORS: Toast after a scan when the mode writes into the book's text but
 #. the conversion hasn't been applied yet. %1 is the number found.
-#: main.lua:7317
 msgid "Scan complete: %1 unit found"
 msgid_plural "Scan complete: %1 units found"
 msgstr[0] "Análisis completo: %1 unidad encontrada"
@@ -298,7 +253,6 @@ msgstr[1] "Análisis completo: %1 unidades encontradas"
 
 #. TRANSLATORS: Toast after a scan in underline mode. %1 is the number of
 #. measurements now underlined.
-#: main.lua:7321
 msgid "Underlined %1 unit in book"
 msgid_plural "Underlined %1 units in book"
 msgstr[0] "%1 unidad subrayada en el libro"
@@ -307,7 +261,6 @@ msgstr[1] "%1 unidades subrayadas en el libro"
 #. TRANSLATORS: Refusal shown when the book's text has already been converted. The
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
-#: main.lua:7401 main.lua:7479
 msgid ""
 "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
@@ -318,19 +271,16 @@ msgstr ""
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
 #. questions and progress messages below ('Convert this book's measurements to
 #. metric?', 'Converting to metric…'). Lowercase, mid-sentence.
-#: main.lua:7410 main.lua:7473 main.lua:7494 main.lua:7666 main.lua:9797
 msgid "imperial"
 msgstr "imperiales"
 
 #. TRANSLATORS: The unit system searched for, inserted as %1 into 'No %1
 #. measurements found in this book'. Lowercase, mid-sentence.
-#: main.lua:7410 main.lua:7473 main.lua:7494 main.lua:7666 main.lua:9797
 msgid "metric"
 msgstr "métricas"
 
 #. TRANSLATORS: Toast confirming the mode was left as it was after the user
 #. declined to convert. %1 is a mode name such as 'Metric only (in text)'.
-#: main.lua:7421 main.lua:7519
 msgid "Kept mode: %1"
 msgstr "Modo conservado: %1"
 
@@ -339,7 +289,6 @@ msgstr "Modo conservado: %1"
 #. This one question covers BOTH steps, so the translation must say the book
 #. will be scanned AND that conversions will be added. A suggestion offering
 #. only the adding half is the older, convert-only wording — do not accept it.
-#: main.lua:7433
 msgid "Scan this book and add %1 conversions alongside its measurements?"
 msgstr "¿Analizar este libro y añadir conversiones %1 junto a sus medidas?"
 
@@ -349,63 +298,53 @@ msgstr "¿Analizar este libro y añadir conversiones %1 junto a sus medidas?"
 #. will be scanned AND that its measurements will be converted. A suggestion
 #. offering only the converting half is the older, convert-only wording — do
 #. not accept it.
-#: main.lua:7441
 msgid "Scan this book and convert its measurements to %1?"
 msgstr "¿Analizar este libro y convertir sus medidas a unidades %1?"
 
 #. TRANSLATORS: Button that starts the scan and then rewrites the book's text; the
 #. other button is the shared 'Cancel'.
-#: main.lua:7444
 msgid "Scan and convert"
 msgstr "Analizar y convertir"
 
 #. TRANSLATORS: Shown when a scan finished and the book genuinely contains no
 #. measurements to convert. %1 is 'imperial' or 'metric'.
-#: main.lua:7491
 msgid "No %1 measurements found in this book — nothing to convert."
 msgstr "No se encontraron medidas %1 en este libro: no hay nada que convertir."
 
 #. TRANSLATORS: Shown when the book has not been scanned yet, so there is nothing
 #. to convert. 'hints' are the underlined measurements Footcream finds.
-#: main.lua:7497
 msgid "No hints yet — scan the book first."
 msgstr "Aún no hay resultados: analiza primero el libro."
 
 #. TRANSLATORS: Asked before mode 2 edits the book: conversions are added next to
 #. the existing measurements. %1 is 'metric' or 'imperial'.
-#: main.lua:7528
 msgid "Add %1 conversions alongside this book's measurements?"
 msgstr "¿Añadir conversiones %1 junto a las medidas de este libro?"
 
 #. TRANSLATORS: Asked before mode 3 edits the book: measurements are replaced by
 #. their conversions. %1 is 'metric' or 'imperial'.
-#: main.lua:7532
 msgid "Convert this book's measurements to %1?"
 msgstr "¿Convertir las medidas de este libro a unidades %1?"
 
 #. TRANSLATORS: Button that starts rewriting the book's text; the other button is
 #. the shared 'Cancel'.
-#: main.lua:7536
 msgid "Convert"
 msgstr "Convertir"
 
 #. TRANSLATORS: Error when the part of Footcream that edits the book's text can't
 #. be loaded, so the book was left untouched. The install is incomplete; the
 #. underline mode still works.
-#: main.lua:7648 main.lua:7803
 msgid "Could not load the metric converter module."
 msgstr "No se pudo cargar el módulo de conversión."
 
 #. TRANSLATORS: Error shown when the in-text conversion was interrupted before it
 #. finished. %1 is 'metric' or 'imperial'. The book is unchanged.
-#: main.lua:7727
 msgid "Converting to %1 was interrupted — the book is unchanged."
 msgstr "La conversión a unidades %1 se interrumpió — el libro no ha cambiado."
 
 #. TRANSLATORS: Error when the conversion found measurements but couldn't locate
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
-#: main.lua:7748
 msgid ""
 "Couldn't convert this book in place.\n"
 "\n"
@@ -439,24 +378,20 @@ msgstr[1] ""
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
 #. technical reason is appended on the next line, untranslated.
-#: main.lua:7786
 msgid "Could not convert this book."
 msgstr "No se pudo convertir este libro."
 
 #. TRANSLATORS: Progress message while the book's original measurements are being
 #. put back. Tapping it cancels.
-#: main.lua:7817
 msgid "Restoring original text…"
 msgstr "Restaurando el texto original…"
 
 #. TRANSLATORS: Toast confirming the book's original measurements were restored.
-#: main.lua:7899
 msgid "Restored original units in book"
 msgstr "Unidades originales restauradas en el libro"
 
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
-#: main.lua:7918
 msgid ""
 "This book's file changed since Footcream converted it, so the original text "
 "can't be restored. Footcream's conversion record has been cleared."
@@ -467,20 +402,17 @@ msgstr ""
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
-#: main.lua:7925
 msgid "Could not revert."
 msgstr "No se pudo restaurar."
 
 #. TRANSLATORS: Toast when a scan is asked for while one is already running. The
 #. running scan is left alone.
-#: main.lua:8210
 msgid "A scan is already in progress…"
 msgstr "Ya hay un análisis en curso…"
 
 #. TRANSLATORS: Shown when the background scan failed or was stopped, so the book
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
-#: main.lua:8405
 msgid ""
 "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
@@ -490,14 +422,12 @@ msgstr ""
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
 #. been scanned, or when the scan found nothing.
-#: main.lua:8862
 msgid "No units found in this book yet."
 msgstr "Todavía no se han encontrado unidades en este libro."
 
 #. TRANSLATORS: One row of the 'Units in book' list. %1 is the row number, %2 the
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
-#: main.lua:8931
 msgid ""
 "%1. %2 (%3)  →  %4\n"
 "…%5…"
@@ -507,85 +437,71 @@ msgstr ""
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
 #. contains.
-#: main.lua:8947
 msgid "Units in book (%1)"
 msgstr "Unidades en el libro (%1)"
 
 #. TRANSLATORS: Button in the long-press report dialog: the measurement was
 #. recognised but converted to the wrong value. Keep the flag symbol.
-#: main.lua:8988 main.lua:9593
 msgid "⚑ Wrong conversion"
 msgstr "⚑ Conversión incorrecta"
 
 #. TRANSLATORS: Button in the long-press report dialog: Footcream underlined the
 #. wrong words - too much, too little, or the wrong part of the sentence. Keep the
 #. flag symbol.
-#: main.lua:8992 main.lua:9598
 msgid "⚑ Wrong text captured"
 msgstr "⚑ Texto mal detectado"
 
 #. TRANSLATORS: Button in the long-press report dialog: this isn't a measurement at
 #. all and should never have been underlined. Keep the flag symbol.
-#: main.lua:8995 main.lua:9602
 msgid "⚑ Not a unit"
 msgstr "⚑ No es una unidad"
 
 #. TRANSLATORS: Button in the long-press dialog on a row of the 'Units in book'
 #. list: jump to where this measurement appears in the book.
-#: main.lua:8998
 msgid "Go to in book"
 msgstr "Ir al pasaje"
 
 #. TRANSLATORS: Error when the flagged-errors file on the device can't be written
 #. to, so the report was lost.
-#: main.lua:9036
 msgid "Couldn't write the flag file."
 msgstr "No se pudo escribir el archivo de informes."
 
 #. TRANSLATORS: Toast confirming an error report was recorded. %1 is the kind of
 #. problem picked, e.g. 'wrong conversion'.
-#: main.lua:9064
 msgid "Flagged: %1"
 msgstr "Informado: %1"
 
 #. TRANSLATORS: Shown for 'Advanced > Debug > View flagged errors' when nothing has
 #. been flagged on this device yet.
-#: main.lua:9155
 msgid "No flagged errors yet."
 msgstr "Aún no hay errores informados."
 
 #. TRANSLATORS: Title of the viewer listing the errors flagged on this device.
-#: main.lua:9161
 msgid "Flagged errors"
 msgstr "Errores informados"
 
 #. TRANSLATORS: Shown for 'Advanced > Debug > Clear flagged errors' when there is
 #. nothing to delete.
-#: main.lua:9171
 msgid "No flagged errors to clear."
 msgstr "No hay errores informados que borrar."
 
 #. TRANSLATORS: Question for 'Advanced > Debug > Clear flagged errors'. This only
 #. deletes the local file; reports already sent to the developer are not affected.
-#: main.lua:9176
 msgid "Delete all flagged errors?"
 msgstr "¿Eliminar todos los errores informados?"
 
 #. TRANSLATORS: Confirm button on the 'Delete all flagged errors?' question; the
 #. other button is the shared 'Cancel'.
-#: main.lua:9179
 msgid "Delete"
 msgstr "Eliminar"
 
 #. TRANSLATORS: Toast after the local flagged-errors file was deleted.
-#: main.lua:9182
 msgid "Flagged errors cleared."
 msgstr "Errores informados borrados."
 
 #. TRANSLATORS: Title of the popup after long-pressing an underlined measurement.
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
-#: main.lua:9511
 msgid ""
 "%1 (%2)  →  %3\n"
 "…%4…"
@@ -596,7 +512,6 @@ msgstr ""
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
-#: main.lua:9539
 msgid ""
 "%1  →  %2\n"
 "…%3…"
@@ -607,7 +522,6 @@ msgstr ""
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
-#: main.lua:9560
 msgid ""
 "%1\n"
 "…%2…"
@@ -618,49 +532,41 @@ msgstr ""
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
 #. selected: Footcream should have recognised this and didn't. Keep the flag
 #. symbol.
-#: main.lua:9588
 msgid "⚑ Missed unit"
 msgstr "⚑ Unidad no detectada"
 
 #. TRANSLATORS: Button in the long-press report popup that looks the word up in
 #. KOReader's dictionary. %1 is the word itself.
-#: main.lua:9607
 msgid "Dictionary: %1"
 msgstr "Diccionario: %1"
 
 #. TRANSLATORS: Shown when the update check couldn't reach GitHub. The reason is
 #. appended on the line below it.
-#: main.lua:9653
 msgid "Update check failed:"
 msgstr "Error al buscar actualizaciones:"
 
 #. TRANSLATORS: Stands in as the reason on the 'Update check failed:' message when
 #. the server gave no answer at all.
-#: main.lua:9656
 msgid "no response"
 msgstr "sin respuesta"
 
 #. TRANSLATORS: Shown when GitHub answered the update check with something
 #. Footcream couldn't understand.
-#: main.lua:9663
 msgid "Could not read the latest release info."
 msgstr "No se pudo leer la información de la última versión."
 
 #. TRANSLATORS: Shown when the update check found no newer release. %1 is the
 #. installed version number.
-#: main.lua:9671
 msgid "You're up to date (v%1)."
 msgstr "Ya tienes la última versión (v%1)."
 
 #. TRANSLATORS: Shown when a newer release exists but has no installable package
 #. attached to it.
-#: main.lua:9686
 msgid "No downloadable release package found."
 msgstr "No se encontró ningún paquete descargable para esta versión."
 
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
-#: main.lua:9692
 msgid ""
 "Update available: %1\n"
 "(installed: v%2)\n"
@@ -674,26 +580,22 @@ msgstr ""
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
 #. button is the shared 'Cancel'.
-#: main.lua:9696
 msgid "Update"
 msgstr "Actualizar"
 
 #. TRANSLATORS: Progress message while Footcream asks GitHub whether a newer
 #. version exists.
-#: main.lua:9715 main.lua:9728
 msgid "Checking for updates…"
 msgstr "Buscando actualizaciones…"
 
 #. TRANSLATORS: Progress message while the new version downloads and installs. %1
 #. is the version tag, e.g. 'v1.6.0'.
-#: main.lua:9748 main.lua:9768
 msgid "Updating to %1…"
 msgstr "Actualizando a %1…"
 
 #. TRANSLATORS: Name of mode 3, shown on the 'Mode:' menu entry and in the mode
 #. picker: measurements are replaced by their conversions in the book's text. %1 is
 #. 'Metric' or 'Imperial'.
-#: main.lua:9788
 msgid "%1 only (in text)"
 msgstr "Solo %1 (en el texto)"
 
@@ -701,82 +603,69 @@ msgstr "Solo %1 (en el texto)"
 #. 'Convert units to' (the default: the book's imperial measurements become metric
 #. ones) and inserted into the mode names, e.g. 'Metric only (in text)'. Keep it
 #. identical in both places.
-#: main.lua:9788 main.lua:9792 main.lua:9981 main.lua:9995 main.lua:10282
 msgid "Metric"
 msgstr "Métrico"
 
 #. TRANSLATORS: Name of the imperial system, capitalised. Inserted into the mode
 #. names ('Imperial only (in text)') and into the menu entry below it, so it must
 #. read the same in both.
-#: main.lua:9788 main.lua:9792 main.lua:10282
 msgid "Imperial"
 msgstr "Imperial"
 
 #. TRANSLATORS: Name of mode 2: conversions are written into the book's text next
 #. to the original measurements. %1 is 'Metric' or 'Imperial'.
-#: main.lua:9792
 msgid "%1 alongside original (in text)"
 msgstr "%1 junto al original (en el texto)"
 
 #. TRANSLATORS: Name of mode 1: the book is never edited; measurements are
 #. underlined and you tap one to see its conversion. %1 is 'metric' or 'imperial',
 #. lowercase mid-sentence.
-#: main.lua:9797
 msgid "Underline units, tap for %1"
 msgstr "Subrayar unidades, tocar para ver unidades %1"
 
 #. TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
 #. Unit categories'. Untick it and distances are left alone everywhere in the book.
-#: main.lua:9824
 msgid "Length & Distance"
 msgstr "Longitud y distancia"
 
 #. TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
 #. Unit categories'. Untick it and weights are left alone everywhere in the book.
-#: main.lua:9827
 msgid "Weight"
 msgstr "Peso"
 
 #. TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
 #. Unit categories'. Untick it and temperatures are left alone everywhere in the
 #. book.
-#: main.lua:9831
 msgid "Temperature"
 msgstr "Temperatura"
 
 #. TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
 #. Unit categories'. Untick it and volumes are left alone everywhere in the book.
-#: main.lua:9834
 msgid "Volume"
 msgstr "Volumen"
 
 #. TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
 #. Unit categories'. Untick it and speeds are left alone everywhere in the book.
-#: main.lua:9837
 msgid "Speed"
 msgstr "Velocidad"
 
 #. TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
 #. Unit categories'. Untick it and areas are left alone everywhere in the book.
-#: main.lua:9840
 msgid "Area"
 msgstr "Superficie"
 
 #. TRANSLATORS: First line of the 'Menu > Footcream' menu, which reports what the
 #. scan found. Shown when no book is open, so there is nothing to report.
-#: main.lua:9870
 msgid "No book open"
 msgstr "No hay ningún libro abierto"
 
 #. TRANSLATORS: Same menu line, when Footcream has been switched off for this
 #. particular book via the entry below it.
-#: main.lua:9874
 msgid "Footcream is off in this book"
 msgstr "Footcream está desactivado en este libro"
 
 #. TRANSLATORS: Same menu line, reporting the scan result for a book whose English
 #. variant is known. %1 is the count, %2 a label like 'UK English'.
-#: main.lua:9890
 msgid "%1 hint found in this %2 book"
 msgid_plural "%1 hints found in this %2 book"
 msgstr[0] "%1 resultado en este libro (%2)"
@@ -787,80 +676,68 @@ msgstr[1] "%1 resultados en este libro (%2)"
 #. measurements - deliberately a zero count rather than 'nothing found', so it
 #. can't be misread as 'not scanned yet'. 'hints' are the measurements Footcream
 #. found, however they are being shown.
-#: main.lua:9898 main.lua:9907
 msgid "%1 hint found"
 msgid_plural "%1 hints found"
 msgstr[0] "%1 resultado encontrado"
 msgstr[1] "%1 resultados encontrados"
 
 #. TRANSLATORS: Same menu line, for a book that has never been scanned.
-#: main.lua:9910
 msgid "Not yet scanned"
 msgstr "Todavía sin analizar"
 
 #. TRANSLATORS: Tickable entry in 'Menu > Footcream'. Untick it to switch Footcream
 #. off for this book only; every other book keeps following the global setting.
-#: main.lua:9928
 msgid "Enable Footcream in this book"
 msgstr "Activar Footcream en este libro"
 
 #. TRANSLATORS: US flavour of the imperial system - pounds, US pints and gallons.
 #. Both a choice under 'Convert units to' and the value shown on that entry.
-#: main.lua:9977 main.lua:10007
 msgid "Imperial (US)"
 msgstr "Imperial (EE. UU.)"
 
 #. TRANSLATORS: UK flavour of the imperial system - stones, imperial pints and
 #. gallons. Both a choice under 'Convert units to' and the value shown on that
 #. entry.
-#: main.lua:9981 main.lua:10022
 msgid "Imperial (UK)"
 msgstr "Imperial (RU)"
 
 #. TRANSLATORS: Entry in 'Menu > Footcream' showing which unit system the reader
 #. wants to read in. %1 is 'Metric', 'Imperial (US)' or 'Imperial (UK)'. Opens the
 #. list of the three.
-#: main.lua:9985
 msgid "Convert units to: %1"
 msgstr "Convertir unidades a: %1"
 
 #. TRANSLATORS: Entry in 'Menu > Footcream' showing how conversions are currently
 #. displayed. %1 is one of the three mode names ('Underline units, tap for metric',
 #. 'Metric alongside original (in text)', ...).
-#: main.lua:10050
 msgid "Mode: %1"
 msgstr "Modo: %1"
 
 #. TRANSLATORS: Tickable entry in 'Menu > Footcream', shown only in the two
 #. in-text modes: convert each book automatically, without asking, the first
 #. time it is opened.
-#: main.lua:10082
 msgid "Auto-convert when opening a new book"
 msgstr "Convertir automáticamente al abrir un libro nuevo"
 
 #. TRANSLATORS: Tickable entry in 'Menu > Footcream': scan each book by itself the
 #. first time it is opened, instead of waiting for 'Scan book'.
-#: main.lua:10086
 msgid "Auto-scan when opening a new book"
 msgstr "Analizar automáticamente al abrir un libro nuevo"
 
 #. TRANSLATORS: Entry in 'Menu > Footcream' that runs the scan again from scratch.
 #. Shown instead of 'Scan book' once this book has already been scanned.
-#: main.lua:10111
 msgid "Rescan book"
 msgstr "Volver a analizar el libro"
 
 #. TRANSLATORS: Entry in 'Menu > Footcream' that searches this book for
 #. measurements. Nothing is underlined or converted until this has run at least
 #. once.
-#: main.lua:10116
 msgid "Scan book"
 msgstr "Analizar el libro"
 
 #. TRANSLATORS: Asked before scanning a book that doesn't look English, since
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
-#: main.lua:10151
 msgid ""
 "This book does not appear to be in English (detected: %1).\n"
 "\n"
@@ -871,7 +748,6 @@ msgstr ""
 "¿Analizarlo de todos modos?"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
-#: main.lua:10153
 msgid ""
 "This book does not appear to be in English.\n"
 "\n"
@@ -883,14 +759,12 @@ msgstr ""
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
 #. 'Cancel'.
-#: main.lua:10156
 msgid "Scan"
 msgstr "Analizar"
 
 #. TRANSLATORS: Asked when 'Rescan book' is used on a book whose text was already
 #. converted: the old conversion is undone, the book scanned afresh, and the
 #. conversion written again.
-#: main.lua:10177
 msgid "This book is converted — rescan it and re-apply the conversion?"
 msgstr ""
 "Este libro está convertido: ¿volver a analizarlo y aplicar de nuevo la "
@@ -898,37 +772,31 @@ msgstr ""
 
 #. TRANSLATORS: Button that starts the rescan-and-reconvert; the other button is
 #. the shared 'Cancel'.
-#: main.lua:10180
 msgid "Rescan & reconvert"
 msgstr "Volver a analizar y convertir"
 
 #. TRANSLATORS: Entry in 'Menu > Footcream' that opens the appearance dialog
 #. (underline look and tooltip size).
-#: main.lua:10201
 msgid "Styling"
 msgstr "Apariencia"
 
 #. TRANSLATORS: Entry in 'Menu > Footcream' that looks for a newer Footcream on
 #. GitHub. %1 is the version installed right now.
-#: main.lua:10216
 msgid "Check for updates (v%1)"
 msgstr "Buscar actualizaciones (v%1)"
 
 #. TRANSLATORS: Submenu at the bottom of 'Menu > Footcream' holding the less-used
 #. settings.
-#: main.lua:10230
 msgid "Advanced"
 msgstr "Avanzado"
 
 #. TRANSLATORS: Entry under 'Advanced' opening the list of measurement kinds
 #. (length, weight, temperature...) that can each be switched off.
-#: main.lua:10237
 msgid "Unit categories"
 msgstr "Categorías de unidades"
 
 #. TRANSLATORS: Tickable entry under 'Advanced': round conversions to values a
 #. person would say out loud rather than exact arithmetic.
-#: main.lua:10245
 msgid "Smart rounding for conversions"
 msgstr "Redondeo inteligente de las conversiones"
 
@@ -936,14 +804,12 @@ msgstr "Redondeo inteligente de las conversiones"
 #. measurements in the book's text: underline the converted values too, so tapping
 #. one shows what the book originally said. %1 is 'Metric' or 'Imperial' and must
 #. match that mode's name.
-#: main.lua:10287
 msgid "Show original unit in tooltip (%1 only mode)"
 msgstr "Mostrar la unidad original en el recuadro (modo «Solo %1»)"
 
 #. TRANSLATORS: Shown when this toggle can't work because the record of the book's
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
-#: main.lua:10308
 msgid ""
 "Original-unit data for this book is missing.\n"
 "To restore it, use 'Remove Footcream data from this book', then convert "
@@ -955,45 +821,37 @@ msgstr ""
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
-#: main.lua:10322
 msgid "Long-press units to send errors to the developer"
 msgstr "Mantener pulsada una unidad para enviar errores al desarrollador"
 
 #. TRANSLATORS: Toast when error reporting is switched on, confirming that reports
 #. carry no personal information.
-#: main.lua:10349
 msgid "Flagged errors will be shared anonymously"
 msgstr "Los errores informados se compartirán de forma anónima"
 
 #. TRANSLATORS: Entry under 'Advanced' that undoes everything Footcream did to this
 #. book: original text back, underlines gone, scan results deleted.
-#: main.lua:10357
 msgid "Remove Footcream data from this book"
 msgstr "Eliminar los datos de Footcream de este libro"
 
 #. TRANSLATORS: Toast confirming Footcream's data for this book was deleted.
-#: main.lua:10391
 msgid "Footcream data removed from book"
 msgstr "Datos de Footcream eliminados del libro"
 
 #. TRANSLATORS: Submenu under 'Advanced' with the tools for inspecting what the
 #. scan found and managing reported errors.
-#: main.lua:10399
 msgid "Debug"
 msgstr "Diagnóstico"
 
 #. TRANSLATORS: Entry under 'Debug' listing every measurement the scan found in
 #. this book, with its conversion.
-#: main.lua:10406
 msgid "Units in book (list)"
 msgstr "Unidades en el libro (lista)"
 
 #. TRANSLATORS: Entry under 'Debug' showing the errors flagged on this device.
-#: main.lua:10420
 msgid "View flagged errors"
 msgstr "Ver errores informados"
 
 #. TRANSLATORS: Entry under 'Debug' that deletes the local list of flagged errors.
-#: main.lua:10431
 msgid "Clear flagged errors"
 msgstr "Borrar errores informados"
