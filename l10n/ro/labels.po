@@ -3,15 +3,14 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-19 13:38+0200\n"
-"PO-Revision-Date: 2026-08-18 13:58\n"
+"PO-Revision-Date: 2026-08-19 11:54\n"
 "Last-Translator: \n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && "
-"n%100<20)) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Crowdin-Project: foot-cream\n"
 "X-Crowdin-Project-ID: 919191\n"
 "X-Crowdin-Language: ro\n"
@@ -46,11 +45,9 @@ msgstr "Instalarea a eșuat — versiunea anterioară a fost restaurată."
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
 #: main.lua:1807
-msgid ""
-"Updated to %1.\n"
+msgid "Updated to %1.\n"
 "Restart KOReader now to load it?"
-msgstr ""
-"Actualizat la %1.\n"
+msgstr "Actualizat la %1.\n"
 "Repornești KOReader acum pentru a-l încărca?"
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
@@ -312,11 +309,9 @@ msgstr[2] "%1 de unități subliniate în carte"
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
 #: main.lua:7033 main.lua:7111
-msgid ""
-"This book is already converted.\n"
+msgid "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
-msgstr ""
-"Această carte este deja convertită.\n"
+msgstr "Această carte este deja convertită.\n"
 "Folosește mai întâi „Elimină datele Footcream din această carte” (Avansate)."
 
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
@@ -367,8 +362,7 @@ msgstr "Scanează și convertește"
 #. measurements to convert. %1 is 'imperial' or 'metric'.
 #: main.lua:7123
 msgid "No %1 measurements found in this book — nothing to convert."
-msgstr ""
-"Nu s-au găsit măsurători %1 în această carte — nu este nimic de convertit."
+msgstr "Nu s-au găsit măsurători %1 în această carte — nu este nimic de convertit."
 
 #. TRANSLATORS: Shown when the book has not been scanned yet, so there is nothing
 #. to convert. 'hints' are the underlined measurements Footcream finds.
@@ -405,50 +399,26 @@ msgstr "Modulul de conversie nu a putut fi încărcat."
 #. finished. %1 is 'metric' or 'imperial'. The book is unchanged.
 #: main.lua:7359
 msgid "Converting to %1 was interrupted — the book is unchanged."
-msgstr ""
-"Conversia în unități %1 a fost întreruptă — cartea a rămas neschimbată."
+msgstr "Conversia în unități %1 a fost întreruptă — cartea a rămas neschimbată."
 
 #. TRANSLATORS: Error when the conversion found measurements but couldn't locate
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
 #: main.lua:7380
-msgid ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurement was found, but it could not be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgid_plural ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurements were found, but none could be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgstr[0] ""
-"Cartea nu a putut fi convertită direct în fișier.\n"
-"\n"
-"A fost găsită %1 măsurătoare, dar nu a putut fi regăsită în textul cărții — "
-"marcajul sau formatul ei s-ar putea să nu fie acceptat pentru conversia în "
-"text.\n"
-"\n"
+msgstr[0] "Cartea nu a putut fi convertită direct în fișier.\n\n"
+"A fost găsită %1 măsurătoare, dar nu a putut fi regăsită în textul cărții — marcajul sau formatul ei s-ar putea să nu fie acceptat pentru conversia în text.\n\n"
 "Modul „%2” funcționează în continuare pentru această carte."
-msgstr[1] ""
-"Cartea nu a putut fi convertită direct în fișier.\n"
-"\n"
-"Au fost găsite %1 măsurători, dar niciuna nu a putut fi regăsită în textul "
-"cărții — marcajul sau formatul ei s-ar putea să nu fie acceptat pentru "
-"conversia în text.\n"
-"\n"
+msgstr[1] "Cartea nu a putut fi convertită direct în fișier.\n\n"
+"Au fost găsite %1 măsurători, dar niciuna nu a putut fi regăsită în textul cărții — marcajul sau formatul ei s-ar putea să nu fie acceptat pentru conversia în text.\n\n"
 "Modul „%2” funcționează în continuare pentru această carte."
-msgstr[2] ""
-"Cartea nu a putut fi convertită direct în fișier.\n"
-"\n"
-"Au fost găsite %1 de măsurători, dar niciuna nu a putut fi regăsită în "
-"textul cărții — marcajul sau formatul ei s-ar putea să nu fie acceptat "
-"pentru conversia în text.\n"
-"\n"
+msgstr[2] "Cartea nu a putut fi convertită direct în fișier.\n\n"
+"Au fost găsite %1 de măsurători, dar niciuna nu a putut fi regăsită în textul cărții — marcajul sau formatul ei s-ar putea să nu fie acceptat pentru conversia în text.\n\n"
 "Modul „%2” funcționează în continuare pentru această carte."
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
@@ -471,13 +441,8 @@ msgstr "Unitățile originale din carte au fost restaurate"
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
 #: main.lua:7550
-msgid ""
-"This book's file changed since Footcream converted it, so the original text "
-"can't be restored. Footcream's conversion record has been cleared."
-msgstr ""
-"Fișierul acestei cărți s-a modificat de când Footcream a convertit-o, așa că "
-"textul original nu poate fi restaurat. Datele de conversie Footcream au fost "
-"șterse."
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr "Fișierul acestei cărți s-a modificat de când Footcream a convertit-o, așa că textul original nu poate fi restaurat. Datele de conversie Footcream au fost șterse."
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
@@ -495,11 +460,9 @@ msgstr "O scanare este deja în curs…"
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
 #: main.lua:8037
-msgid ""
-"Couldn't finish scanning this book.\n"
+msgid "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
-msgstr ""
-"Scanarea acestei cărți nu a putut fi finalizată.\n"
+msgstr "Scanarea acestei cărți nu a putut fi finalizată.\n"
 "Folosește „Scanează cartea” pentru a încerca din nou."
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
@@ -512,11 +475,9 @@ msgstr "Încă nu s-a găsit nicio unitate în această carte."
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
 #: main.lua:8563
-msgid ""
-"%1. %2 (%3)  →  %4\n"
+msgid "%1. %2 (%3)  →  %4\n"
 "…%5…"
-msgstr ""
-"%1. %2 (%3)  →  %4\n"
+msgstr "%1. %2 (%3)  →  %4\n"
 "…%5…"
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
@@ -600,33 +561,27 @@ msgstr "Erorile raportate au fost șterse."
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
 #: main.lua:9143
-msgid ""
-"%1 (%2)  →  %3\n"
+msgid "%1 (%2)  →  %3\n"
 "…%4…"
-msgstr ""
-"%1 (%2)  →  %3\n"
+msgstr "%1 (%2)  →  %3\n"
 "…%4…"
 
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
 #: main.lua:9171
-msgid ""
-"%1  →  %2\n"
+msgid "%1  →  %2\n"
 "…%3…"
-msgstr ""
-"%1  →  %2\n"
+msgstr "%1  →  %2\n"
 "…%3…"
 
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
 #: main.lua:9192
-msgid ""
-"%1\n"
+msgid "%1\n"
 "…%2…"
-msgstr ""
-"%1\n"
+msgstr "%1\n"
 "…%2…"
 
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
@@ -675,15 +630,11 @@ msgstr "Nu s-a găsit niciun pachet descărcabil pentru această versiune."
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
 #: main.lua:9324
-msgid ""
-"Update available: %1\n"
-"(installed: v%2)\n"
-"\n"
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
 "Download and install now?"
-msgstr ""
-"Actualizare disponibilă: %1\n"
-"(instalată: v%2)\n"
-"\n"
+msgstr "Actualizare disponibilă: %1\n"
+"(instalată: v%2)\n\n"
 "Descarci și instalezi acum?"
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
@@ -877,24 +828,16 @@ msgstr "Scanează cartea"
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
 #: main.lua:9783
-msgid ""
-"This book does not appear to be in English (detected: %1).\n"
-"\n"
+msgid "This book does not appear to be in English (detected: %1).\n\n"
 "Scan it anyway?"
-msgstr ""
-"Această carte nu pare să fie în engleză (detectat: %1).\n"
-"\n"
+msgstr "Această carte nu pare să fie în engleză (detectat: %1).\n\n"
 "O scanezi oricum?"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
 #: main.lua:9785
-msgid ""
-"This book does not appear to be in English.\n"
-"\n"
+msgid "This book does not appear to be in English.\n\n"
 "Scan it anyway?"
-msgstr ""
-"Această carte nu pare să fie în engleză.\n"
-"\n"
+msgstr "Această carte nu pare să fie în engleză.\n\n"
 "O scanezi oricum?"
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
@@ -908,8 +851,7 @@ msgstr "Scanează"
 #. conversion written again.
 #: main.lua:9809
 msgid "This book is converted — rescan it and re-apply the conversion?"
-msgstr ""
-"Această carte este convertită — o scanezi din nou și aplici iar conversia?"
+msgstr "Această carte este convertită — o scanezi din nou și aplici iar conversia?"
 
 #. TRANSLATORS: Button that starts the rescan-and-reconvert; the other button is
 #. the shared 'Cancel'.
@@ -959,14 +901,10 @@ msgstr "Arată unitatea originală în casetă (modul „Doar %1”)"
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
 #: main.lua:9940
-msgid ""
-"Original-unit data for this book is missing.\n"
-"To restore it, use 'Remove Footcream data from this book', then convert "
-"again via the Mode menu."
-msgstr ""
-"Lipsesc datele despre unitățile originale ale acestei cărți.\n"
-"Pentru a le reface, folosește „Elimină datele Footcream din această carte”, "
-"apoi convertește din nou din meniul Mod."
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr "Lipsesc datele despre unitățile originale ale acestei cărți.\n"
+"Pentru a le reface, folosește „Elimină datele Footcream din această carte”, apoi convertește din nou din meniul Mod."
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
@@ -1013,15 +951,3 @@ msgstr "Vezi erorile raportate"
 msgid "Clear flagged errors"
 msgstr "Șterge erorile raportate"
 
-#~ msgid ""
-#~ "Footcream's converter has improved — update this book's in-text "
-#~ "conversions?"
-#~ msgstr ""
-#~ "Convertorul Footcream s-a îmbunătățit — actualizezi conversiile din "
-#~ "textul acestei cărți?"
-
-#~ msgid "Update now"
-#~ msgstr "Actualizează acum"
-
-#~ msgid "Not now"
-#~ msgstr "Nu acum"

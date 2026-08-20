@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-19 13:38+0200\n"
-"PO-Revision-Date: 2026-08-18 13:58\n"
+"PO-Revision-Date: 2026-08-19 11:55\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -45,11 +45,9 @@ msgstr "Η εγκατάσταση απέτυχε — επαναφέρθηκε η
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
 #: main.lua:1807
-msgid ""
-"Updated to %1.\n"
+msgid "Updated to %1.\n"
 "Restart KOReader now to load it?"
-msgstr ""
-"Ενημερώθηκε σε %1.\n"
+msgstr "Ενημερώθηκε σε %1.\n"
 "Να γίνει επανεκκίνηση του KOReader τώρα για να φορτωθεί;"
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
@@ -308,13 +306,10 @@ msgstr[1] "Υπογραμμίστηκαν %1 μονάδες στο βιβλίο"
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
 #: main.lua:7033 main.lua:7111
-msgid ""
-"This book is already converted.\n"
+msgid "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
-msgstr ""
-"Αυτό το βιβλίο έχει ήδη μετατραπεί.\n"
-"Χρησιμοποιήστε πρώτα την «Αφαίρεση δεδομένων Footcream από αυτό το βιβλίο» "
-"(Για προχωρημένους)."
+msgstr "Αυτό το βιβλίο έχει ήδη μετατραπεί.\n"
+"Χρησιμοποιήστε πρώτα την «Αφαίρεση δεδομένων Footcream από αυτό το βιβλίο» (Για προχωρημένους)."
 
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
 #. questions and progress messages below ('Convert this book's measurements to
@@ -342,9 +337,7 @@ msgstr "Διατηρήθηκε η λειτουργία: %1"
 #. only the adding half is the older, convert-only wording — do not accept it.
 #: main.lua:7065
 msgid "Scan this book and add %1 conversions alongside its measurements?"
-msgstr ""
-"Να σαρωθεί αυτό το βιβλίο και να προστεθούν %1 μονάδες δίπλα στις μετρήσεις "
-"του;"
+msgstr "Να σαρωθεί αυτό το βιβλίο και να προστεθούν %1 μονάδες δίπλα στις μετρήσεις του;"
 
 #. TRANSLATORS: Asked BEFORE scanning, when mode 3 will then edit the book:
 #. measurements are replaced by their conversions. %1 is 'metric' or 'imperial'.
@@ -354,8 +347,7 @@ msgstr ""
 #. not accept it.
 #: main.lua:7073
 msgid "Scan this book and convert its measurements to %1?"
-msgstr ""
-"Να σαρωθεί αυτό το βιβλίο και να μετατραπούν οι μετρήσεις του σε %1 μονάδες;"
+msgstr "Να σαρωθεί αυτό το βιβλίο και να μετατραπούν οι μετρήσεις του σε %1 μονάδες;"
 
 #. TRANSLATORS: Button that starts the scan and then rewrites the book's text; the
 #. other button is the shared 'Cancel'.
@@ -410,35 +402,17 @@ msgstr "Η μετατροπή σε %1 μονάδες διακόπηκε — το
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
 #: main.lua:7380
-msgid ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurement was found, but it could not be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgid_plural ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurements were found, but none could be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgstr[0] ""
-"Δεν ήταν δυνατή η μετατροπή αυτού του βιβλίου επιτόπου.\n"
-"\n"
-"Βρέθηκε %1 μέτρηση, αλλά δεν ήταν δυνατή η αντιστοίχισή της στο κείμενο του "
-"βιβλίου — η σήμανση ή η μορφή της ίσως δεν υποστηρίζεται για μετατροπή μέσα "
-"στο κείμενο.\n"
-"\n"
+msgstr[0] "Δεν ήταν δυνατή η μετατροπή αυτού του βιβλίου επιτόπου.\n\n"
+"Βρέθηκε %1 μέτρηση, αλλά δεν ήταν δυνατή η αντιστοίχισή της στο κείμενο του βιβλίου — η σήμανση ή η μορφή της ίσως δεν υποστηρίζεται για μετατροπή μέσα στο κείμενο.\n\n"
 "Η λειτουργία «%2» εξακολουθεί να λειτουργεί για αυτό το βιβλίο."
-msgstr[1] ""
-"Δεν ήταν δυνατή η μετατροπή αυτού του βιβλίου επιτόπου.\n"
-"\n"
-"Βρέθηκαν %1 μετρήσεις, αλλά καμία δεν ήταν δυνατό να αντιστοιχιστεί στο "
-"κείμενο του βιβλίου — η σήμανση ή η μορφή τους ίσως δεν υποστηρίζεται για "
-"μετατροπή μέσα στο κείμενο.\n"
-"\n"
+msgstr[1] "Δεν ήταν δυνατή η μετατροπή αυτού του βιβλίου επιτόπου.\n\n"
+"Βρέθηκαν %1 μετρήσεις, αλλά καμία δεν ήταν δυνατό να αντιστοιχιστεί στο κείμενο του βιβλίου — η σήμανση ή η μορφή τους ίσως δεν υποστηρίζεται για μετατροπή μέσα στο κείμενο.\n\n"
 "Η λειτουργία «%2» εξακολουθεί να λειτουργεί για αυτό το βιβλίο."
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
@@ -461,13 +435,8 @@ msgstr "Επαναφέρθηκαν οι αρχικές μονάδες στο β�
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
 #: main.lua:7550
-msgid ""
-"This book's file changed since Footcream converted it, so the original text "
-"can't be restored. Footcream's conversion record has been cleared."
-msgstr ""
-"Το αρχείο αυτού του βιβλίου άλλαξε αφότου το μετέτρεψε το Footcream, οπότε "
-"το αρχικό κείμενο δεν μπορεί να επαναφερθεί. Η καταγραφή μετατροπής του "
-"Footcream διαγράφηκε."
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr "Το αρχείο αυτού του βιβλίου άλλαξε αφότου το μετέτρεψε το Footcream, οπότε το αρχικό κείμενο δεν μπορεί να επαναφερθεί. Η καταγραφή μετατροπής του Footcream διαγράφηκε."
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
@@ -485,11 +454,9 @@ msgstr "Μια σάρωση βρίσκεται ήδη σε εξέλιξη…"
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
 #: main.lua:8037
-msgid ""
-"Couldn't finish scanning this book.\n"
+msgid "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
-msgstr ""
-"Δεν ήταν δυνατή η ολοκλήρωση της σάρωσης αυτού του βιβλίου.\n"
+msgstr "Δεν ήταν δυνατή η ολοκλήρωση της σάρωσης αυτού του βιβλίου.\n"
 "Χρησιμοποιήστε τη «Σάρωση βιβλίου» για να δοκιμάσετε ξανά."
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
@@ -502,11 +469,9 @@ msgstr "Δεν βρέθηκαν ακόμη μονάδες σε αυτό το β�
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
 #: main.lua:8563
-msgid ""
-"%1. %2 (%3)  →  %4\n"
+msgid "%1. %2 (%3)  →  %4\n"
 "…%5…"
-msgstr ""
-"%1. %2 (%3)  →  %4\n"
+msgstr "%1. %2 (%3)  →  %4\n"
 "…%5…"
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
@@ -590,33 +555,27 @@ msgstr "Τα αναφερμένα σφάλματα διαγράφηκαν."
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
 #: main.lua:9143
-msgid ""
-"%1 (%2)  →  %3\n"
+msgid "%1 (%2)  →  %3\n"
 "…%4…"
-msgstr ""
-"%1 (%2)  →  %3\n"
+msgstr "%1 (%2)  →  %3\n"
 "…%4…"
 
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
 #: main.lua:9171
-msgid ""
-"%1  →  %2\n"
+msgid "%1  →  %2\n"
 "…%3…"
-msgstr ""
-"%1  →  %2\n"
+msgstr "%1  →  %2\n"
 "…%3…"
 
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
 #: main.lua:9192
-msgid ""
-"%1\n"
+msgid "%1\n"
 "…%2…"
-msgstr ""
-"%1\n"
+msgstr "%1\n"
 "…%2…"
 
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
@@ -665,15 +624,11 @@ msgstr "Δεν βρέθηκε πακέτο έκδοσης προς λήψη."
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
 #: main.lua:9324
-msgid ""
-"Update available: %1\n"
-"(installed: v%2)\n"
-"\n"
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
 "Download and install now?"
-msgstr ""
-"Διαθέσιμη ενημέρωση: %1\n"
-"(εγκατεστημένη: v%2)\n"
-"\n"
+msgstr "Διαθέσιμη ενημέρωση: %1\n"
+"(εγκατεστημένη: v%2)\n\n"
 "Λήψη και εγκατάσταση τώρα;"
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
@@ -865,24 +820,16 @@ msgstr "Σάρωση βιβλίου"
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
 #: main.lua:9783
-msgid ""
-"This book does not appear to be in English (detected: %1).\n"
-"\n"
+msgid "This book does not appear to be in English (detected: %1).\n\n"
 "Scan it anyway?"
-msgstr ""
-"Αυτό το βιβλίο δεν φαίνεται να είναι στα αγγλικά (εντοπίστηκε: %1).\n"
-"\n"
+msgstr "Αυτό το βιβλίο δεν φαίνεται να είναι στα αγγλικά (εντοπίστηκε: %1).\n\n"
 "Να σαρωθεί ούτως ή άλλως;"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
 #: main.lua:9785
-msgid ""
-"This book does not appear to be in English.\n"
-"\n"
+msgid "This book does not appear to be in English.\n\n"
 "Scan it anyway?"
-msgstr ""
-"Αυτό το βιβλίο δεν φαίνεται να είναι στα αγγλικά.\n"
-"\n"
+msgstr "Αυτό το βιβλίο δεν φαίνεται να είναι στα αγγλικά.\n\n"
 "Να σαρωθεί ούτως ή άλλως;"
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
@@ -896,9 +843,7 @@ msgstr "Σάρωση"
 #. conversion written again.
 #: main.lua:9809
 msgid "This book is converted — rescan it and re-apply the conversion?"
-msgstr ""
-"Αυτό το βιβλίο έχει μετατραπεί — να σαρωθεί ξανά και να εφαρμοστεί εκ νέου η "
-"μετατροπή;"
+msgstr "Αυτό το βιβλίο έχει μετατραπεί — να σαρωθεί ξανά και να εφαρμοστεί εκ νέου η μετατροπή;"
 
 #. TRANSLATORS: Button that starts the rescan-and-reconvert; the other button is
 #. the shared 'Cancel'.
@@ -948,21 +893,16 @@ msgstr "Εμφάνιση αρχικής μονάδας στην υπόδειξη
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
 #: main.lua:9940
-msgid ""
-"Original-unit data for this book is missing.\n"
-"To restore it, use 'Remove Footcream data from this book', then convert "
-"again via the Mode menu."
-msgstr ""
-"Λείπουν τα δεδομένα αρχικών μονάδων για αυτό το βιβλίο.\n"
-"Για να τα επαναφέρετε, χρησιμοποιήστε την «Αφαίρεση δεδομένων Footcream από "
-"αυτό το βιβλίο» και μετά μετατρέψτε ξανά από το μενού Λειτουργία."
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr "Λείπουν τα δεδομένα αρχικών μονάδων για αυτό το βιβλίο.\n"
+"Για να τα επαναφέρετε, χρησιμοποιήστε την «Αφαίρεση δεδομένων Footcream από αυτό το βιβλίο» και μετά μετατρέψτε ξανά από το μενού Λειτουργία."
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
 #: main.lua:9954
 msgid "Long-press units to send errors to the developer"
-msgstr ""
-"Παρατεταμένο πάτημα σε μονάδα για αποστολή σφάλματος στον προγραμματιστή"
+msgstr "Παρατεταμένο πάτημα σε μονάδα για αποστολή σφάλματος στον προγραμματιστή"
 
 #. TRANSLATORS: Toast when error reporting is switched on, confirming that reports
 #. carry no personal information.
@@ -1003,15 +943,3 @@ msgstr "Προβολή αναφερμένων σφαλμάτων"
 msgid "Clear flagged errors"
 msgstr "Εκκαθάριση αναφερμένων σφαλμάτων"
 
-#~ msgid ""
-#~ "Footcream's converter has improved — update this book's in-text "
-#~ "conversions?"
-#~ msgstr ""
-#~ "Ο μετατροπέας του Footcream βελτιώθηκε — να ενημερωθούν οι μετατροπές "
-#~ "μέσα στο κείμενο αυτού του βιβλίου;"
-
-#~ msgid "Update now"
-#~ msgstr "Ενημέρωση τώρα"
-
-#~ msgid "Not now"
-#~ msgstr "Όχι τώρα"
