@@ -2698,6 +2698,36 @@ local _UNIT_CONV = {
     -- historical and fantasy prose ("three hundred cubits").
     ["cubits"]            = { factor=0.4572,   offset=0,       target="m",    cat="length"      },
     ["cubit"]             = { factor=0.4572,   offset=0,       target="m",    cat="length"      },
+    -- Historical/archaic English units from epic-fantasy & classic fiction
+    -- (issue #3): cloth, distance and horse-height measures. The short
+    -- spellings (span/rod/pole/ell/hand/pace) are ordinary English words, so
+    -- they sit in FootFree._GATED_UNITS and need a book cluster + a literal
+    -- digit before they convert; perch/chain (5 letters, fish / common noun)
+    -- are gated the same way via _GATED_LONG. Values are the common English
+    -- standards, approximate where the unit varied by time/region.
+    -- 1 span = 9 in (quarter yard).
+    ["spans"]             = { factor=0.2286,   offset=0,       target="m",    cat="length"      },
+    ["span"]              = { factor=0.2286,   offset=0,       target="m",    cat="length"      },
+    -- 1 rod = 1 pole = 1 perch = 5.5 yd = 16.5 ft.
+    ["rods"]              = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["rod"]               = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["poles"]             = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["pole"]              = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["perches"]           = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["perch"]             = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    -- 1 chain = 22 yd = 66 ft (surveying; "twenty chains of road").
+    ["chains"]            = { factor=20.1168,  offset=0,       target="m",    cat="length"      },
+    ["chain"]             = { factor=20.1168,  offset=0,       target="m",    cat="length"      },
+    -- 1 (English) ell = 45 in. Scottish/Flemish ells were shorter.
+    ["ells"]              = { factor=1.143,    offset=0,       target="m",    cat="length"      },
+    ["ell"]               = { factor=1.143,    offset=0,       target="m",    cat="length"      },
+    -- 1 hand = 4 in (horse height: "fifteen hands tall").
+    ["hands"]             = { factor=0.1016,   offset=0,       target="m",    cat="length"      },
+    ["hand"]              = { factor=0.1016,   offset=0,       target="m",    cat="length"      },
+    -- 1 pace ≈ 30 in (the ordinary walking pace). Some sources use the Roman
+    -- pace (5 ft); the common English pace is the safer default for prose.
+    ["paces"]             = { factor=0.762,    offset=0,       target="m",    cat="length"      },
+    ["pace"]              = { factor=0.762,    offset=0,       target="m",    cat="length"      },
     ["pounds"]            = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
     ["pound"]             = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
     ["lbs"]               = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
@@ -2736,6 +2766,26 @@ local _UNIT_CONV = {
     ["acre"]              = { converter=_conv_acres_to_ha,     target="ha",   cat="area"        },
 }
 
+-- Ambiguous short units, gated in _finishScan against false positives
+-- (issue #3). The short spellings are ordinary English words ("life span",
+-- "fishing rod", "two hands of cards"), so a stray hit in a normal book is
+-- almost certainly a false positive. Two rules back them in _finishScan:
+--   * CLUSTER: a gated unit only converts when the book shows ≥2 DISTINCT
+--     gated units anywhere in it (a genuine historical-fantasy book mixes
+--     several; an ordinary English book never does).
+--   * DIGIT-ONLY: the number must be literally written ("5 span"), so
+--     spelled-number idioms ("two hands") structurally never convert.
+-- Longer, unambiguous spellings ("cubit", "league", "furlong") convert freely.
+-- Then held on the CLASS (not a chunk local): the chunk sits near LuaJIT's
+-- 200-locals ceiling.
+FootFree._GATED_UNITS = {
+    span = true, rod = true, pole = true, ell = true, hand = true, pace = true,
+}
+-- 5-letter historical units that are also ordinary English words (perch =
+-- fish, chain = everyday noun). Longer than the ≤4 "short" rule, so flagged
+-- here to receive the same cluster+digit gate.
+FootFree._GATED_LONG = { perch = true, chain = true }
+
 -- Longest-first so "miles per hour" matches before "miles", etc.
 local _UNIT_SUFFIXES = {
     "degrees Fahrenheit", "degrees F", "degrees",
@@ -2746,6 +2796,9 @@ local _UNIT_SUFFIXES = {
     "leagues", "league",
     "gallons", "gallon", "quarts", "quart",
     "cubits", "cubit",
+    "chains", "chain", "perches", "perch", "spans", "span",
+    "hands", "hand", "poles", "pole", "rods", "rod",
+    "paces", "pace", "ells", "ell",
     "knots", "knot", "pounds", "pound",
     "ounces", "ounce", "pints", "pint",
     "acres", "acre", "stone", "yards", "yard",
@@ -7201,6 +7254,56 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
         if keep then table.insert(filtered, r) end
     end
 
+    -- Ambiguous-unit gate (false-positive defense for the historical/fantasy
+    -- unit set — FootFree._GATED_UNITS/_GATED_LONG, issue #3). The SHORT
+    -- spellings (≤4 letters, plus the flagged 5-letter _GATED_LONG ones) are
+    -- ordinary English words ("life span", "fishing rod", "two perch"), so a
+    -- stray hit in a normal book is almost certainly a false positive. Two
+    -- rules back them:
+    --   (1) CLUSTER: count every DISTINCT gated unit in the book (long or
+    --       short); drop the gated ones unless ≥2 distinct exist. A genuine
+    --       historical-fantasy book mixes several; an ordinary English book
+    --       never does.
+    --   (2) DIGIT-ONLY: in a cluster book a gated unit's number must be
+    --       literally written ("5 span"), so spelled-number idioms ("two
+    --       hands") structurally never convert.
+    -- Longer, unambiguous spellings ("cubit", "league", "furlong") convert
+    -- freely — the momentum here is FP-suppression, not recall.
+    do
+        -- Strip a plural "s" so "hands"/"hand", "spans"/"span" share one key.
+        local core = function(u)
+            return u:gsub("s$", "")
+        end
+        local gated = function(r)
+            if not r._unit then return false end
+            local c = core(r._unit)
+            return FootFree._GATED_UNITS[c] or FootFree._GATED_LONG[c]
+        end
+        local short = function(r)
+            if not gated(r) then return false end
+            local c = core(r._unit)
+            return #c <= 4 or FootFree._GATED_LONG[c]
+        end
+        local distinct, nd = {}, 0
+        for _, r in ipairs(filtered) do
+            if gated(r) then
+                local c = core(r._unit)
+                if not distinct[c] then
+                    distinct[c] = true
+                    nd = nd + 1
+                end
+            end
+        end
+        for i = #filtered, 1, -1 do
+            if short(filtered[i]) then
+                if nd < 2
+                   or not (filtered[i].prev_text or ""):match("%d[%d.,]*%s*$") then
+                    table.remove(filtered, i)
+                end
+            end
+        end
+    end
+
     -- Collapse overlapping spans — but only now, AFTER the legacy false-positive
     -- filters above have run. Doing it on the raw scan output would let a
     -- soon-to-be-rejected over-catch (e.g. "fifteen-foot-wide stone") win the
@@ -9803,7 +9906,7 @@ function FootFree:addToMainMenu(menu_items)
         -- TRANSLATORS: Long-press explainer for the 'Length & Distance' category. The unit
         -- names are English measurement words - use your language's names for the same
         -- units.
-        length = _("Inches, feet, yards, miles, fathoms, furlongs, leagues, cubits — and in the imperial direction: millimeters, centimeters, meters, kilometers."),
+        length = _("Inches, feet, yards, miles, fathoms, furlongs, leagues, cubits, spans, hands, ells, rods, chains, paces — and in the imperial direction: millimeters, centimeters, meters, kilometers."),
         -- TRANSLATORS: Long-press explainer for the 'Weight' category. Tons are left alone
         -- on purpose because the word means several different quantities.
         weight = _("Ounces, pounds and stone — and in the imperial direction: grams and kilos. Tons are deliberately not converted (the word is too ambiguous)."),
