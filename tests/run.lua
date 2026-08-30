@@ -53,6 +53,14 @@ local function scan(text, opts)
         local v = opts.cat_enabled and opts.cat_enabled[c]
         FootFree._cat_enabled[c] = (v ~= false)
     end
+    -- Opt-in unit packages default ON in the harness so the existing unit tests
+    -- (which expect Asian/fantasy units to convert) keep passing. Individual
+    -- tests opt a package OUT via opts.pkg_enabled to exercise the gate.
+    FootFree._pkg_enabled = {}
+    for _, p in ipairs({ "asian", "fantasy" }) do
+        local v = opts.pkg_enabled and opts.pkg_enabled[p]
+        FootFree._pkg_enabled[p] = (v ~= false)
+    end
     FootFree._debug_report     = false
     FootFree._tap_mode         = opts.tap_mode or 1
     FootFree._scanned          = false
