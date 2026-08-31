@@ -57,11 +57,17 @@ FootFree._CDQ    = "\226\128\157"   -- "  U+201D curly right double quote
 -- quotation mark apart from an inches mark when a digit sits before it
 -- (“Reach 18” is a call sign, 18” is a measurement; see the quotation guard).
 FootFree._CLDQ   = "\226\128\156"   -- "  U+201C curly left double quote
+-- Its single-quote twin. British typesetting quotes speech and quoted strings
+-- with '…', so a quoted NUMBER ends in the same glyph as a feet mark: Wool's
+-- socket labels ("the jack labelled '18'") produced 32 false 5.5 m readings.
+-- U+2018 is unambiguous — it is never an apostrophe — so counting it against
+-- U+2019 can only ever UNDER-report an open quotation, never invent one.
+FootFree._CLSQ   = "\226\128\152"   -- '  U+2018 curly left single quote
 local _ENDASH = "\226\128\147"   -- –  U+2013
 local _TIMES  = "\195\151"       -- ×  U+00D7
 local _SUP2   = "\194\178"       -- ²  U+00B2 (superscript two)
 
-local CACHE_VERSION = 69  -- fork 69: opt-in UNIT PACKAGES (FootFree._PKG_UNITS). Asian and historical/fantasy units are now OFF by default and only convert when their package is enabled (footcream_pkg_asian / footcream_pkg_fantasy), so users who never read wuxia or epic fantasy skip the scan time and false-positive surface. Match output changes when a package is off, so sidecars from 68 (packages always on) must be rescanned. (68 was: merged fork 66 (pinyin 時辰 稱謂 units: English "X Hour" periods via _SHICHEN_PATS plus Hour/Watch/Mark/Ke fast-path renderings; sidecars from 65 (no such units) must be rescanned) and upstream 67 (reader-flagged fixes: sig-digit distance floor for precise sources — 29,028 ft -> 8 848 m; closing-curly-quote call-sign guard — "Reach 18" is not 46 cm; ≤2 body-part foot guards). Both sides change match/convert output, so sidecars from either lineage (fork <66, upstream <67) must be rescanned. (66 was: fork: pinyin 時辰 稱謂 units — English "X Hour" periods (Zi/Chou/…/Hai, broad romanizations) via the _SHICHEN_PATS literal pass, plus the capitalized English renderings Hour/Watch/Mark/Ke on the fast path; sidecars from 65 (no such units) must be rescanned. (65 was: fork merged upstream v1.7.0 (64) — the fork's added units (carat, ton, verst/arshin/pood, gill, hp/BTU/psi, Asian transliterations) change match/convert output, so sidecars from 64 (no such units) and earlier fork builds must be rescanned. (64 was: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001’s" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001’ = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6’ wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-toed/-legged/-clawed/-pawed/etc. feet/foot" no longer reads as a distance — anatomy, not a measurement (report #9: "three-toed feet" was reading as 91 cm; the shared _parse_num word-number fallback treats a hyphen right after a number word as an ordinary compound-number boundary, the same mechanism that composes "twenty-three", so it doesn't distinguish "three-toed" from "twenty-three"). (62 was: shorthand height notation (issue #2) now recognizes curly/smart quotes ("6’2”"), not just straight ASCII/true-prime — most commercial EPUBs are typeset this way, which is why it looked entirely broken to the reporter. A digit-adjacent bare feet-mark ('/′/’) immediately followed by "s" is now read as a year/decade possessive or plural ("2001's", "the 90's"), not a height — closes the false positive in reports #11-13 ("2001's Ghosts of Mars" was reading as 2001 ft = 600 m). (61 was: bare "degrees" (no F/Fahrenheit qualifier) now converts as a Fahrenheit temperature when a nearby word suggests one (cold/hot/warm/chill/freez.../temperature/weather/humid/...); default is still to leave it alone (angle, rotation, proof, heading, latitude). Spelled "minus" before a number now negates it ("minus seventy degrees" = -70), matching the existing symbolic-dash handling. "N degrees below zero" is suppressed rather than mis-signed (residual — reports #14-33). (60 was: hyphenated adjectival "square <unit>" compounds ("a 250,000-square-foot room", "a three-million-square-foot cave") now detect as area — the "square" cue check missed the hyphen glue and fell through to the linear-foot factor, badly wrong and missing the ² (reports #22-24). (59 was: metric→imperial direction ("Preferred units": metric/us/uk; sidecars carry a direction field, matches can now target imperial compound formats). (58 was: hyphen-glued attributive fractions parse — "<ordinal>-of-a-<unit>-thick/long" reads as 1/denominator ("a third-of-a-mile-thick" = 540 m; "quarter-of-a" worked already via _WORD_NUMS, ordinals like "third" were nil because bare ordinals are ambiguous — the glued "-of-a" tail disambiguates). (57 was: bare-article "a million miles" (incl. "an hour"/"away" forms) suppressed as hyperbole — user-approved 2026-07-06, all 7 corpus hits figurative; digits and real multiples ("two million miles", "half a million miles") still convert. (56 was: URL path fragments never convert (digit/letter slash in matched_text — "178650/League" was 860 000 km); "N-foot-by-M-foot" dimension adjectives convert both sides ("twenty-foot-by-hundred-foot" = 6 × 30 m, was a bare 6 m). (55 was: shy-book plain passes enforce true \\b via adjacent-char probes on BOTH sides (plain-path contexts are word-based, so "15 mi|nutes"/"one kn|ows" looked clean and inflated matches 3-6x). (54 was: soft-hyphen books (U+00AD in the text) scan via per-alias PLAIN findAllText passes — the regex path returns span-shifted/missing hits in such books (The Rise and Fall of the Dinosaurs: "1,700 miles" never hit, "seven-ton" garbled). (53 was: new-test-books sweep fixes — em-dash/ellipsis glued to the number no longer defeats _prev_num_words ("too far—eleven feet six inches", "off course by…sixty miles", "park—four acres"); fused digit+unit forms hit via a digit lookbehind in _FAST_UNIT_PAT ("260lbs", "6ft"); banking vocabulary (bank/account/bills/untraceable) added to the soft-currency cues. (52 was: "for a mile" article cue (user-approved) + attributive-tail guard ("ran a mile RELAY" is a compound noun — the batch-2 motion-verb cues were wrongly converting it). (51 was: tight U+2044 fractions from sup/sub-span markup ("21⁄2-inch" = 2½, "13⁄16-inch" = 13/16 — improper-looking numerator reads as a mixed number, proper as a plain fraction). 50 was: corpus-sweep batch 2 follow-ups — prime matches re-check the coordinate/astronomy vocab on the tail of their own paragraph (the 5-word hit window missed "ABERRATION … is established 20″"); spaced U+2044 mixed fractions parse ("2 1 ⁄ 2 -inch plank" = 2.5); _prev_num_words' article-fraction tail requires both words ("half LONG" no longer reads 0.5, which spawned a bogus 0.5–1000 range eating "…a mile and a half long and 1000 ft. deep"). (49 was: batch 2 — FP guards for closing-quote/middle-dot/arcsecond; enumeration lists; ASCII mixed fractions; million; article-mile directional/motion cues; at-a-time ≤ 2; "<digit> of a mile" fraction guard. 48 was: foot-idiom positional cues gated ≤ 2.) (67 was: bumped: two reader-flagged fixes. (1) Report #37 — "29,028 feet" (Everest) converted to "9 000 m". The conversion was right (8 847.7 m); smart rounding then flattened it, because plain metres at distance scale round within a 4% band REGARDLESS of source precision and 9 000 is only 1.72% away, so one significant figure swallowed a five-figure surveyed number. Distance targets (m/km) now floor the collapse at the source's own significant digits via _sig_digits, gated on `not _is_approx_num(n)` so an admittedly-round source still rounds hard: 29,028 ft -> 8 848 m and 511 ft -> 156 m (which the comment at the top of that section always CLAIMED happened), while 1,700 ft -> 500 m and 3,000 ft -> 900 m are unchanged. Ranges keep rounding coarse (force=true). (2) Reports #40/#41 — a closing curly quote after a digit read as inches: the call sign "Reach 18" came out as 46 cm. The existing guard only catches a quote after PUNCTUATION ("1836."); here a digit genuinely precedes the glyph, so the tell is an unmatched OPENING curly quote earlier in the context. Bare inches only — a spoken height ("5'10\"") carries a feet mark and is matched by the compound pattern, which never reaches this guard. Corpus-checked over 45 books before adding: 4 matches sit inside an open quotation, ALL FOUR citations or call signs, zero genuine measurements (one, "1913-1914\" -> -5 000 cm, was a live FP nobody had reported). (3) Reports #35/#36 — a foot as a BODY PART read as a distance. "had done so on two feet, and operated the door" = 60 cm: the "on/with <n> feet" idiom guard only covered the literal word "one", so it is now the whole ≤2 body scale (the "of" exception still protects a real "on two feet of packed snow"). "one foot is wrapped around the calf of her other leg" = 30 cm: every body-verb cue is anchored at the START of the following text and a copula sat in front of them all, so a leading is/was/were/are is now stripped before the cues run, and wrapp/hook/tuck/curl/propp/cross joined them (≤2-gated — "fifty feet wrapped around the post" is rope). Both were VM-confirmed STILL LIVE on a probe book before fixing, not assumed from the v59 report. Covered by smoketest5 CH50 and CH41; EXPECTED_TOTAL 321 -> 329. (66 was: the scan is now ONE PLAIN findAllText per unit alias for every book. It was a single 54-branch regex alternation, justified by "the cost is the per-call document walk, not the matching" — profiling says the opposite (2026-08-17, Lonesome Dove 366k words): plain search for "miles" 0.03s, regex \bmiles\b 0.52s for the IDENTICAL 177 hits, and the alternation grew ~0.08s per branch to 4.82s of a 5.0s scan. Its (?:\b|(?<=[0-9])) left anchor alone was 2.34s. 54 plain passes cost ~1.6s, so doing it 54 times is ~3x cheaper; plain search also needs no \b anchor, which is what let cache 65's bug exist (\b cannot see a soft hyphen where a letter would be). Equivalence was PROVEN before the switch, not assumed: 12 books both ways, both directions, every match set identical — smoketest5 321, smoketest6 39, smoketest5shy 13, Lonesome Dove 261. Measured end to end: Lonesome Dove 5.13s -> 2.43s, The End of Men 1.91s -> 0.69s, SPQR 16.6s -> 12.2s; tiny books pay slightly more (smoketest5 0.24s -> 0.28s) because each pass has a fixed cost. The regex path is DELETED rather than kept as a fallback: two paths that were supposed to agree and silently did not is exactly what produced cache 65, and only the unprofiled one had the hole. Shy books also stopped running the prime/°F regex passes unconditionally: they now answer "does this book contain 6'2\" or °F at all?" from the RAW FILE via metric_epub.probe_notation (tags stripped, entities decoded, any failure answers yes-to-everything) instead of from the 160s crengine read. 73% of a 45-book corpus contain neither, so most shy books now skip all 7. Controlled pair, same prose: lonesome-dove-shy 16.99s -> 2.74s against lonesome-dove 2.39s, both 261 matches; smoketest5shy still 13 with 0 passes, smoketest5 still 321 with 7 passes run (it does contain the notation). Shy-book ETA multiplier corrected 55x -> 8x. (65 was: soft-hyphen books. TWO fixes, both surfaced by profiling one novel against an 82k-soft-hyphen twin of itself (2026-08-17). (1) The shy path's adjacent-character boundary probe read exactly ONE character, and in these books that character is frequently the soft hyphen itself — not %a, so the guard passed and the "mi" alias matched inside longer words: "losing five mi|nutes" converted as "five mi" = 8 km, 48 times in one book. The probe now reads 4 characters and strips U+00AD before testing. (2) The whole-book getTextFromXPointers gate that decides whether to run the prime/°F literal passes cost 0.02s on the ordinary book and 159.95s on the shy twin — 98% of the entire scan, and it gated nothing: zero passes ran after it. Shy books now skip the gate and take the same branch as a failed gate read (run the passes unconditionally), the conservative direction: a wrong "skip" is silent lost prime/°F coverage, a wrong "run" is a few extra passes. (64 was: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001’s" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001’ = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6’ wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-toed/-legged/-clawed/-pawed/etc. feet/foot" no longer reads as a distance — anatomy, not a measurement (report #9: "three-toed feet" was reading as 91 cm; the shared _parse_num word-number fallback treats a hyphen right after a number word as an ordinary compound-number boundary, the same mechanism that composes "twenty-three", so it doesn't distinguish "three-toed" from "twenty-three"). (62 was: shorthand height notation (issue #2) now recognizes curly/smart quotes ("6’2”"), not just straight ASCII/true-prime — most commercial EPUBs are typeset this way, which is why it looked entirely broken to the reporter. A digit-adjacent bare feet-mark ('/′/’) immediately followed by "s" is now read as a year/decade possessive or plural ("2001's", "the 90's"), not a height — closes the false positive in reports #11-13 ("2001's Ghosts of Mars" was reading as 2001 ft = 600 m). (61 was: bare "degrees" (no F/Fahrenheit qualifier) now converts as a Fahrenheit temperature when a nearby word suggests one (cold/hot/warm/chill/freez.../temperature/weather/humid/...); default is still to leave it alone (angle, rotation, proof, heading, latitude). Spelled "minus" before a number now negates it ("minus seventy degrees" = -70), matching the existing symbolic-dash handling. "N degrees below zero" is suppressed rather than mis-signed (residual — reports #14-33). (60 was: hyphenated adjectival "square <unit>" compounds ("a 250,000-square-foot room", "a three-million-square-foot cave") now detect as area — the "square" cue check missed the hyphen glue and fell through to the linear-foot factor, badly wrong and missing the ² (reports #22-24). (59 was: metric→imperial direction ("Preferred units": metric/us/uk; sidecars carry a direction field, matches can now target imperial compound formats). (58 was: hyphen-glued attributive fractions parse — "<ordinal>-of-a-<unit>-thick/long" reads as 1/denominator ("a third-of-a-mile-thick" = 540 m; "quarter-of-a" worked already via _WORD_NUMS, ordinals like "third" were nil because bare ordinals are ambiguous — the glued "-of-a" tail disambiguates). (57 was: bare-article "a million miles" (incl. "an hour"/"away" forms) suppressed as hyperbole — user-approved 2026-07-06, all 7 corpus hits figurative; digits and real multiples ("two million miles", "half a million miles") still convert. (56 was: URL path fragments never convert (digit/letter slash in matched_text — "178650/League" was 860 000 km); "N-foot-by-M-foot" dimension adjectives convert both sides ("twenty-foot-by-hundred-foot" = 6 × 30 m, was a bare 6 m). (55 was: shy-book plain passes enforce true \\b via adjacent-char probes on BOTH sides (plain-path contexts are word-based, so "15 mi|nutes"/"one kn|ows" looked clean and inflated matches 3-6x). (54 was: soft-hyphen books (U+00AD in the text) scan via per-alias PLAIN findAllText passes — the regex path returns span-shifted/missing hits in such books (The Rise and Fall of the Dinosaurs: "1,700 miles" never hit, "seven-ton" garbled). (53 was: new-test-books sweep fixes — em-dash/ellipsis glued to the number no longer defeats _prev_num_words ("too far—eleven feet six inches", "off course by…sixty miles", "park—four acres"); fused digit+unit forms hit via a digit lookbehind in _FAST_UNIT_PAT ("260lbs", "6ft"); banking vocabulary (bank/account/bills/untraceable) added to the soft-currency cues. (52 was: "for a mile" article cue (user-approved) + attributive-tail guard ("ran a mile RELAY" is a compound noun — the batch-2 motion-verb cues were wrongly converting it). (51 was: tight U+2044 fractions from sup/sub-span markup ("21⁄2-inch" = 2½, "13⁄16-inch" = 13/16 — improper-looking numerator reads as a mixed number, proper as a plain fraction). 50 was: corpus-sweep batch 2 follow-ups — prime matches re-check the coordinate/astronomy vocab on the tail of their own paragraph (the 5-word hit window missed "ABERRATION … is established 20″"); spaced U+2044 mixed fractions parse ("2 1 ⁄ 2 -inch plank" = 2.5); _prev_num_words' article-fraction tail requires both words ("half LONG" no longer reads 0.5, which spawned a bogus 0.5–1000 range eating "…a mile and a half long and 1000 ft. deep"). (49 was: batch 2 — FP guards for closing-quote/middle-dot/arcsecond; enumeration lists; ASCII mixed fractions; million; article-mile directional/motion cues; at-a-time ≤ 2; "<digit> of a mile" fraction guard. 48 was: foot-idiom positional cues gated ≤ 2.)))))
+local CACHE_VERSION = 70  -- 70: merge of fork 69 (opt-in unit packages: Asian and historical/fantasy units OFF by default via footcream_pkg_asian / footcream_pkg_fantasy) with upstream v1.8.2 bare-prime audit (68: _prime_fp_reason ten-tell guard on the prime passes, possessive-s guard deleted in favour of rule 9). Both change match/convert output for overlapping surface (prime notation), so sidecars from either lineage (fork <69, upstream <68) must be rescanned. (69 was: fork: opt-in UNIT PACKAGES (FootFree._PKG_UNITS). Asian and historical/fantasy units are now OFF by default and only convert when their package is enabled (footcream_pkg_asian / footcream_pkg_fantasy), so users who never read wuxia or epic fantasy skip the scan time and false-positive surface. Match output changes when a package is off, so sidecars from 68 (packages always on) must be rescanned. (68 was: merged fork 66 (pinyin 時辰 稱謂 units: English "X Hour" periods via _SHICHEN_PATS plus Hour/Watch/Mark/Ke fast-path renderings; sidecars from 65 (no such units) must be rescanned) and upstream 67 (reader-flagged fixes: sig-digit distance floor for precise sources — 29,028 ft -> 8 848 m; closing-curly-quote call-sign guard — "Reach 18" is not 46 cm; ≤2 body-part foot guards). Both sides change match/convert output, so sidecars from either lineage (fork <66, upstream <67) must be rescanned. (66 was: fork: pinyin 時辰 稱謂 units — English "X Hour" periods (Zi/Chou/…/Hai, broad romanizations) via the _SHICHEN_PATS literal pass, plus the capitalized English renderings Hour/Watch/Mark/Ke on the fast path; sidecars from 65 (no such units) must be rescanned. (65 was: fork merged upstream v1.7.0 (64) — the fork's added units (carat, ton, verst/arshin/pood, gill, hp/BTU/psi, Asian transliterations) change match/convert output, so sidecars from 64 (no such units) and earlier fork builds must be rescanned. (64 was: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001's" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001' = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6' wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-t Every rule was measured against all 91 corpus hits before it went in: together they suppress 62 of the 72 bare hits and cost ZERO of the genuine ones. A positive measurement cue after the mark (tall/wide/deep/long/across/by/square/×) short-circuits all ten, which is what keeps a height spoken inside single-quoted dialogue converting — no corpus hit carries such a cue, so this costs nothing today and is the insurance against the guards over-reaching later. The guard runs in the prime PASS, sharing its paragraph read with the coordinate check: crengine's prev_text is five words (~45 chars), far too short to see the opening quote of "'around 50,000'", and its next_text starts at the following WORD, so "86'd" and "823'.92" arrive with the evidence already swallowed — only a document read sees them. (2) _is_coordinate learned U+00BA (Two Years Before the Mast sets "33º 30' S." throughout, so the ° test missed every coordinate in the book) and the PLURAL abbreviation "degs."/"degs" (the Beagle's "57 degs. 23' south"). (3) Two pattern gaps that were losing real measurements: the compound now allows ONE SPACE between the figures ("6' 4\"" = 1.93 m, was two bare hits), and a new inches-BY-inches dimension entry converts both figures of "10\" × 8\"" (the feet×inches form existed; DBL×DBL fell through, so the 8" stayed imperial beside a metric 10"). classify indices renumbered 4→5 entries. Covered by smoketest5 CH52 and 28 new headless cases in lua_helper_tests; EXPECTED_TOTAL 329 -> 332. VM-VERIFIED, and the verification earned its keep: the cue exemption above SHIPPED INERT. It read crengine's next_text, and next_text SKIPS THE ADJACENT WORD — for "The shelf was 6' wide" it begins " and hard to reach", with the cue already swallowed. So the test could never fire, and the only reason the corpus measurement still looked right is that no corpus cue-carrying hit sat inside a quotation. A probe book with "'He was 6' tall,' she said" showed it in one scan: the height was dropped. Both context arguments are now document reads (widths tried 24/12/4/2, because the match can sit near the end of its node), and the headless cases were rewritten against real book text rather than an invented next_text. This is the THIRD guard in this file to ship compiled, green and doing nothing — see cache 64's possessive-s test and cache 65's shy-book gate — and all three failed the same way: a suppression that silently stops working is indistinguishable from one that works, so nothing short of reading a real match list catches it. Two harness faults surfaced with it, both now fixed: verify_scan.py checked must-not rules against DISPLAY-SUPPRESSED matches the reader never sees (a correctly suppressed currency case read as a regression), and sidecar_to_json.lua's classifier mirror still called _pound_currency_wins with two arguments after it grew a third, so the rate-tail rule looked dead from the outside — it now extracts FootFree._pound_rate_tail too and shouts on stderr instead of silently reporting nothing suppressed. Scan evidence, all on smoketest5 unless noted: 337 matches, 0 must-not violations; smoketest5shy 13; smoketest6 39 under "us". Corpus book diffs — Wool 76 -> 44 visible (32 quoted numbers gone, its one real 8" becomes the dimension 8" x 2"), Written In Bone 29 -> 22 (7 index entries gone, all 8 genuine 5ft/6ft heights kept), I Heard You Paint Houses 60 -> 57 (6' + 4" merged into 6' 4" = 1.93 m, two call numbers gone), Lee Miller 34 -> 33 (two bare 10" become 10" x 8" dimensions), Orbital 39 -> 39 with four range renderings corrected ("160 and 13 000 000 km" -> "170 000 000 km"), Manhunt 21/2 inches 53 cm -> 6 cm, 20,000 Leagues span widened to "one and three-quarter leagues", Two Years Before the Mast 143 -> 141, Voyage of the Beagle 642 -> 641 with its 40+ "and" ranges untouched, Moby Dick 161 -> 160, SPQR 42 -> 40. FULL CORPUS RE-SCAN, 226 books, every change accounted for: 9,467 -> 9,372 reader-visible matches. 98 suppressed outright (69 prime, 25 index/endnote, 1 runaway span, 3 by sense — Gulliver's "thirty pounds a year" and the two walking idioms), 66 CORRECTED IN PLACE, 3 newly appearing (the inches-by-inches dimensions), and NOTHING unexplained. Prime detections 91 -> 25, of which 23 are compound/dimension and all correct; the 2 residual bare false positives ("EC1’", "IG XI.4.756’") are both the documented under-fire direction of the quote-balance rule, where an apostrophe earlier in the paragraph balances the count. The in-place corrections are mostly ONE THING: 57 spans widened with the value unchanged, and 53 of those are the cookbook's "one and one-half inches" being underlined as "one-half inches" — the same extend_start fault as Verne and Darwin, and in Add/Convert mode it was writing "one and 4 cm" into the text 53 times in one book. The 7 value changes are the scaled-and ranges (Orbital x4, Gulliver, The Lost City of Z 500-and-180 000 km2 -> 700 000 km2, The Last Devil To Die) plus Manhunt's 21/2 inches. The income-rate rule earns exactly ONE correction: 9 of its 10 corpus hits were ALREADY suppressed by the existing cue table (usually "annum" or "income" in the same window), so its smoketest case had to be scrubbed of every other cue word — heading included, since crengine feeds heading text into prev_text — before it tested anything at all. (One book, The Bell Jar, reported "not-english" in the batch run and scanned identically to before in isolation: a known race in the sweep harness's language probe, not a plugin change.) SECOND BATCH, same audit, same cache: the 21 non-prime confirmed bugs. (a) INDEX AND ENDNOTE ENTRIES — the number-walk collects words backwards from the unit, and in an index the words behind it are page numbers ("amputation tattoos 279; foot" = 85 m). Four rules, one principle (the number must be ADJACENT to the unit), each measured corpus-wide with ZERO legitimate matches caught: a semicolon between them (6 hits), a BLOCK BREAK immediately before the unit word (13) — anchored at the unit so a <br/> inside a spelled compound, which is legitimate and is smoketest5 CH26 case E, cannot trip it — a sentence-ending period crossed on the way back (9, "30. Fathom" from a table of contents), and a non-alias word GLUED to the number ("8Katzmarzyk PT" = 3.8 litres; 28 corpus hits carry a glued letter run and exactly the 3 non-alias ones are wrong, the rest spelling lb/mph/ft/QT or the "x" of "10x10 feet"). (b) RUNAWAY SPANS — the compound "N feet M inches" walk glued numbers thousands of characters apart, producing a single 9,331-character "match" across most of a Moby Dick chapter and a 6,847 one in Two Years Before the Mast. Corpus median span is 11 characters and the 99.9th percentile is 41, so an 80-character cap is a backstop nothing real approaches: exactly 2 of 9,763 hits exceed it, and both are those runaways. (c) A COMPOUND NUMBER READ AS A RANGE — "one hundred and eight million miles" came out of Orbital as "160 and 13 000 000 km". The existing guard only recognised a SMALL second operand (n2 < 100); these carry a scale word of their own, so the test is now that n2's multiplier exceeds n1 ("two hundred and fifty thousand" = (200+50) x 1000, n1 200 < scale 1000), which leaves a genuine shared-scale range like "between one hundred and two hundred feet" alone. 7 corpus hits, all wrong, none of the 91 real "and" ranges near them. (d) AN ADDITIVE SPAN THAT STOPPED SHORT — extend_start validates a candidate with _parse_num, which is STRUCTURALLY unable to confirm the additive form: "one and three-quarter leagues" is 1.75 but _parse_num prefix-reads it as 1, which is exactly why _prev_num_words computes that value itself. So the test could never become true, the loop ran out, and the span fell back short — correct 8.4 km attached to two thirds of the phrase. Harmless in Underline mode; in Add/Convert it writes "one and 8.4 km" into the book. A second validator mirrors the additive branch (whole + fraction, exact hit only). Darwin's "thirteen and three-quarters British miles" is the same shape. (e) THE WALKING IDIOM — "one foot carefully placed in front of the other" (Fourth Wing) and "putting one foot steadily in front of the other" (Evicted): the "in front" cue is anchored at the start of next_text and could not see past the wedged-in adverb, so the whole phrase "in front of the other/next" is now matched unanchored, still inside the <=2 body-scale gate. (f) AN INCOME RATE — "thirty pounds a year", "twenty pounds per annum" read as weights. ADJACENCY is the whole rule and the reason this is its own list rather than three more _CURRENCY_PHRASES: 25 corpus pound matches have a rate phrase somewhere in their window and 8 of those are genuine weights ("ballooning up fifteen pounds in a month", "T. rex put on about 1,700 pounds per year"), and every one of them either separates the phrase from the unit or uses a DAILY/WEEKLY rate — so those two forms are absent and the phrase must open next_text. 10 hits then, all money. Worth one vote, so a genuine weight cue still ties and keeps. (The reader also suggested "got"; measured and REJECTED — of 16 pound matches with "got" nearby most are plain weights: lifted eighty pounds, dropped about ten pounds, went about 350 pounds, sixteen pounds of marijuana.) (g) AN ASCII TYPESET HALF — "21/2 inches above the clavicle" (Manhunt) read as 53 cm. The tight-U+2044 improper-numerator rule from cache 51 now also accepts a plain "/", but ONLY the improper form and only for denominators a fraction actually uses (2/3/4/8/16), so "12/25" and "10/12" stay dates. Together with the prime work above this corrects ~43 corpus detections. Covered by smoketest5 CH53 and 21 more headless cases; EXPECTED_TOTAL 332 -> 335. (67 was: two reader-flagged fixes. (1) Report #37 — "29,028 feet" (Everest) converted to "9 000 m". The conversion was right (8 847.7 m); smart rounding then flattened it, because plain metres at distance scale round within a 4% band REGARDLESS of source precision and 9 000 is only 1.72% away, so one significant figure swallowed a five-figure surveyed number. Distance targets (m/km) now floor the collapse at the source's own significant digits via _sig_digits, gated on `not _is_approx_num(n)` so an admittedly-round source still rounds hard: 29,028 ft -> 8 848 m and 511 ft -> 156 m (which the comment at the top of that section always CLAIMED happened), while 1,700 ft -> 500 m and 3,000 ft -> 900 m are unchanged. Ranges keep rounding coarse (force=true). (2) Reports #40/#41 — a closing curly quote after a digit read as inches: the call sign "Reach 18" came out as 46 cm. The existing guard only catches a quote after PUNCTUATION ("1836."); here a digit genuinely precedes the glyph, so the tell is an unmatched OPENING curly quote earlier in the context. Bare inches only — a spoken height ("5'10\"") carries a feet mark and is matched by the compound pattern, which never reaches this guard. Corpus-checked over 45 books before adding: 4 matches sit inside an open quotation, ALL FOUR citations or call signs, zero genuine measurements (one, "1913-1914\" -> -5 000 cm, was a live FP nobody had reported). (3) Reports #35/#36 — a foot as a BODY PART read as a distance. "had done so on two feet, and operated the door" = 60 cm: the "on/with <n> feet" idiom guard only covered the literal word "one", so it is now the whole ≤2 body scale (the "of" exception still protects a real "on two feet of packed snow"). "one foot is wrapped around the calf of her other leg" = 30 cm: every body-verb cue is anchored at the START of the following text and a copula sat in front of them all, so a leading is/was/were/are is now stripped before the cues run, and wrapp/hook/tuck/curl/propp/cross joined them (≤2-gated — "fifty feet wrapped around the post" is rope). Both were VM-confirmed STILL LIVE on a probe book before fixing, not assumed from the v59 report. Covered by smoketest5 CH50 and CH41; EXPECTED_TOTAL 321 -> 329. (66 was: the scan is now ONE PLAIN findAllText per unit alias for every book. It was a single 54-branch regex alternation, justified by "the cost is the per-call document walk, not the matching" — profiling says the opposite (2026-08-17, Lonesome Dove 366k words): plain search for "miles" 0.03s, regex \bmiles\b 0.52s for the IDENTICAL 177 hits, and the alternation grew ~0.08s per branch to 4.82s of a 5.0s scan. Its (?:\b|(?<=[0-9])) left anchor alone was 2.34s. 54 plain passes cost ~1.6s, so doing it 54 times is ~3x cheaper; plain search also needs no \b anchor, which is what let cache 65's bug exist (\b cannot see a soft hyphen where a letter would be). Equivalence was PROVEN before the switch, not assumed: 12 books both ways, both directions, every match set identical — smoketest5 321, smoketest6 39, smoketest5shy 13, Lonesome Dove 261. Measured end to end: Lonesome Dove 5.13s -> 2.43s, The End of Men 1.91s -> 0.69s, SPQR 16.6s -> 12.2s; tiny books pay slightly more (smoketest5 0.24s -> 0.28s) because each pass has a fixed cost. The regex path is DELETED rather than kept as a fallback: two paths that were supposed to agree and silently did not is exactly what produced cache 65, and only the unprofiled one had the hole. Shy books also stopped running the prime/°F regex passes unconditionally: they now answer "does this book contain 6'2\" or °F at all?" from the RAW FILE via metric_epub.probe_notation (tags stripped, entities decoded, any failure answers yes-to-everything) instead of from the 160s crengine read. 73% of a 45-book corpus contain neither, so most shy books now skip all 7. Controlled pair, same prose: lonesome-dove-shy 16.99s -> 2.74s against lonesome-dove 2.39s, both 261 matches; smoketest5shy still 13 with 0 passes, smoketest5 still 321 with 7 passes run (it does contain the notation). Shy-book ETA multiplier corrected 55x -> 8x. (65 was: soft-hyphen books. TWO fixes, both surfaced by profiling one novel against an 82k-soft-hyphen twin of itself (2026-08-17). (1) The shy path's adjacent-character boundary probe read exactly ONE character, and in these books that character is frequently the soft hyphen itself — not %a, so the guard passed and the "mi" alias matched inside longer words: "losing five mi|nutes" converted as "five mi" = 8 km, 48 times in one book. The probe now reads 4 characters and strips U+00AD before testing. (2) The whole-book getTextFromXPointers gate that decides whether to run the prime/°F literal passes cost 0.02s on the ordinary book and 159.95s on the shy twin — 98% of the entire scan, and it gated nothing: zero passes ran after it. Shy books now skip the gate and take the same branch as a failed gate read (run the passes unconditionally), the conservative direction: a wrong "skip" is silent lost prime/°F coverage, a wrong "run" is a few extra passes. (64 was: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001’s" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001’ = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6’ wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-toed/-legged/-clawed/-pawed/etc. feet/foot" no longer reads as a distance — anatomy, not a measurement (report #9: "three-toed feet" was reading as 91 cm; the shared _parse_num word-number fallback treats a hyphen right after a number word as an ordinary compound-number boundary, the same mechanism that composes "twenty-three", so it doesn't distinguish "three-toed" from "twenty-three"). (62 was: shorthand height notation (issue #2) now recognizes curly/smart quotes ("6’2”"), not just straight ASCII/true-prime — most commercial EPUBs are typeset this way, which is why it looked entirely broken to the reporter. A digit-adjacent bare feet-mark ('/′/’) immediately followed by "s" is now read as a year/decade possessive or plural ("2001's", "the 90's"), not a height — closes the false positive in reports #11-13 ("2001's Ghosts of Mars" was reading as 2001 ft = 600 m). (61 was: bare "degrees" (no F/Fahrenheit qualifier) now converts as a Fahrenheit temperature when a nearby word suggests one (cold/hot/warm/chill/freez.../temperature/weather/humid/...); default is still to leave it alone (angle, rotation, proof, heading, latitude). Spelled "minus" before a number now negates it ("minus seventy degrees" = -70), matching the existing symbolic-dash handling. "N degrees below zero" is suppressed rather than mis-signed (residual — reports #14-33). (60 was: hyphenated adjectival "square <unit>" compounds ("a 250,000-square-foot room", "a three-million-square-foot cave") now detect as area — the "square" cue check missed the hyphen glue and fell through to the linear-foot factor, badly wrong and missing the ² (reports #22-24). (59 was: metric→imperial direction ("Preferred units": metric/us/uk; sidecars carry a direction field, matches can now target imperial compound formats). (58 was: hyphen-glued attributive fractions parse — "<ordinal>-of-a-<unit>-thick/long" reads as 1/denominator ("a third-of-a-mile-thick" = 540 m; "quarter-of-a" worked already via _WORD_NUMS, ordinals like "third" were nil because bare ordinals are ambiguous — the glued "-of-a" tail disambiguates). (57 was: bare-article "a million miles" (incl. "an hour"/"away" forms) suppressed as hyperbole — user-approved 2026-07-06, all 7 corpus hits figurative; digits and real multiples ("two million miles", "half a million miles") still convert. (56 was: URL path fragments never convert (digit/letter slash in matched_text — "178650/League" was 860 000 km); "N-foot-by-M-foot" dimension adjectives convert both sides ("twenty-foot-by-hundred-foot" = 6 × 30 m, was a bare 6 m). (55 was: shy-book plain passes enforce true \\b via adjacent-char probes on BOTH sides (plain-path contexts are word-based, so "15 mi|nutes"/"one kn|ows" looked clean and inflated matches 3-6x). (54 was: soft-hyphen books (U+00AD in the text) scan via per-alias PLAIN findAllText passes — the regex path returns span-shifted/missing hits in such books (The Rise and Fall of the Dinosaurs: "1,700 miles" never hit, "seven-ton" garbled). (53 was: new-test-books sweep fixes — em-dash/ellipsis glued to the number no longer defeats _prev_num_words ("too far—eleven feet six inches", "off course by…sixty miles", "park—four acres"); fused digit+unit forms hit via a digit lookbehind in _FAST_UNIT_PAT ("260lbs", "6ft"); banking vocabulary (bank/account/bills/untraceable) added to the soft-currency cues. (52 was: "for a mile" article cue (user-approved) + attributive-tail guard ("ran a mile RELAY" is a compound noun — the batch-2 motion-verb cues were wrongly converting it). (51 was: tight U+2044 fractions from sup/sub-span markup ("21⁄2-inch" = 2½, "13⁄16-inch" = 13/16 — improper-looking numerator reads as a mixed number, proper as a plain fraction). 50 was: corpus-sweep batch 2 follow-ups — prime matches re-check the coordinate/astronomy vocab on the tail of their own paragraph (the 5-word hit window missed "ABERRATION … is established 20″"); spaced U+2044 mixed fractions parse ("2 1 ⁄ 2 -inch plank" = 2.5); _prev_num_words' article-fraction tail requires both words ("half LONG" no longer reads 0.5, which spawned a bogus 0.5–1000 range eating "…a mile and a half long and 1000 ft. deep"). (49 was: batch 2 — FP guards for closing-quote/middle-dot/arcsecond; enumeration lists; ASCII mixed fractions; million; article-mile directional/motion cues; at-a-time ≤ 2; "<digit> of a mile" fraction guard. 48 was: foot-idiom positional cues gated ≤ 2.)))))
 local _REVERSE_VERSION = 2  -- v2: ordered originals per converted string (position-aware reverse lookup)
 
 -- ── Number prefixes ───────────────────────────────────────────────────────────
@@ -371,9 +377,24 @@ local function _parse_num(text)
         -- spans render with no space): a proper-looking numerator is a plain
         -- fraction ("13⁄16" = 13/16), an improper-looking one is a MIXED
         -- number whose last digit is the numerator ("21⁄2" = 2½ — nobody
-        -- typesets 21/2 with a fraction slash). ASCII "/" is left alone
-        -- ("21/2" could be a date or division).
+        -- typesets 21/2 with a fraction slash).
+        --
+        -- The ASCII slash gets the IMPROPER half of that rule and nothing else,
+        -- because the same typesetting reaches print with a plain "/" too:
+        -- Manhunt writes "the ball entering just behind the sterno-cleido
+        -- muscle—21/2 inches above the clavicle", which read as 53 cm. A date
+        -- or a division is the reason this was left alone before, so the
+        -- denominator must be one a fraction actually uses — 2, 3, 4, 8, 16 —
+        -- which excludes "12/25" and "10/12" outright. The proper-looking form
+        -- ("13/16 inch") is untouched and still takes the path below.
         local n0, q0 = text:match("^%s*(%d+)\226\129\132(%d+)%f[%D]")
+        if not n0 then
+            local a, b = text:match("^%s*(%d%d+)/(%d+)%f[%D]")
+            if a and (b == "2" or b == "3" or b == "4" or b == "8" or b == "16")
+               and tonumber(a) > tonumber(b) then
+                n0, q0 = a, b
+            end
+        end
         if n0 then
             local nn, qn = tonumber(n0), tonumber(q0)
             if nn and qn and qn > 0 then
@@ -1144,6 +1165,20 @@ local function _conv_dim_to_m_cm(text)
     return nil
 end
 
+-- The inches-by-inches twin of the form above ("10" × 8"", "8” × 2”") → cm by cm.
+-- It was missing, so a plate or print size converted its FIRST figure only: the
+-- 8" of '10" × 8" plates' stayed imperial beside a metric 10", which reads as a
+-- mistake even though the 25 cm itself is right.
+local function _conv_dim_cm_cm(text)
+    local clean = _display(text)
+    local a = clean:match("^([0-9]+)")
+    local b = clean:match(".*[^0-9]([0-9]+)")
+    if a and b then
+        return _fmt(tonumber(a) * 2.54) .. " cm by " .. _fmt(tonumber(b) * 2.54) .. " cm"
+    end
+    return nil
+end
+
 -- "10x10 feet" / "10×10 ft" → "3 × 3 m": two same-unit dimensions joined by
 -- x/X/× (no spaces — the spaced form "10 x 10 feet" only spans "10 feet"). Both
 -- numbers convert with the unit's own factor/target; nil if it isn't this shape.
@@ -1353,6 +1388,37 @@ local _CURRENCY_PHRASES = {
     "in gold", "in silver",
     "left her", "left him", "left them", "left me", "left us",
 }
+-- An income rate written IMMEDIATELY after the unit — "thirty pounds a year",
+-- "twenty pounds per annum". A sum quoted at a yearly or monthly rate is a
+-- salary, an allowance or a rent; nothing is ever weighed per annum.
+--
+-- Adjacency is the whole rule, and it is why this is a separate list rather
+-- than three more entries in _CURRENCY_PHRASES (which search the whole window).
+-- Measured over the corpus: 25 pound matches have a rate phrase somewhere in
+-- their window and 8 of those are genuine weights — "ballooning up fifteen
+-- pounds in a month", "T. rex put on about 1,700 pounds per year", "we require
+-- more than one pound a day". Every one of them puts something between the unit
+-- and the rate, or uses a DAILY/WEEKLY rate. Anchor at the unit and drop the day
+-- and week forms, and the same corpus yields 10 hits, all of them money.
+--
+-- ("got" was measured as a cue too, on the reader's suggestion, and rejected:
+-- of 16 pound matches with "got" nearby, most are plain weights — lifted eighty
+-- pounds, dropped about ten pounds, went about 350 pounds, sixteen pounds of
+-- marijuana. It would cost more than it earns.)
+--
+-- A class attribute, not a local: main.lua is at Lua's 200-local ceiling (see
+-- references/gotchas.md), and this form is also what the headless harness
+-- extracts by name.
+function FootFree._pound_rate_tail(nxt)
+    local n = (nxt or ""):lower():gsub("^%s+", "")
+    for _, t in ipairs({ "a year", "per year", "a month", "per month",
+                         "per annum", "an annum" }) do
+        if n:sub(1, #t) == t and not n:sub(#t + 1, #t + 1):match("%a") then
+            return true
+        end
+    end
+    return false
+end
 local _WEIGHT_WORDS = {
     weighed=true, weighs=true, weigh=true, weighing=true,
     weight=true, weights=true,
@@ -1389,8 +1455,11 @@ end
 -- weight cues, so a genuinely weighty context keeps the match even with a money
 -- word nearby. Ties keep (lean toward converting). `num` (optional) is the
 -- pound amount, used for the magnitude prior below.
-local function _pound_currency_wins(window, num)
+local function _pound_currency_wins(window, num, rate_tail)
     local cscore, wscore = 0, 0
+    -- An income rate right after the unit is worth one currency vote, like a
+    -- phrase cue — so a genuine weight cue still ties and keeps the conversion.
+    if rate_tail then cscore = cscore + 1 end
     for word in window:gmatch("%a+") do
         if _CURRENCY_SOFT[word] then cscore = cscore + 1 end
         if _WEIGHT_WORDS[word]  then wscore = wscore + 1 end
@@ -2674,7 +2743,10 @@ local function _apply_settings_to_matches(matches, distinguish_pounds, use_uk_vo
             local mt = (r.matched_text or ""):lower()
             if mt:find("pound") then
                 local window = ((r.prev_text or "") .. " " .. (r.next_text or "")):lower()
-                if _pound_currency_wins(window, r._num) then keep = false end
+                if _pound_currency_wins(window, r._num,
+                                        FootFree._pound_rate_tail(r.next_text)) then
+                    keep = false
+                end
             end
             -- Tons: figurative ("tons of fun", "a ton of work") and ship
             -- register-tonnage are not weights.
@@ -3781,8 +3853,27 @@ local function _detect_back_range(prev, unit)
                 -- single-number path read the whole compound (correct value AND
                 -- span). A true range keeps n1 off a round hundred ("ten and
                 -- twenty") or n2 ≥ 100 ("between one hundred and two hundred").
-                if conn == " and " and n1 % 100 == 0 and n2 > 0 and n2 < 100 then
-                    return nil
+                if conn == " and " and n1 % 100 == 0 and n2 > 0 then
+                    if n2 < 100 then return nil end
+                    -- Same thing one scale up, which the < 100 test above cannot
+                    -- see: "one hundred and eight million" = 108 million and
+                    -- "two hundred and fifty thousand" = 250,000. Both came out
+                    -- of Orbital as two-ended ranges ("160 and 13 000 000 km"),
+                    -- and the shape occurs 7 times across the corpus — every one
+                    -- of them wrong, none of the 91 genuine "and" ranges near it.
+                    --
+                    -- The tell is that n2 carries a SCALE WORD whose multiplier
+                    -- is larger than n1 itself: "two hundred and fifty thousand"
+                    -- reads (200 + 50) x 1000, so n1 (200) sits below n2's scale
+                    -- (1000). A genuine range like "between one hundred and two
+                    -- hundred feet" shares its scale — n1 (100) is NOT below
+                    -- n2's scale (100) — and is left alone.
+                    local lead = mtok:match("^%s*([%w%-]+)")
+                    local lv = lead and _parse_num(lead)
+                    if lv and lv > 0 and lv < 100 then
+                        local scale = n2 / lv
+                        if scale >= 10 and n1 < scale then return nil end
+                    end
                 end
                 return n1, n2, (n1span or 1) + 2 + extra
             end
@@ -3854,6 +3945,10 @@ end
 -- (′) and arcsecond (″) marks — the SAME glyphs as feet/inches — so a prime pass
 -- would mis-convert "24′" to 7.3 m. Detect the coordinate context and skip.
 local _DEGREE  = "\194\176"   -- ° U+00B0
+-- U+00BA MASCULINE ORDINAL, which older typesetting uses where a modern text
+-- would set °. Two Years Before the Mast writes "33º 30' S." throughout, so the
+-- ° test above walked straight past every coordinate in the book.
+local _DEGORD  = "\194\186"   -- º U+00BA
 -- crengine drops the ° byte that sits immediately before the matched prime (its
 -- own degrees mark), so we can't rely on it being in prev_text. Instead scan the
 -- whole prev+next window for coordinate signals — in a "<n>° <n>′ … <n>° <n>′"
@@ -3863,11 +3958,14 @@ local _DEGREE  = "\194\176"   -- ° U+00B0
 local function _is_coordinate(prev, nxt)
     local w = ((prev or "") .. " " .. (nxt or "")):lower()
     -- A degree symbol anywhere in the window (the paired component's °).
-    if w:find(_DEGREE, 1, true) then return true end
+    if w:find(_DEGREE, 1, true) or w:find(_DEGORD, 1, true) then return true end
     -- Coordinate vocabulary — full words and the safe abbreviations only.
     if w:find("latitude") or w:find("longitude") then return true end
     if w:find("%f[%a]lat%f[%A]") then return true end        -- "lat" / "lat." (not "flat"/"later")
-    if w:find("%f[%a]deg%f[%A]") or w:find("%f[%a]deg%.") then return true end  -- "deg"/"deg." (degrees)
+    -- "deg"/"deg."/"degs"/"degs." — Darwin's Beagle logs abbreviate the plural
+    -- ("we drifted to 57 degs. 23' south"), which the singular frontier missed.
+    if w:find("%f[%a]deg%f[%A]") or w:find("%f[%a]deg%.")
+       or w:find("%f[%a]degs%f[%A]") or w:find("%f[%a]degs%.") then return true end
     if w:find("meridian") then return true end
     -- "W. long" / "E. long" — a directional letter guards the otherwise-risky
     -- "long" (so the adjective in "12′ long" is NOT matched).
@@ -3885,8 +3983,13 @@ end
 local _PRIME_PATS = {
     pre = _ND,
     needs_left_char = true,
+    -- 4′ × 2″  (feet × inches)
     { suf = _PRIME_MARKS.ft.."[ ]*".._TIMES.."[ ]*[0-9][0-9.,]*".._PRIME_MARKS.in_mark,
       converter = _conv_dim_to_m_cm, target = "m×cm", cat = "length" },
+    -- 10″ × 8″  (inches × inches)
+    { suf = _PRIME_MARKS.in_mark.."[ ]*".._TIMES.."[ ]*[0-9][0-9.,]*".._PRIME_MARKS.in_mark,
+      converter = _conv_dim_cm_cm, target = "cm×cm", cat = "length" },
+    -- 6′8″, 6′ 8″ and 6′ 8½″ (with optional vulgar fraction)
     { suf = _PRIME_MARKS.ft.."[ ]*[0-9][0-9.,]*".._PRIME_MARKS.vfrac.."?".._PRIME_MARKS.in_mark,
       converter = _conv_prime_to_m, target = "m", cat = "length" },
     { suf = _PRIME_MARKS.ft.."[0-9][0-9.,]*",
@@ -3965,15 +4068,175 @@ function FootFree._classify_prime(s)
     -- itself be a quote — in "'12\"" the leading apostrophe would otherwise
     -- read as a feet mark and turn a plain inches hit into a feet+inches one.
     local tail = s:match("^.-[0-9][0-9,.]*(.*)$") or s
-    if tail:find(_TIMES, 1, true) then return 1 end   -- 4′ × 2″
     local dbl = ends_any(tail, DBL)
-    if dbl and has_any(tail, SGL) then return 2 end   -- 6′8″
-    if dbl then return 5 end                          -- 3″
-    if ends_any(tail, SGL) then return 4 end          -- 6′
-    if has_any(tail, SGL) then return 3 end           -- 6′4 (bare, no closing quote)
+    -- Both × forms end in an inch mark, so they are told apart by which mark
+    -- sits on the LEFT figure — the part of the tail before the ×.
+    if tail:find(_TIMES, 1, true) then
+        local head = tail:sub(1, (tail:find(_TIMES, 1, true) or 1) - 1)
+        if has_any(head, SGL) then return 1 end       -- 4′ × 2″
+        return 2                                     -- 10″ × 8″
+    end
+    if dbl and has_any(tail, SGL) then return 3 end   -- 6′8″ / 6′ 8″
+    if ends_any(tail, SGL) then return 5 end          -- 6′ (bare feet)
+    if has_any(tail, SGL) then return 4 end           -- 6′4 (bare compound, no closing quote)
+    if dbl then return 6 end                          -- 3″
     return nil
 end
 _PRIME_PATS.classify = FootFree._classify_prime
+
+-- A bare feet/inch mark — one glyph, nothing on the other side of the number —
+-- is by far the weakest signal this plugin acts on. Measured across the 187
+-- English books of the corpus (2026-08-20, full device scan, every hit read by
+-- hand): the compound form "6'2"" was a real measurement 19 times out of 19,
+-- the bare INCH mark 4 times out of 9, and the bare FEET mark ONCE out of 63 —
+-- and that once was half of a spaced "6' 4"" which the compound pattern now
+-- claims whole. Every other bare-feet hit in the corpus was a closing quotation
+-- mark: Wool alone contributed 32, because British typesetting quotes strings
+-- in '…' and the book is full of numbered floors, sockets and channels.
+--
+-- Hence these guards. Each is a tell that the glyph CLOSES something rather
+-- than measuring something. Each was checked against all 91 corpus prime hits
+-- before being added: together they suppress 62 of the 72 bare hits and cost
+-- zero of the genuine ones.
+--
+--   mt     the matched text
+--   left   the match's own paragraph up to the number (the same wide read the
+--          coordinate check does — crengine's prev_text is only ~45 characters,
+--          far too short to see the opening quote of "'around 50,000'")
+--   after  the REAL characters following the mark, read from the document
+--
+-- Both context arguments are document reads rather than crengine's prev_text /
+-- next_text, and neither is a nicety. next_text SKIPS THE ADJACENT WORD: for
+-- "The shelf was 6' wide" it begins " and hard to reach", with "wide" already
+-- swallowed. So a cue test written against next_text can never fire — which is
+-- how the first version of the exemption below shipped inert, and it is the
+-- same shape as the year-possessive guard of cache 64 and the shy-book gate of
+-- cache 65. VM-verified on a probe book before this note was written, not
+-- assumed. prev_text has the mirror problem plus a five-word ceiling.
+--
+-- Returns a short reason string, or nil to keep the match. The compound and ×
+-- forms never reach here: they carry both marks, which is exactly the evidence
+-- the bare forms lack.
+function FootFree._prime_fp_reason(mt, left, after)
+    mt, left, after = mt or "", left or "", after or ""
+    local SGL = { _PRIME, "'", FootFree._CAPOS }
+    local DBL = { _DPRIME, "\"", FootFree._CDQ }
+    local function ends_any(t, marks)
+        for _, m in ipairs(marks) do
+            if #t >= #m and t:sub(-#m) == m then return true end
+        end
+        return false
+    end
+    local feet = ends_any(mt, SGL)
+    if not (feet or ends_any(mt, DBL)) then return nil end   -- not a prime hit
+    -- Both marks present = compound/dimension. Those forms are trustworthy and
+    -- are never second-guessed here.
+    do
+        local body = mt:sub(1, -2)
+        for _, m in ipairs(feet and DBL or SGL) do
+            if body:find(m, 1, true) then return nil end
+        end
+    end
+
+    -- POSITIVE CUE WINS. A measurement word right after the mark outranks every
+    -- guard below, so a genuine height inside quoted dialogue — "'He was 6'
+    -- tall,' she said", which the quotation guards would otherwise kill — still
+    -- converts. No corpus hit carries one of these, so this costs nothing today
+    -- and is the insurance against the guards ever over-reaching.
+    do
+        local w = after:lower():match("^[%s%p]*(%a+)")
+        local CUES = { tall = true, high = true, wide = true, long = true,
+                       deep = true, thick = true, across = true, by = true,
+                       square = true, height = true, length = true,
+                       width = true, diameter = true, apart = true }
+        if w and CUES[w] then return nil end
+        if after:find(_TIMES, 1, true) then return nil end
+    end
+
+    local lt = left:gsub("[ \t]+$", "")            -- keep the last real char
+    local last = lt:sub(-1)
+    local last3 = lt:sub(-3)
+
+    -- 1. The number is WRAPPED in quotes: '18', '40', '2'. 42 of the 72 corpus
+    --    false positives, and the cheapest test there is — look at the one
+    --    character before the digits. A measurement never has a quote there.
+    if last == "'" or last == '"' or last3 == FootFree._CLSQ
+       or last3 == FootFree._CAPOS or last3 == FootFree._CLDQ
+       or last3 == FootFree._CDQ or last3 == _PRIME or last3 == _DPRIME then
+        return "quoted number"
+    end
+
+    -- 2. The number sits INSIDE an open quotation whose opening mark is further
+    --    back: "'around 50,000'", "'£4.99 for a roll of 60'". U+2018 and U+201C
+    --    are unambiguous opening glyphs — neither is ever an apostrophe — so an
+    --    apostrophe-heavy paragraph inflates the CLOSING count and the test
+    --    quietly fails to fire. It can under-report an open quotation; it can
+    --    never invent one. Straight ASCII quotes are not counted at all: ' is
+    --    both apostrophe and quote, so the count means nothing.
+    if select(2, lt:gsub(FootFree._CLSQ, "")) > select(2, lt:gsub(FootFree._CAPOS, "")) then
+        return "inside a quotation"
+    end
+    if select(2, lt:gsub(FootFree._CLDQ, "")) > select(2, lt:gsub(FootFree._CDQ, "")) then
+        return "inside a quotation"
+    end
+
+    -- 3. A dash immediately before the number makes it the far end of a range,
+    --    and the mark closes the title it sits in: "…Species Theory, 1838-1859""
+    --    read as 4 700 cm, "Anson's Circumnavigation, 1740-44"" as 110 cm.
+    if last == "-" or last3 == _ENDASH or last3 == _EMDASH then
+        return "range endpoint"
+    end
+
+    -- 4. Victorian British decimal point (U+00B7): "0·485"" is 0.485 arcseconds,
+    --    not 485 inches. The existing middle-dot guard only fires when the dot
+    --    is inside matched_text; here it sits just before it.
+    if last3:sub(-2) == "\194\183" then return "middle-dot decimal" end
+
+    -- 5. Clock time: "'2030-08-27 20:31'" — the minutes read as 9.4 m.
+    if lt:match("%d:$") then return "clock time" end
+
+    -- 6. An item number rather than a size: "whole-number coefficients, No. 11"",
+    --    "'#39' for the one who never says anything except the number".
+    if lt:match("[Nn]os?%.$") or last == "#" then return "item number" end
+
+    -- 7. A year after a month name is a date, whatever glyph follows it:
+    --    "said '18 October 1919'" read as 585 m.
+    do
+        local n = tonumber((mt:gsub("[^%d]", "")))
+        if n and n >= 1000 and n <= 2999 then
+            local w = lt:lower():match("(%a+)%s*$")
+            local MONTHS = { january = true, february = true, march = true,
+                             april = true, may = true, june = true, july = true,
+                             august = true, september = true, october = true,
+                             november = true, december = true }
+            if w and MONTHS[w] then return "date" end
+        end
+    end
+
+    -- 8. Library of Congress / Dewey call numbers on the copyright page:
+    --    "823'.92-dc22", "364.1'06'0973-dc22", "895.6'36-dc22". The prime is a
+    --    field separator, so DIGITS CONTINUE straight after it — which a real
+    --    "6' tall" never does. One test, every such number in the corpus, and
+    --    no need to guess at where the front matter ends.
+    if after:match("^%d") or after:match("^%.%d") then
+        return "call number"
+    end
+
+    -- 9. A letter straight after a bare FEET mark makes it an apostrophe:
+    --    "86'd", "2001's Ghosts of Mars", "o'clock". (This subsumes the
+    --    narrower possessive-s test that used to live in the match filter.)
+    --    Inches are exempt — "3" in diameter" legitimately precedes a letter.
+    if feet and after:match("^%a") then return "apostrophe" end
+
+    -- 10. A zero-length measurement says nothing worth saying, and in practice
+    --     it is dialect: Tehanu's "'0' course he did" is "of course".
+    do
+        local n = tonumber((mt:gsub("[^%d%.]", "")))
+        if n == 0 then return "zero" end
+    end
+
+    return nil
+end
 
 -- All °F (degree-symbol form) handling runs as dedicated literal passes, like
 -- the prime passes — the unit-anchored stage can't reliably read a leading dash
@@ -4390,6 +4653,29 @@ local function _fast_scan_matches(doc, cat_enabled, pkg_enabled)
             -- match whose last word alone equals num ("one hundred" → stop at
             -- "one", not "hundred"; "a hundred" → include the "a").
             if t and _parse_num(t) == num and i >= (span or 1) then return cand end
+            -- The ADDITIVE form needs its own validator, because _parse_num is
+            -- structurally unable to confirm it: "one and three-quarter leagues"
+            -- is 1.75, but _parse_num prefix-reads it as 1 — which is exactly why
+            -- _prev_num_words computes the value itself for this shape. So the
+            -- test above can never become true, the loop runs out, and the span
+            -- falls back short: the book read "one and three-quarter leagues" and
+            -- the underline covered "three-quarter leagues", with the correct
+            -- 8.4 km attached to two thirds of the phrase. Harmless in Underline
+            -- mode; in Add/Convert mode it writes "one and 8.4 km" into the text.
+            -- Mirror the additive branch of _prev_num_words: whole + fraction,
+            -- both re-parsed from the candidate text, accepted only on an exact
+            -- hit. (Corpus: Darwin's "thirteen and three-quarters British miles"
+            -- and Verne's "one and three-quarter leagues".)
+            if t then
+                local ipart, fpart = t:match("^([%w%-]+)%s+and%s+(.+)$")
+                if ipart and fpart then
+                    local iv, fv = _parse_num(ipart), _parse_num(fpart)
+                    if iv and fv and iv >= 1 and iv == math.floor(iv)
+                       and fv > 0 and fv < 1 and math.abs(iv + fv - num) < 1e-9 then
+                        return cand
+                    end
+                end
+            end
             -- Range lower-endpoint rescue: a range like "fifty and a hundred
             -- fathoms" has its two numbers glued by "and", so _parse_num(t)
             -- composes the whole span multiplicatively ("fifty … hundred" =
@@ -5261,23 +5547,60 @@ local function _fast_scan_matches(doc, cat_enabled, pkg_enabled)
                             seen_start[r.start] = true
                             seen_end[r["end"]] = true
                         -- A lat/long coordinate prime (′ arcminute / ″ arcsecond)
-                        -- is not feet/inches — claim the span so no pass converts it.
+                        -- is not feet/inches, and neither is a closing quotation
+                        -- mark, a call number or an apostrophe — claim the span so
+                        -- no pass converts it.
+                        --
+                        -- Both checks want the same thing, the match's own
+                        -- paragraph up to the number, so they share one read of it.
+                        -- crengine's prev_text is five words (~45 characters),
+                        -- which is too short for either: the giveaway noun of a
+                        -- dictionary entry sits twenty words back ("ABERRATION. In
+                        -- astronomy, … the progressive motion of light, is
+                        -- established 20″"), and so does the opening quote of
+                        -- "'around 50,000'".
                         elseif e.cat == "length" and (function()
+                            local prime_fp = FootFree._prime_fp_reason
+                            local mtx = r.matched_text or ""
                             if _is_coordinate(r.prev_text, r.next_text) then return true end
-                            -- The hit window is only 5 words; dictionary/astronomy
-                            -- prose can hold the giveaway noun further back
-                            -- ("ABERRATION. In astronomy, … the progressive motion
-                            -- of light, is established 20″" — 20 words). Re-run the
-                            -- vocab check on the tail of the match's own paragraph.
+
+                            local wide
                             local elem = (r.start or ""):match("^(.*)/text%(%)")
                             if elem then
-                                local okw, wide = pcall(function()
+                                local okw, w = pcall(function()
                                     return doc:getTextFromXPointers(elem, r.start)
                                 end)
-                                if okw and wide then
-                                    if #wide > 400 then wide = wide:sub(-400) end
-                                    return _is_coordinate(wide, r.next_text)
+                                if okw and w then
+                                    wide = #w > 400 and w:sub(-400) or w
+                                    if _is_coordinate(wide, r.next_text) then return true end
                                 end
+                            end
+
+                            -- The real characters after the mark. crengine's
+                            -- next_text is no use for ANY of this: it skips the
+                            -- adjacent word (for "6' wide" it starts " and hard
+                            -- to reach"), and it swallows the letter of "86'd"
+                            -- and the ".92" of "823'.92". Only a document read
+                            -- sees them. Widths are tried longest-first because
+                            -- the match can sit near the end of its text node,
+                            -- where the wider read has nothing to return.
+                            local after = ""
+                            local pfx, off = _xpointer_offset(r["end"] or "")
+                            if pfx ~= r["end"] and off then
+                                for _, w in ipairs({ 24, 12, 4, 2 }) do
+                                    local okc, c = pcall(function()
+                                        return doc:getTextFromXPointers(
+                                            r["end"], pfx .. tostring(off + w))
+                                    end)
+                                    if okc and c and c ~= "" then after = c; break end
+                                end
+                            end
+
+                            local why = prime_fp(mtx, wide or r.prev_text, after)
+                            if why then
+                                logger.dbg("FootFree: dropped prime "
+                                           .. mtx .. " — " .. why)
+                                return true
                             end
                             return false
                         end)() then
@@ -6934,6 +7257,15 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
             local drop_foot =
                 (body_scale and (
                     nxt:match("^%s*in front")            or  -- "one foot in front of the other" (anchored: not "…foot tower in front of the cabin")
+                    -- The same idiom with an adverb or participle wedged in:
+                    -- "one foot carefully placed in front of the other" (Fourth
+                    -- Wing), "putting one foot steadily in front of the other"
+                    -- (Evicted). The anchor above cannot see past the inserted
+                    -- word, so match the whole phrase unanchored instead — "in
+                    -- front of the other/next" is only ever walking, never a
+                    -- measurement, and the ≤ 2 gate still holds it in.
+                    nxt:match("in front of the other")   or
+                    nxt:match("in front of the next")    or
                     nxt:match("^%s*into ")               or
                     nxt:match("^%s*over ")               or
                     nxt:match("^%s*forward")             or
@@ -7063,36 +7395,14 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
         local _mt_end1 = r.matched_text:sub(-1)
         local _ends_prime = _mt_end1 == "'" or _mt_end1 == '"'
             or r.matched_text:sub(-3) == _PRIME or r.matched_text:sub(-3) == _DPRIME
-            or r.matched_text:sub(-3) == _PRIME_MARKS.rsquote
-            or r.matched_text:sub(-3) == _PRIME_MARKS.rdquote
-        -- A bare feet-mark ending (single apostrophe/prime — NOT the double-
-        -- prime/quote inches ending, which a possessive/plural 's' never
-        -- follows) immediately followed by "s" is a year/decade possessive
-        -- or plural, not a feet marker — "2001's Ghosts of Mars" read as
-        -- 2001 ft (600 m). Without this, the _ends_prime exemption right
-        -- below waves it through as "can't be mid-word", which is only
-        -- true for the unambiguous double-prime/quote glyphs, not a bare
-        -- apostrophe (issue #2 / reports #11-13).
-        --
-        -- Read the ACTUAL next character from the document rather than
-        -- trusting next_text: crengine builds the context word by word, and
-        -- "2001’s" is a single word token, so the possessive "s" is swallowed
-        -- — next_text starts at " Ghosts of Mars", and an "^[sS]" test on it
-        -- can NEVER fire. (That was the original form of this guard; it
-        -- compiled, passed check.sh, and silently did nothing — VM-verified
-        -- 2026-08-07.) Same one-character xpointer read as the mid-word guard
-        -- just below. A genuine height reads a space here ("6’ wide").
-        local _ends_single_apos = _mt_end1 == "'" or r.matched_text:sub(-3) == _PRIME
-            or r.matched_text:sub(-3) == _PRIME_MARKS.rsquote
-        if _ends_single_apos then
-            local pfx, off = _xpointer_offset(r["end"])
-            if pfx ~= r["end"] and off then
-                local okc, c = pcall(function()
-                    return doc:getTextFromXPointers(r["end"], pfx .. tostring(off + 1))
-                end)
-                if okc and c and c:match("^[sS]") then keep = false end
-            end
-        end
+            or r.matched_text:sub(-3) == FootFree._CAPOS or r.matched_text:sub(-3) == FootFree._CDQ
+        -- (The year/decade possessive guard — "2001's Ghosts of Mars" read as
+        -- 2001 ft — used to live here, testing the document's next character
+        -- for an "s". It moved into FootFree._prime_fp_reason, which runs on
+        -- the prime passes themselves and widens the same test from "s" to any
+        -- letter, so "86'd" and "o'clock" are covered too. Kept in ONE place
+        -- deliberately: two copies of a rule that are supposed to agree, and
+        -- silently do not, is how the cache-65 bug happened.)
         if not _ends_prime and (r.next_text or ""):match("^[a-zA-Z]") then
             -- The letter can also come from the NEXT BLOCK: when the match
             -- ends at its node's last character (sign/label paragraphs —
@@ -7245,6 +7555,59 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
         -- "178650/League" as 860 000 km — Hooked's endnotes). Never prose;
         -- ASCII fractions are digit/digit, so "19-3/10 miles" doesn't trip.
         if r.matched_text:match("%d/%a") then keep = false end
+
+        -- ── Back-of-book indexes and endnote lists ──────────────────────────
+        -- The number-walk collects words backwards from the unit, and in an
+        -- index entry the words behind the unit are page numbers. "amputations
+        -- 263-4, 268; amputation tattoos 279; foot" read as 85 m. All four
+        -- rules below are the same principle — the number must be ADJACENT to
+        -- the unit, with nothing between them but whitespace or a hyphen —
+        -- and all four were measured across the 187-book English corpus
+        -- (2026-08-20) with zero legitimate matches caught.
+        --
+        -- A semicolon between the number and the unit. Written In Bone's index
+        -- alone had six ("279; foot", "186-7, 188, 197; feet"). 6 corpus hits,
+        -- all wrong. (The comma twin is the model-number rule just above.)
+        if r.matched_text:match("%d%s*;%s*%a") then keep = false end
+        -- A BLOCK BREAK immediately before the unit word: the number is the last
+        -- thing in one paragraph and the unit the first thing in the next, which
+        -- is what an index or a table of contents looks like ("287\nfeet",
+        -- "116, 268n\nStone", "450\nGal"). 13 corpus hits, all wrong.
+        -- Deliberately anchored at the UNIT: a <br/> inside a spelled compound
+        -- ("four-and-a-<br/>half feet", smoketest5 CH26 case E) puts the break
+        -- mid-number, where it is legitimate, and this rule cannot see it.
+        if r.matched_text:match("\n%s*%a+%s*$") then keep = false end
+        -- A sentence-ending period crossed on the way back ("30. Fathom" from a
+        -- table of contents, "276-277.\n11. Pt" from an endnote list). A real
+        -- measurement writes its period AFTER the unit ("6 ft."), never between
+        -- the figure and it. Requires whitespace after the period, so decimals
+        -- ("3.5 inches") and abbreviations are untouched. 9 corpus hits, all
+        -- wrong.
+        if r.matched_text:match("%d%.%s") then keep = false end
+        -- A runaway span. The compound "N feet M inches" walk can glue two
+        -- numbers thousands of characters apart: Moby Dick yielded a single
+        -- 9,331-character "match" spanning most of a chapter, and Two Years
+        -- Before the Mast one of 6,847. Corpus median is 11 characters and the
+        -- 99.9th percentile is 41, so 80 is a backstop nothing real approaches
+        -- — exactly two hits in 9,763 exceed it, and both are those runaways.
+        if #r.matched_text > 80 then keep = false end
+        -- A word GLUED to the number that is not a unit: "8Katzmarzyk PT" (an
+        -- endnote reference number fused to an author's surname, with the "pt"
+        -- pint alias landing on the initials) read as 3.8 litres. The glued
+        -- forms that ARE legitimate all spell a unit alias — "100lb", "95mph",
+        -- "6ft", "3QT" — plus the dimension "x" of "10x10 feet" and ordinal
+        -- suffixes ("6th, 4 miles"). 28 corpus hits carry a glued letter run;
+        -- exactly the 3 non-alias ones are wrong.
+        do
+            local run = r.matched_text:match("^[0-9][0-9,.]*(%a+)")
+            if run then
+                local rl = run:lower()
+                if rl ~= "x" and rl ~= "st" and rl ~= "nd" and rl ~= "rd"
+                   and rl ~= "th" and not _identify_unit(rl) then
+                    keep = false
+                end
+            end
+        end
         -- Geographic coordinates ("37°18'32\" N 115°36'52\" W"): the degree
         -- symbol leads the match because the degrees figure sits before it, so a
         -- length match never begins with ° (a real prime height like 5'9" starts
