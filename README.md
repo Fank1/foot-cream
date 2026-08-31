@@ -47,24 +47,53 @@ NOTE: Although Claude Code helped a lot in the writing of Lua, I have QA:ed this
 | 📏 Length       | nautical mile / nmi                  | km             |
 | 📏 Length       | league / leagues                     | km             |
 | 📏 Length       | cubit / cubits                       | m              |
+| 📏 Length       | span / spans / hand / hands          | m              |
+| 📏 Length       | rod / rods / pole / poles / perch / perches | m        |
+| 📏 Length       | chain / chains                       | m              |
+| 📏 Length       | ell / ells / pace / paces            | m              |
+| 📏 Length       | verst / versts                       | km             |
+| 📏 Length       | arshin / arshins                     | m              |
 | ⚖️ Weight       | ounce / ounces / oz                  | g              |
 | ⚖️ Weight       | pound / pounds / lb / lbs            | kg             |
 | ⚖️ Weight       | stone                                | kg             |
+| ⚖️ Weight       | ton / tons                           | kg             |
+| ⚖️ Weight       | pood / poods                         | kg             |
+| ⚖️ Weight       | carat / carats                       | g              |
 | 🧪 Volume       | fluid ounce / fl oz                  | mL             |
 | 🧪 Volume       | pint / pints / pt                    | L              |
 | 🧪 Volume       | quart / quarts / qt                  | L              |
 | 🧪 Volume       | gallon / gallons / gal               | L              |
+| 🧪 Volume       | gill / gills                         | mL             |
 | 🌡️ Temperature | °F / degrees Fahrenheit              | °C             |
 | 🚀 Speed        | mph / miles per hour / miles an hour | km/h           |
 | 🚀 Speed        | knot / knots / kn                    | km/h           |
 | 🟩 Area         | acre / acres                         | ha             |
 | 🟩 Area         | square miles / feet / yards / …      | km² / m² / cm² |
+| ⚡ Energy       | hp / horsepower                      | kW             |
+| ⚡ Energy       | BTU / British thermal unit(s)        | kJ             |
+| ⚡ Energy       | calorie / calories                   | kJ             |
+| 🔧 Pressure    | psi / pounds per square inch         | kPa            |
+| 🔧 Pressure    | atmosphere / atmospheres / atm       | kPa            |
+| 🔧 Pressure    | mmHg / millimeters of mercury        | kPa            |
+| 📏 Length       | li / zhang / chi / cun / ri / cho / ken / shaku / sun / jang / cheok / chon (*) | m / km |
+| ⚖️ Weight       | jin / liang / qian / kan (*)          | kg             |
+| 🧪 Volume       | shō / gō / koku                      | L              |
+| 🟩 Area         | mu / tan / tsubo / pyeong (*)        | m²             |
+| ⏱ Time         | shichen / geng / dian / ke           | min            |
+| ⏱ Time         | the Shen/Chou/…/Hai Hour (12 時辰)    | min            |
+| ⏱ Time         | Hour / Watch / Mark / Ke             | min            |
 
-*Volumes follow the book's locale: UK imperial vs. US measures.*
+*Volumes follow the book's locale: UK imperial vs. US measures. Energy and pressure categories work in both directions (imperial↔metric).*
 
-**In the imperial direction** (Convert units to: Imperial US/UK) the same categories work in reverse: km/m/cm/mm, kg/kilos/grams, °C, liters/ml, km/h, hectares and square km/m/cm all convert, as natural compounds (*"1.8 m"* → *"5 ft 11 in"*, *"2.5 kg"* → *"5 lb 8 oz"*), with stones and imperial pints/gallons in the UK flavor and eighth-inch fractions for small lengths (*"9 mm"* → *"⅜ in"*).
+**In the imperial direction** (Convert units to: Imperial US/UK) the same categories work in reverse: km/m/cm/mm, kg/kilos/grams, °C, liters/ml, km/h, hectares and square km/m/cm all convert, as natural compounds (*"1.8 m"* → *"5 ft 11 in"*, *"2.5 kg"* → *"5 lb 8 oz"*), with stones and imperial pints/gallons in the UK flavor and eighth-inch fractions for small lengths (*"9 mm"* → *"⅜ in"*). Kilowatts, kilojoules and kilopascals convert to hp, BTU and psi respectively.
 
-> **A note on tons:** Footcream intentionally does **not** convert *tons*. The word is ambiguous: a long ton (1016 kg), a short ton (907 kg), a metric tonne (1000 kg) etc. Rather than converting incorrectly, it leaves them untouched. If there is a huge need for this, it might be added in the future.
+**Height notation**: curly-quote primes (*6′4″*) and bare compound notation (*6'4*) are detected and converted to metric (*1.93 m*). Fractional inches (*5 ft 9½ in*) are supported. A speech-close guard prevents false positives on dialogue markers like *6'4" she said*.
+
+> **A note on tons:** Footcream converts *tons* using a context classifier. Standing weights (*"weighed ten tons"*) convert to kilograms (*≈ 9 000 kg*), while register tonnage (*"displacement of 50 000 tons"*) and figurative uses (*"tons of trouble"*) are left untouched. Carat is similarly guarded: *"18 carat gold"* (fineness) is preserved, while *"a 2-carat diamond"* (weight) converts to grams.
+
+> **A note on Asian/transliteration units (\*) and other short spellings:** these stage in historical-CJK fiction (wuxia etc.), but several spell like English words (*"go"*, *"sun"*, *"tan"*, *"ken"*, *"mu"*, *"li"*). So the short ones (≤ 4 letters) only convert when the **book** clearly uses them — at least two distinct transliteration units somewhere in it — **and** the number is written as digits (*"30 li"*). That keeps *"in one go"* (an idiom, not 0.18 litres) and *"she got a tan"* from ever converting, while *"the caravan went 30 li, the farm covered 2 mu"* converts normally. Longer spellings (*"zhang"*, *"shichen"*, *"koku"*) are unambiguous and convert freely.
+
+> **A note on 時辰 (traditional Chinese time):** besides the pinyin forms *shichen / geng / dian / ke*, Footcream recognises the English renderings of the twelve named two-hour periods — *"the Shen Hour"*, *"the Chou Hour"*, … *"the Hai Hour"* (broad pinyin/Wade-Giles romanizations) — each converting to its fixed 2 h (*120 min*), even without a count. The capitalized generic *Hour / Watch / Mark / Ke* (→ *shichen / geng / dian / ke*) convert like the other short homographs: they need a literal number and a book cluster, so ordinary *"happy hour"* and clock *"hour"* are never touched.
 
 ***
 
@@ -83,6 +112,7 @@ Footcream isn't a dumb find-and-replace. A lot of the code goes into matching th
 
 ### Other smartness
 
+- **Height notation**: curly-quote primes (*6′4″*), bare compound notation (*6'4*), and fractional inches (*5 ft 9½ in*) are detected and converted to metric. A speech-close guard prevents false positives on dialogue markers.
 - **UK vs. US volumes**: gallons and pints differ between the two; Footcream picks the right factor from the book's language.
 - **Compound measurements**: heights like *"six foot four"*, *"5 ft 7 in"*, *"six-foot-five-inch"*, *"five-foot, seven inches"*, and *"six feet, one and a half inches"* are read as a single value. Same for weights: *"nine stone four"*, *"seven pounds four ounces"*.
 - **Ranges**: *"four to five feet"*, *"twelve or fifteen miles"* convert to a metric range.
@@ -151,7 +181,6 @@ Footcream scans the book's whole text once and stores the results in a small per
 
 ## Limitations
 
-- *Tons* are intentionally unsupported (see the note above).
 - Coverage supports English-language books only
 
 ***

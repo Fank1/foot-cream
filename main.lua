@@ -67,7 +67,7 @@ local _ENDASH = "\226\128\147"   -- –  U+2013
 local _TIMES  = "\195\151"       -- ×  U+00D7
 local _SUP2   = "\194\178"       -- ²  U+00B2 (superscript two)
 
-local CACHE_VERSION = 68  -- bumped: the bare-prime audit (2026-08-20). The full 187-book English corpus scan made 91 prime-notation detections; every one was read by hand against the book text. The COMPOUND form ("6'2\"") was a real measurement 19 times out of 19. The bare INCH mark was right 4 times in 9. The bare FEET mark was right ONCE in 63 — and that once was half of a spaced "6' 4\"" that the compound pattern should have claimed whole. Everything else was a closing quotation mark, a call number, an apostrophe or a coordinate; Wool alone contributed 32, because British typesetting quotes strings in '…' and the book is full of numbered floors, sockets and channels. THREE changes. (1) FootFree._prime_fp_reason — ten tells that the glyph CLOSES something rather than measuring it: a quote immediately before the digits (42 of the 72 bare false positives, and the cheapest test there is), an unmatched U+2018/U+201C earlier in the paragraph, a dash before the number (a year span in a citation title), a Victorian middle-dot decimal, a clock time, "No."/"#", a year after a month name, digits continuing straight after the mark (Dewey/LC call numbers — no need to guess where front matter ends), any letter after a bare FEET mark ("86'd", and this subsumes the old possessive-s guard, which is now DELETED rather than duplicated), and a zero-length measurement. Every rule was measured against all 91 corpus hits before it went in: together they suppress 62 of the 72 bare hits and cost ZERO of the genuine ones. A positive measurement cue after the mark (tall/wide/deep/long/across/by/square/×) short-circuits all ten, which is what keeps a height spoken inside single-quoted dialogue converting — no corpus hit carries such a cue, so this costs nothing today and is the insurance against the guards over-reaching later. The guard runs in the prime PASS, sharing its paragraph read with the coordinate check: crengine's prev_text is five words (~45 chars), far too short to see the opening quote of "'around 50,000'", and its next_text starts at the following WORD, so "86'd" and "823'.92" arrive with the evidence already swallowed — only a document read sees them. (2) _is_coordinate learned U+00BA (Two Years Before the Mast sets "33º 30' S." throughout, so the ° test missed every coordinate in the book) and the PLURAL abbreviation "degs."/"degs" (the Beagle's "57 degs. 23' south"). (3) Two pattern gaps that were losing real measurements: the compound now allows ONE SPACE between the figures ("6' 4\"" = 1.93 m, was two bare hits), and a new inches-BY-inches dimension entry converts both figures of "10\" × 8\"" (the feet×inches form existed; DBL×DBL fell through, so the 8" stayed imperial beside a metric 10"). classify indices renumbered 4→5 entries. Covered by smoketest5 CH52 and 28 new headless cases in lua_helper_tests; EXPECTED_TOTAL 329 -> 332. VM-VERIFIED, and the verification earned its keep: the cue exemption above SHIPPED INERT. It read crengine's next_text, and next_text SKIPS THE ADJACENT WORD — for "The shelf was 6' wide" it begins " and hard to reach", with the cue already swallowed. So the test could never fire, and the only reason the corpus measurement still looked right is that no corpus cue-carrying hit sat inside a quotation. A probe book with "'He was 6' tall,' she said" showed it in one scan: the height was dropped. Both context arguments are now document reads (widths tried 24/12/4/2, because the match can sit near the end of its node), and the headless cases were rewritten against real book text rather than an invented next_text. This is the THIRD guard in this file to ship compiled, green and doing nothing — see cache 64's possessive-s test and cache 65's shy-book gate — and all three failed the same way: a suppression that silently stops working is indistinguishable from one that works, so nothing short of reading a real match list catches it. Two harness faults surfaced with it, both now fixed: verify_scan.py checked must-not rules against DISPLAY-SUPPRESSED matches the reader never sees (a correctly suppressed currency case read as a regression), and sidecar_to_json.lua's classifier mirror still called _pound_currency_wins with two arguments after it grew a third, so the rate-tail rule looked dead from the outside — it now extracts FootFree._pound_rate_tail too and shouts on stderr instead of silently reporting nothing suppressed. Scan evidence, all on smoketest5 unless noted: 337 matches, 0 must-not violations; smoketest5shy 13; smoketest6 39 under "us". Corpus book diffs — Wool 76 -> 44 visible (32 quoted numbers gone, its one real 8" becomes the dimension 8" x 2"), Written In Bone 29 -> 22 (7 index entries gone, all 8 genuine 5ft/6ft heights kept), I Heard You Paint Houses 60 -> 57 (6' + 4" merged into 6' 4" = 1.93 m, two call numbers gone), Lee Miller 34 -> 33 (two bare 10" become 10" x 8" dimensions), Orbital 39 -> 39 with four range renderings corrected ("160 and 13 000 000 km" -> "170 000 000 km"), Manhunt 21/2 inches 53 cm -> 6 cm, 20,000 Leagues span widened to "one and three-quarter leagues", Two Years Before the Mast 143 -> 141, Voyage of the Beagle 642 -> 641 with its 40+ "and" ranges untouched, Moby Dick 161 -> 160, SPQR 42 -> 40. FULL CORPUS RE-SCAN, 226 books, every change accounted for: 9,467 -> 9,372 reader-visible matches. 98 suppressed outright (69 prime, 25 index/endnote, 1 runaway span, 3 by sense — Gulliver's "thirty pounds a year" and the two walking idioms), 66 CORRECTED IN PLACE, 3 newly appearing (the inches-by-inches dimensions), and NOTHING unexplained. Prime detections 91 -> 25, of which 23 are compound/dimension and all correct; the 2 residual bare false positives ("EC1’", "IG XI.4.756’") are both the documented under-fire direction of the quote-balance rule, where an apostrophe earlier in the paragraph balances the count. The in-place corrections are mostly ONE THING: 57 spans widened with the value unchanged, and 53 of those are the cookbook's "one and one-half inches" being underlined as "one-half inches" — the same extend_start fault as Verne and Darwin, and in Add/Convert mode it was writing "one and 4 cm" into the text 53 times in one book. The 7 value changes are the scaled-and ranges (Orbital x4, Gulliver, The Lost City of Z 500-and-180 000 km2 -> 700 000 km2, The Last Devil To Die) plus Manhunt's 21/2 inches. The income-rate rule earns exactly ONE correction: 9 of its 10 corpus hits were ALREADY suppressed by the existing cue table (usually "annum" or "income" in the same window), so its smoketest case had to be scrubbed of every other cue word — heading included, since crengine feeds heading text into prev_text — before it tested anything at all. (One book, The Bell Jar, reported "not-english" in the batch run and scanned identically to before in isolation: a known race in the sweep harness's language probe, not a plugin change.) SECOND BATCH, same audit, same cache: the 21 non-prime confirmed bugs. (a) INDEX AND ENDNOTE ENTRIES — the number-walk collects words backwards from the unit, and in an index the words behind it are page numbers ("amputation tattoos 279; foot" = 85 m). Four rules, one principle (the number must be ADJACENT to the unit), each measured corpus-wide with ZERO legitimate matches caught: a semicolon between them (6 hits), a BLOCK BREAK immediately before the unit word (13) — anchored at the unit so a <br/> inside a spelled compound, which is legitimate and is smoketest5 CH26 case E, cannot trip it — a sentence-ending period crossed on the way back (9, "30. Fathom" from a table of contents), and a non-alias word GLUED to the number ("8Katzmarzyk PT" = 3.8 litres; 28 corpus hits carry a glued letter run and exactly the 3 non-alias ones are wrong, the rest spelling lb/mph/ft/QT or the "x" of "10x10 feet"). (b) RUNAWAY SPANS — the compound "N feet M inches" walk glued numbers thousands of characters apart, producing a single 9,331-character "match" across most of a Moby Dick chapter and a 6,847 one in Two Years Before the Mast. Corpus median span is 11 characters and the 99.9th percentile is 41, so an 80-character cap is a backstop nothing real approaches: exactly 2 of 9,763 hits exceed it, and both are those runaways. (c) A COMPOUND NUMBER READ AS A RANGE — "one hundred and eight million miles" came out of Orbital as "160 and 13 000 000 km". The existing guard only recognised a SMALL second operand (n2 < 100); these carry a scale word of their own, so the test is now that n2's multiplier exceeds n1 ("two hundred and fifty thousand" = (200+50) x 1000, n1 200 < scale 1000), which leaves a genuine shared-scale range like "between one hundred and two hundred feet" alone. 7 corpus hits, all wrong, none of the 91 real "and" ranges near them. (d) AN ADDITIVE SPAN THAT STOPPED SHORT — extend_start validates a candidate with _parse_num, which is STRUCTURALLY unable to confirm the additive form: "one and three-quarter leagues" is 1.75 but _parse_num prefix-reads it as 1, which is exactly why _prev_num_words computes that value itself. So the test could never become true, the loop ran out, and the span fell back short — correct 8.4 km attached to two thirds of the phrase. Harmless in Underline mode; in Add/Convert it writes "one and 8.4 km" into the book. A second validator mirrors the additive branch (whole + fraction, exact hit only). Darwin's "thirteen and three-quarters British miles" is the same shape. (e) THE WALKING IDIOM — "one foot carefully placed in front of the other" (Fourth Wing) and "putting one foot steadily in front of the other" (Evicted): the "in front" cue is anchored at the start of next_text and could not see past the wedged-in adverb, so the whole phrase "in front of the other/next" is now matched unanchored, still inside the <=2 body-scale gate. (f) AN INCOME RATE — "thirty pounds a year", "twenty pounds per annum" read as weights. ADJACENCY is the whole rule and the reason this is its own list rather than three more _CURRENCY_PHRASES: 25 corpus pound matches have a rate phrase somewhere in their window and 8 of those are genuine weights ("ballooning up fifteen pounds in a month", "T. rex put on about 1,700 pounds per year"), and every one of them either separates the phrase from the unit or uses a DAILY/WEEKLY rate — so those two forms are absent and the phrase must open next_text. 10 hits then, all money. Worth one vote, so a genuine weight cue still ties and keeps. (The reader also suggested "got"; measured and REJECTED — of 16 pound matches with "got" nearby most are plain weights: lifted eighty pounds, dropped about ten pounds, went about 350 pounds, sixteen pounds of marijuana.) (g) AN ASCII TYPESET HALF — "21/2 inches above the clavicle" (Manhunt) read as 53 cm. The tight-U+2044 improper-numerator rule from cache 51 now also accepts a plain "/", but ONLY the improper form and only for denominators a fraction actually uses (2/3/4/8/16), so "12/25" and "10/12" stay dates. Together with the prime work above this corrects ~43 corpus detections. Covered by smoketest5 CH53 and 21 more headless cases; EXPECTED_TOTAL 332 -> 335. (67 was: two reader-flagged fixes. (1) Report #37 — "29,028 feet" (Everest) converted to "9 000 m". The conversion was right (8 847.7 m); smart rounding then flattened it, because plain metres at distance scale round within a 4% band REGARDLESS of source precision and 9 000 is only 1.72% away, so one significant figure swallowed a five-figure surveyed number. Distance targets (m/km) now floor the collapse at the source's own significant digits via _sig_digits, gated on `not _is_approx_num(n)` so an admittedly-round source still rounds hard: 29,028 ft -> 8 848 m and 511 ft -> 156 m (which the comment at the top of that section always CLAIMED happened), while 1,700 ft -> 500 m and 3,000 ft -> 900 m are unchanged. Ranges keep rounding coarse (force=true). (2) Reports #40/#41 — a closing curly quote after a digit read as inches: the call sign "Reach 18" came out as 46 cm. The existing guard only catches a quote after PUNCTUATION ("1836."); here a digit genuinely precedes the glyph, so the tell is an unmatched OPENING curly quote earlier in the context. Bare inches only — a spoken height ("5'10\"") carries a feet mark and is matched by the compound pattern, which never reaches this guard. Corpus-checked over 45 books before adding: 4 matches sit inside an open quotation, ALL FOUR citations or call signs, zero genuine measurements (one, "1913-1914\" -> -5 000 cm, was a live FP nobody had reported). (3) Reports #35/#36 — a foot as a BODY PART read as a distance. "had done so on two feet, and operated the door" = 60 cm: the "on/with <n> feet" idiom guard only covered the literal word "one", so it is now the whole ≤2 body scale (the "of" exception still protects a real "on two feet of packed snow"). "one foot is wrapped around the calf of her other leg" = 30 cm: every body-verb cue is anchored at the START of the following text and a copula sat in front of them all, so a leading is/was/were/are is now stripped before the cues run, and wrapp/hook/tuck/curl/propp/cross joined them (≤2-gated — "fifty feet wrapped around the post" is rope). Both were VM-confirmed STILL LIVE on a probe book before fixing, not assumed from the v59 report. Covered by smoketest5 CH50 and CH41; EXPECTED_TOTAL 321 -> 329. (66 was: the scan is now ONE PLAIN findAllText per unit alias for every book. It was a single 54-branch regex alternation, justified by "the cost is the per-call document walk, not the matching" — profiling says the opposite (2026-08-17, Lonesome Dove 366k words): plain search for "miles" 0.03s, regex \bmiles\b 0.52s for the IDENTICAL 177 hits, and the alternation grew ~0.08s per branch to 4.82s of a 5.0s scan. Its (?:\b|(?<=[0-9])) left anchor alone was 2.34s. 54 plain passes cost ~1.6s, so doing it 54 times is ~3x cheaper; plain search also needs no \b anchor, which is what let cache 65's bug exist (\b cannot see a soft hyphen where a letter would be). Equivalence was PROVEN before the switch, not assumed: 12 books both ways, both directions, every match set identical — smoketest5 321, smoketest6 39, smoketest5shy 13, Lonesome Dove 261. Measured end to end: Lonesome Dove 5.13s -> 2.43s, The End of Men 1.91s -> 0.69s, SPQR 16.6s -> 12.2s; tiny books pay slightly more (smoketest5 0.24s -> 0.28s) because each pass has a fixed cost. The regex path is DELETED rather than kept as a fallback: two paths that were supposed to agree and silently did not is exactly what produced cache 65, and only the unprofiled one had the hole. Shy books also stopped running the prime/°F regex passes unconditionally: they now answer "does this book contain 6'2\" or °F at all?" from the RAW FILE via metric_epub.probe_notation (tags stripped, entities decoded, any failure answers yes-to-everything) instead of from the 160s crengine read. 73% of a 45-book corpus contain neither, so most shy books now skip all 7. Controlled pair, same prose: lonesome-dove-shy 16.99s -> 2.74s against lonesome-dove 2.39s, both 261 matches; smoketest5shy still 13 with 0 passes, smoketest5 still 321 with 7 passes run (it does contain the notation). Shy-book ETA multiplier corrected 55x -> 8x. (65 was: soft-hyphen books. TWO fixes, both surfaced by profiling one novel against an 82k-soft-hyphen twin of itself (2026-08-17). (1) The shy path's adjacent-character boundary probe read exactly ONE character, and in these books that character is frequently the soft hyphen itself — not %a, so the guard passed and the "mi" alias matched inside longer words: "losing five mi|nutes" converted as "five mi" = 8 km, 48 times in one book. The probe now reads 4 characters and strips U+00AD before testing. (2) The whole-book getTextFromXPointers gate that decides whether to run the prime/°F literal passes cost 0.02s on the ordinary book and 159.95s on the shy twin — 98% of the entire scan, and it gated nothing: zero passes ran after it. Shy books now skip the gate and take the same branch as a failed gate read (run the passes unconditionally), the conservative direction: a wrong "skip" is silent lost prime/°F coverage, a wrong "run" is a few extra passes. (64 was: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001’s" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001’ = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6’ wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-toed/-legged/-clawed/-pawed/etc. feet/foot" no longer reads as a distance — anatomy, not a measurement (report #9: "three-toed feet" was reading as 91 cm; the shared _parse_num word-number fallback treats a hyphen right after a number word as an ordinary compound-number boundary, the same mechanism that composes "twenty-three", so it doesn't distinguish "three-toed" from "twenty-three"). (62 was: shorthand height notation (issue #2) now recognizes curly/smart quotes ("6’2”"), not just straight ASCII/true-prime — most commercial EPUBs are typeset this way, which is why it looked entirely broken to the reporter. A digit-adjacent bare feet-mark ('/′/’) immediately followed by "s" is now read as a year/decade possessive or plural ("2001's", "the 90's"), not a height — closes the false positive in reports #11-13 ("2001's Ghosts of Mars" was reading as 2001 ft = 600 m). (61 was: bare "degrees" (no F/Fahrenheit qualifier) now converts as a Fahrenheit temperature when a nearby word suggests one (cold/hot/warm/chill/freez.../temperature/weather/humid/...); default is still to leave it alone (angle, rotation, proof, heading, latitude). Spelled "minus" before a number now negates it ("minus seventy degrees" = -70), matching the existing symbolic-dash handling. "N degrees below zero" is suppressed rather than mis-signed (residual — reports #14-33). (60 was: hyphenated adjectival "square <unit>" compounds ("a 250,000-square-foot room", "a three-million-square-foot cave") now detect as area — the "square" cue check missed the hyphen glue and fell through to the linear-foot factor, badly wrong and missing the ² (reports #22-24). (59 was: metric→imperial direction ("Preferred units": metric/us/uk; sidecars carry a direction field, matches can now target imperial compound formats). (58 was: hyphen-glued attributive fractions parse — "<ordinal>-of-a-<unit>-thick/long" reads as 1/denominator ("a third-of-a-mile-thick" = 540 m; "quarter-of-a" worked already via _WORD_NUMS, ordinals like "third" were nil because bare ordinals are ambiguous — the glued "-of-a" tail disambiguates). (57 was: bare-article "a million miles" (incl. "an hour"/"away" forms) suppressed as hyperbole — user-approved 2026-07-06, all 7 corpus hits figurative; digits and real multiples ("two million miles", "half a million miles") still convert. (56 was: URL path fragments never convert (digit/letter slash in matched_text — "178650/League" was 860 000 km); "N-foot-by-M-foot" dimension adjectives convert both sides ("twenty-foot-by-hundred-foot" = 6 × 30 m, was a bare 6 m). (55 was: shy-book plain passes enforce true \\b via adjacent-char probes on BOTH sides (plain-path contexts are word-based, so "15 mi|nutes"/"one kn|ows" looked clean and inflated matches 3-6x). (54 was: soft-hyphen books (U+00AD in the text) scan via per-alias PLAIN findAllText passes — the regex path returns span-shifted/missing hits in such books (The Rise and Fall of the Dinosaurs: "1,700 miles" never hit, "seven-ton" garbled). (53 was: new-test-books sweep fixes — em-dash/ellipsis glued to the number no longer defeats _prev_num_words ("too far—eleven feet six inches", "off course by…sixty miles", "park—four acres"); fused digit+unit forms hit via a digit lookbehind in _FAST_UNIT_PAT ("260lbs", "6ft"); banking vocabulary (bank/account/bills/untraceable) added to the soft-currency cues. (52 was: "for a mile" article cue (user-approved) + attributive-tail guard ("ran a mile RELAY" is a compound noun — the batch-2 motion-verb cues were wrongly converting it). (51 was: tight U+2044 fractions from sup/sub-span markup ("21⁄2-inch" = 2½, "13⁄16-inch" = 13/16 — improper-looking numerator reads as a mixed number, proper as a plain fraction). 50 was: corpus-sweep batch 2 follow-ups — prime matches re-check the coordinate/astronomy vocab on the tail of their own paragraph (the 5-word hit window missed "ABERRATION … is established 20″"); spaced U+2044 mixed fractions parse ("2 1 ⁄ 2 -inch plank" = 2.5); _prev_num_words' article-fraction tail requires both words ("half LONG" no longer reads 0.5, which spawned a bogus 0.5–1000 range eating "…a mile and a half long and 1000 ft. deep"). (49 was: batch 2 — FP guards for closing-quote/middle-dot/arcsecond; enumeration lists; ASCII mixed fractions; million; article-mile directional/motion cues; at-a-time ≤ 2; "<digit> of a mile" fraction guard. 48 was: foot-idiom positional cues gated ≤ 2.)))))
+local CACHE_VERSION = 70  -- 70: merge of fork 69 (opt-in unit packages: Asian and historical/fantasy units OFF by default via footcream_pkg_asian / footcream_pkg_fantasy) with upstream v1.8.2 bare-prime audit (68: _prime_fp_reason ten-tell guard on the prime passes, possessive-s guard deleted in favour of rule 9). Both change match/convert output for overlapping surface (prime notation), so sidecars from either lineage (fork <69, upstream <68) must be rescanned. (69 was: fork: opt-in UNIT PACKAGES (FootFree._PKG_UNITS). Asian and historical/fantasy units are now OFF by default and only convert when their package is enabled (footcream_pkg_asian / footcream_pkg_fantasy), so users who never read wuxia or epic fantasy skip the scan time and false-positive surface. Match output changes when a package is off, so sidecars from 68 (packages always on) must be rescanned. (68 was: merged fork 66 (pinyin 時辰 稱謂 units: English "X Hour" periods via _SHICHEN_PATS plus Hour/Watch/Mark/Ke fast-path renderings; sidecars from 65 (no such units) must be rescanned) and upstream 67 (reader-flagged fixes: sig-digit distance floor for precise sources — 29,028 ft -> 8 848 m; closing-curly-quote call-sign guard — "Reach 18" is not 46 cm; ≤2 body-part foot guards). Both sides change match/convert output, so sidecars from either lineage (fork <66, upstream <67) must be rescanned. (66 was: fork: pinyin 時辰 稱謂 units — English "X Hour" periods (Zi/Chou/…/Hai, broad romanizations) via the _SHICHEN_PATS literal pass, plus the capitalized English renderings Hour/Watch/Mark/Ke on the fast path; sidecars from 65 (no such units) must be rescanned. (65 was: fork merged upstream v1.7.0 (64) — the fork's added units (carat, ton, verst/arshin/pood, gill, hp/BTU/psi, Asian transliterations) change match/convert output, so sidecars from 64 (no such units) and earlier fork builds must be rescanned. (64 was: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001's" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001' = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6' wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-t Every rule was measured against all 91 corpus hits before it went in: together they suppress 62 of the 72 bare hits and cost ZERO of the genuine ones. A positive measurement cue after the mark (tall/wide/deep/long/across/by/square/×) short-circuits all ten, which is what keeps a height spoken inside single-quoted dialogue converting — no corpus hit carries such a cue, so this costs nothing today and is the insurance against the guards over-reaching later. The guard runs in the prime PASS, sharing its paragraph read with the coordinate check: crengine's prev_text is five words (~45 chars), far too short to see the opening quote of "'around 50,000'", and its next_text starts at the following WORD, so "86'd" and "823'.92" arrive with the evidence already swallowed — only a document read sees them. (2) _is_coordinate learned U+00BA (Two Years Before the Mast sets "33º 30' S." throughout, so the ° test missed every coordinate in the book) and the PLURAL abbreviation "degs."/"degs" (the Beagle's "57 degs. 23' south"). (3) Two pattern gaps that were losing real measurements: the compound now allows ONE SPACE between the figures ("6' 4\"" = 1.93 m, was two bare hits), and a new inches-BY-inches dimension entry converts both figures of "10\" × 8\"" (the feet×inches form existed; DBL×DBL fell through, so the 8" stayed imperial beside a metric 10"). classify indices renumbered 4→5 entries. Covered by smoketest5 CH52 and 28 new headless cases in lua_helper_tests; EXPECTED_TOTAL 329 -> 332. VM-VERIFIED, and the verification earned its keep: the cue exemption above SHIPPED INERT. It read crengine's next_text, and next_text SKIPS THE ADJACENT WORD — for "The shelf was 6' wide" it begins " and hard to reach", with the cue already swallowed. So the test could never fire, and the only reason the corpus measurement still looked right is that no corpus cue-carrying hit sat inside a quotation. A probe book with "'He was 6' tall,' she said" showed it in one scan: the height was dropped. Both context arguments are now document reads (widths tried 24/12/4/2, because the match can sit near the end of its node), and the headless cases were rewritten against real book text rather than an invented next_text. This is the THIRD guard in this file to ship compiled, green and doing nothing — see cache 64's possessive-s test and cache 65's shy-book gate — and all three failed the same way: a suppression that silently stops working is indistinguishable from one that works, so nothing short of reading a real match list catches it. Two harness faults surfaced with it, both now fixed: verify_scan.py checked must-not rules against DISPLAY-SUPPRESSED matches the reader never sees (a correctly suppressed currency case read as a regression), and sidecar_to_json.lua's classifier mirror still called _pound_currency_wins with two arguments after it grew a third, so the rate-tail rule looked dead from the outside — it now extracts FootFree._pound_rate_tail too and shouts on stderr instead of silently reporting nothing suppressed. Scan evidence, all on smoketest5 unless noted: 337 matches, 0 must-not violations; smoketest5shy 13; smoketest6 39 under "us". Corpus book diffs — Wool 76 -> 44 visible (32 quoted numbers gone, its one real 8" becomes the dimension 8" x 2"), Written In Bone 29 -> 22 (7 index entries gone, all 8 genuine 5ft/6ft heights kept), I Heard You Paint Houses 60 -> 57 (6' + 4" merged into 6' 4" = 1.93 m, two call numbers gone), Lee Miller 34 -> 33 (two bare 10" become 10" x 8" dimensions), Orbital 39 -> 39 with four range renderings corrected ("160 and 13 000 000 km" -> "170 000 000 km"), Manhunt 21/2 inches 53 cm -> 6 cm, 20,000 Leagues span widened to "one and three-quarter leagues", Two Years Before the Mast 143 -> 141, Voyage of the Beagle 642 -> 641 with its 40+ "and" ranges untouched, Moby Dick 161 -> 160, SPQR 42 -> 40. FULL CORPUS RE-SCAN, 226 books, every change accounted for: 9,467 -> 9,372 reader-visible matches. 98 suppressed outright (69 prime, 25 index/endnote, 1 runaway span, 3 by sense — Gulliver's "thirty pounds a year" and the two walking idioms), 66 CORRECTED IN PLACE, 3 newly appearing (the inches-by-inches dimensions), and NOTHING unexplained. Prime detections 91 -> 25, of which 23 are compound/dimension and all correct; the 2 residual bare false positives ("EC1’", "IG XI.4.756’") are both the documented under-fire direction of the quote-balance rule, where an apostrophe earlier in the paragraph balances the count. The in-place corrections are mostly ONE THING: 57 spans widened with the value unchanged, and 53 of those are the cookbook's "one and one-half inches" being underlined as "one-half inches" — the same extend_start fault as Verne and Darwin, and in Add/Convert mode it was writing "one and 4 cm" into the text 53 times in one book. The 7 value changes are the scaled-and ranges (Orbital x4, Gulliver, The Lost City of Z 500-and-180 000 km2 -> 700 000 km2, The Last Devil To Die) plus Manhunt's 21/2 inches. The income-rate rule earns exactly ONE correction: 9 of its 10 corpus hits were ALREADY suppressed by the existing cue table (usually "annum" or "income" in the same window), so its smoketest case had to be scrubbed of every other cue word — heading included, since crengine feeds heading text into prev_text — before it tested anything at all. (One book, The Bell Jar, reported "not-english" in the batch run and scanned identically to before in isolation: a known race in the sweep harness's language probe, not a plugin change.) SECOND BATCH, same audit, same cache: the 21 non-prime confirmed bugs. (a) INDEX AND ENDNOTE ENTRIES — the number-walk collects words backwards from the unit, and in an index the words behind it are page numbers ("amputation tattoos 279; foot" = 85 m). Four rules, one principle (the number must be ADJACENT to the unit), each measured corpus-wide with ZERO legitimate matches caught: a semicolon between them (6 hits), a BLOCK BREAK immediately before the unit word (13) — anchored at the unit so a <br/> inside a spelled compound, which is legitimate and is smoketest5 CH26 case E, cannot trip it — a sentence-ending period crossed on the way back (9, "30. Fathom" from a table of contents), and a non-alias word GLUED to the number ("8Katzmarzyk PT" = 3.8 litres; 28 corpus hits carry a glued letter run and exactly the 3 non-alias ones are wrong, the rest spelling lb/mph/ft/QT or the "x" of "10x10 feet"). (b) RUNAWAY SPANS — the compound "N feet M inches" walk glued numbers thousands of characters apart, producing a single 9,331-character "match" across most of a Moby Dick chapter and a 6,847 one in Two Years Before the Mast. Corpus median span is 11 characters and the 99.9th percentile is 41, so an 80-character cap is a backstop nothing real approaches: exactly 2 of 9,763 hits exceed it, and both are those runaways. (c) A COMPOUND NUMBER READ AS A RANGE — "one hundred and eight million miles" came out of Orbital as "160 and 13 000 000 km". The existing guard only recognised a SMALL second operand (n2 < 100); these carry a scale word of their own, so the test is now that n2's multiplier exceeds n1 ("two hundred and fifty thousand" = (200+50) x 1000, n1 200 < scale 1000), which leaves a genuine shared-scale range like "between one hundred and two hundred feet" alone. 7 corpus hits, all wrong, none of the 91 real "and" ranges near them. (d) AN ADDITIVE SPAN THAT STOPPED SHORT — extend_start validates a candidate with _parse_num, which is STRUCTURALLY unable to confirm the additive form: "one and three-quarter leagues" is 1.75 but _parse_num prefix-reads it as 1, which is exactly why _prev_num_words computes that value itself. So the test could never become true, the loop ran out, and the span fell back short — correct 8.4 km attached to two thirds of the phrase. Harmless in Underline mode; in Add/Convert it writes "one and 8.4 km" into the book. A second validator mirrors the additive branch (whole + fraction, exact hit only). Darwin's "thirteen and three-quarters British miles" is the same shape. (e) THE WALKING IDIOM — "one foot carefully placed in front of the other" (Fourth Wing) and "putting one foot steadily in front of the other" (Evicted): the "in front" cue is anchored at the start of next_text and could not see past the wedged-in adverb, so the whole phrase "in front of the other/next" is now matched unanchored, still inside the <=2 body-scale gate. (f) AN INCOME RATE — "thirty pounds a year", "twenty pounds per annum" read as weights. ADJACENCY is the whole rule and the reason this is its own list rather than three more _CURRENCY_PHRASES: 25 corpus pound matches have a rate phrase somewhere in their window and 8 of those are genuine weights ("ballooning up fifteen pounds in a month", "T. rex put on about 1,700 pounds per year"), and every one of them either separates the phrase from the unit or uses a DAILY/WEEKLY rate — so those two forms are absent and the phrase must open next_text. 10 hits then, all money. Worth one vote, so a genuine weight cue still ties and keeps. (The reader also suggested "got"; measured and REJECTED — of 16 pound matches with "got" nearby most are plain weights: lifted eighty pounds, dropped about ten pounds, went about 350 pounds, sixteen pounds of marijuana.) (g) AN ASCII TYPESET HALF — "21/2 inches above the clavicle" (Manhunt) read as 53 cm. The tight-U+2044 improper-numerator rule from cache 51 now also accepts a plain "/", but ONLY the improper form and only for denominators a fraction actually uses (2/3/4/8/16), so "12/25" and "10/12" stay dates. Together with the prime work above this corrects ~43 corpus detections. Covered by smoketest5 CH53 and 21 more headless cases; EXPECTED_TOTAL 332 -> 335. (67 was: two reader-flagged fixes. (1) Report #37 — "29,028 feet" (Everest) converted to "9 000 m". The conversion was right (8 847.7 m); smart rounding then flattened it, because plain metres at distance scale round within a 4% band REGARDLESS of source precision and 9 000 is only 1.72% away, so one significant figure swallowed a five-figure surveyed number. Distance targets (m/km) now floor the collapse at the source's own significant digits via _sig_digits, gated on `not _is_approx_num(n)` so an admittedly-round source still rounds hard: 29,028 ft -> 8 848 m and 511 ft -> 156 m (which the comment at the top of that section always CLAIMED happened), while 1,700 ft -> 500 m and 3,000 ft -> 900 m are unchanged. Ranges keep rounding coarse (force=true). (2) Reports #40/#41 — a closing curly quote after a digit read as inches: the call sign "Reach 18" came out as 46 cm. The existing guard only catches a quote after PUNCTUATION ("1836."); here a digit genuinely precedes the glyph, so the tell is an unmatched OPENING curly quote earlier in the context. Bare inches only — a spoken height ("5'10\"") carries a feet mark and is matched by the compound pattern, which never reaches this guard. Corpus-checked over 45 books before adding: 4 matches sit inside an open quotation, ALL FOUR citations or call signs, zero genuine measurements (one, "1913-1914\" -> -5 000 cm, was a live FP nobody had reported). (3) Reports #35/#36 — a foot as a BODY PART read as a distance. "had done so on two feet, and operated the door" = 60 cm: the "on/with <n> feet" idiom guard only covered the literal word "one", so it is now the whole ≤2 body scale (the "of" exception still protects a real "on two feet of packed snow"). "one foot is wrapped around the calf of her other leg" = 30 cm: every body-verb cue is anchored at the START of the following text and a copula sat in front of them all, so a leading is/was/were/are is now stripped before the cues run, and wrapp/hook/tuck/curl/propp/cross joined them (≤2-gated — "fifty feet wrapped around the post" is rope). Both were VM-confirmed STILL LIVE on a probe book before fixing, not assumed from the v59 report. Covered by smoketest5 CH50 and CH41; EXPECTED_TOTAL 321 -> 329. (66 was: the scan is now ONE PLAIN findAllText per unit alias for every book. It was a single 54-branch regex alternation, justified by "the cost is the per-call document walk, not the matching" — profiling says the opposite (2026-08-17, Lonesome Dove 366k words): plain search for "miles" 0.03s, regex \bmiles\b 0.52s for the IDENTICAL 177 hits, and the alternation grew ~0.08s per branch to 4.82s of a 5.0s scan. Its (?:\b|(?<=[0-9])) left anchor alone was 2.34s. 54 plain passes cost ~1.6s, so doing it 54 times is ~3x cheaper; plain search also needs no \b anchor, which is what let cache 65's bug exist (\b cannot see a soft hyphen where a letter would be). Equivalence was PROVEN before the switch, not assumed: 12 books both ways, both directions, every match set identical — smoketest5 321, smoketest6 39, smoketest5shy 13, Lonesome Dove 261. Measured end to end: Lonesome Dove 5.13s -> 2.43s, The End of Men 1.91s -> 0.69s, SPQR 16.6s -> 12.2s; tiny books pay slightly more (smoketest5 0.24s -> 0.28s) because each pass has a fixed cost. The regex path is DELETED rather than kept as a fallback: two paths that were supposed to agree and silently did not is exactly what produced cache 65, and only the unprofiled one had the hole. Shy books also stopped running the prime/°F regex passes unconditionally: they now answer "does this book contain 6'2\" or °F at all?" from the RAW FILE via metric_epub.probe_notation (tags stripped, entities decoded, any failure answers yes-to-everything) instead of from the 160s crengine read. 73% of a 45-book corpus contain neither, so most shy books now skip all 7. Controlled pair, same prose: lonesome-dove-shy 16.99s -> 2.74s against lonesome-dove 2.39s, both 261 matches; smoketest5shy still 13 with 0 passes, smoketest5 still 321 with 7 passes run (it does contain the notation). Shy-book ETA multiplier corrected 55x -> 8x. (65 was: soft-hyphen books. TWO fixes, both surfaced by profiling one novel against an 82k-soft-hyphen twin of itself (2026-08-17). (1) The shy path's adjacent-character boundary probe read exactly ONE character, and in these books that character is frequently the soft hyphen itself — not %a, so the guard passed and the "mi" alias matched inside longer words: "losing five mi|nutes" converted as "five mi" = 8 km, 48 times in one book. The probe now reads 4 characters and strips U+00AD before testing. (2) The whole-book getTextFromXPointers gate that decides whether to run the prime/°F literal passes cost 0.02s on the ordinary book and 159.95s on the shy twin — 98% of the entire scan, and it gated nothing: zero passes ran after it. Shy books now skip the gate and take the same branch as a failed gate read (run the passes unconditionally), the conservative direction: a wrong "skip" is silent lost prime/°F coverage, a wrong "run" is a few extra passes. (64 was: the year/decade possessive guard for a bare feet-mark ("2001's", "the 90's") ACTUALLY WORKS now. It shipped in 63 but was inert: it tested next_text for a leading "s", and crengine builds context word-by-word — "2001’s" is one token, so the possessive "s" is swallowed and next_text starts at " Ghosts of Mars". The test could never fire, so reports #11-13 (2001’ = 600 m) were still live; VM-verified 2026-08-07, 5 false positives in smoketest5 CH49. Now reads the actual next character from the document via _xpointer_offset, the same one-char xpointer read the mid-word guard below already uses (a genuine height reads a space there: "6’ wide"). (63 was: "square <unit>" now recognizes "league"/"leagues" (was missing from _AREA_CONV entirely — the "square" cue had nothing to convert with, so "twenty-three square leagues" was a total miss, report #10). "<count>-toed/-legged/-clawed/-pawed/etc. feet/foot" no longer reads as a distance — anatomy, not a measurement (report #9: "three-toed feet" was reading as 91 cm; the shared _parse_num word-number fallback treats a hyphen right after a number word as an ordinary compound-number boundary, the same mechanism that composes "twenty-three", so it doesn't distinguish "three-toed" from "twenty-three"). (62 was: shorthand height notation (issue #2) now recognizes curly/smart quotes ("6’2”"), not just straight ASCII/true-prime — most commercial EPUBs are typeset this way, which is why it looked entirely broken to the reporter. A digit-adjacent bare feet-mark ('/′/’) immediately followed by "s" is now read as a year/decade possessive or plural ("2001's", "the 90's"), not a height — closes the false positive in reports #11-13 ("2001's Ghosts of Mars" was reading as 2001 ft = 600 m). (61 was: bare "degrees" (no F/Fahrenheit qualifier) now converts as a Fahrenheit temperature when a nearby word suggests one (cold/hot/warm/chill/freez.../temperature/weather/humid/...); default is still to leave it alone (angle, rotation, proof, heading, latitude). Spelled "minus" before a number now negates it ("minus seventy degrees" = -70), matching the existing symbolic-dash handling. "N degrees below zero" is suppressed rather than mis-signed (residual — reports #14-33). (60 was: hyphenated adjectival "square <unit>" compounds ("a 250,000-square-foot room", "a three-million-square-foot cave") now detect as area — the "square" cue check missed the hyphen glue and fell through to the linear-foot factor, badly wrong and missing the ² (reports #22-24). (59 was: metric→imperial direction ("Preferred units": metric/us/uk; sidecars carry a direction field, matches can now target imperial compound formats). (58 was: hyphen-glued attributive fractions parse — "<ordinal>-of-a-<unit>-thick/long" reads as 1/denominator ("a third-of-a-mile-thick" = 540 m; "quarter-of-a" worked already via _WORD_NUMS, ordinals like "third" were nil because bare ordinals are ambiguous — the glued "-of-a" tail disambiguates). (57 was: bare-article "a million miles" (incl. "an hour"/"away" forms) suppressed as hyperbole — user-approved 2026-07-06, all 7 corpus hits figurative; digits and real multiples ("two million miles", "half a million miles") still convert. (56 was: URL path fragments never convert (digit/letter slash in matched_text — "178650/League" was 860 000 km); "N-foot-by-M-foot" dimension adjectives convert both sides ("twenty-foot-by-hundred-foot" = 6 × 30 m, was a bare 6 m). (55 was: shy-book plain passes enforce true \\b via adjacent-char probes on BOTH sides (plain-path contexts are word-based, so "15 mi|nutes"/"one kn|ows" looked clean and inflated matches 3-6x). (54 was: soft-hyphen books (U+00AD in the text) scan via per-alias PLAIN findAllText passes — the regex path returns span-shifted/missing hits in such books (The Rise and Fall of the Dinosaurs: "1,700 miles" never hit, "seven-ton" garbled). (53 was: new-test-books sweep fixes — em-dash/ellipsis glued to the number no longer defeats _prev_num_words ("too far—eleven feet six inches", "off course by…sixty miles", "park—four acres"); fused digit+unit forms hit via a digit lookbehind in _FAST_UNIT_PAT ("260lbs", "6ft"); banking vocabulary (bank/account/bills/untraceable) added to the soft-currency cues. (52 was: "for a mile" article cue (user-approved) + attributive-tail guard ("ran a mile RELAY" is a compound noun — the batch-2 motion-verb cues were wrongly converting it). (51 was: tight U+2044 fractions from sup/sub-span markup ("21⁄2-inch" = 2½, "13⁄16-inch" = 13/16 — improper-looking numerator reads as a mixed number, proper as a plain fraction). 50 was: corpus-sweep batch 2 follow-ups — prime matches re-check the coordinate/astronomy vocab on the tail of their own paragraph (the 5-word hit window missed "ABERRATION … is established 20″"); spaced U+2044 mixed fractions parse ("2 1 ⁄ 2 -inch plank" = 2.5); _prev_num_words' article-fraction tail requires both words ("half LONG" no longer reads 0.5, which spawned a bogus 0.5–1000 range eating "…a mile and a half long and 1000 ft. deep"). (49 was: batch 2 — FP guards for closing-quote/middle-dot/arcsecond; enumeration lists; ASCII mixed fractions; million; article-mile directional/motion cues; at-a-time ≤ 2; "<digit> of a mile" fraction guard. 48 was: foot-idiom positional cues gated ≤ 2.)))))
 local _REVERSE_VERSION = 2  -- v2: ordered originals per converted string (position-aware reverse lookup)
 
 -- ── Number prefixes ───────────────────────────────────────────────────────────
@@ -670,6 +670,7 @@ local _HARSH_TOLERANCE = 0.04   -- 4%
 local _HARSH_TARGETS = {
     cm = true, kg = true, g = true,
     ["km/h"] = true, km = true, liters = true, mL = true,
+    ["kW"] = true, ["kJ"] = true, ["kPa"] = true,
 }
 
 local function _round_to_int(v)
@@ -769,7 +770,8 @@ FootFree._IMPERIAL = {
     -- time), mph=mph, acres=acres.
     tags = { ftin=true, ["in"]=true, mi=true, lboz=true, oz=true,
              ["°F"]=true, vol=true, mph=true, acres=true,
-             sqft=true, sqmi=true, sqin=true },
+             sqft=true, sqmi=true, sqin=true,
+             hp=true, btu=true, psi=true },
 
     -- The user's preferred system: "metric" (default) | "us" | "uk".
     preferred = function()
@@ -858,6 +860,17 @@ FootFree._IMPERIAL = {
         ["kph"]                  = { factor=0.621371,  offset=0,  target="mph",   cat="speed" },
         ["meters per second"]    = { factor=2.23694,   offset=0,  target="mph",   cat="speed" },
         ["metres per second"]    = { factor=2.23694,   offset=0,  target="mph",   cat="speed" },
+        -- ── Energy (metric source → imperial target) ──────────────────────────
+        ["kilowatts"]            = { factor=1.34102,   offset=0,  target="hp",    cat="energy" },
+        ["kilowatt"]             = { factor=1.34102,   offset=0,  target="hp",    cat="energy" },
+        ["kW"]                   = { factor=1.34102,   offset=0,  target="hp",    cat="energy" },
+        ["kilojoules"]           = { factor=0.947817,  offset=0,  target="btu",   cat="energy" },
+        ["kilojoule"]            = { factor=0.947817,  offset=0,  target="btu",   cat="energy" },
+        ["kJ"]                   = { factor=0.947817,  offset=0,  target="btu",   cat="energy" },
+        -- ── Pressure (metric source → imperial target) ────────────────────────
+        ["kilopascals"]          = { factor=0.145038,  offset=0,  target="psi",   cat="pressure" },
+        ["kilopascal"]           = { factor=0.145038,  offset=0,  target="psi",   cat="pressure" },
+        ["kPa"]                  = { factor=0.145038,  offset=0,  target="psi",   cat="pressure" },
     },
 
     -- Longest-first, like _UNIT_SUFFIXES (suffix identification + shy-book
@@ -877,6 +890,8 @@ FootFree._IMPERIAL = {
         "kilometers an hour", "kilometres an hour",
         "meters per second", "metres per second",
         "degrees Celsius", "degrees centigrade", "centigrade", "Celsius",
+        "kilowatts", "kilowatt", "kilojoules", "kilojoule",
+        "kilopascals", "kilopascal",
         "millimeters", "millimetres", "millimeter", "millimetre",
         "centimeters", "centimetres", "centimeter", "centimetre",
         "kilometers", "kilometres", "kilometer", "kilometre",
@@ -887,7 +902,7 @@ FootFree._IMPERIAL = {
         -- AFTER kilometers/centimeters/millimeters: "meters" is a tail of all
         -- three, and _identify_unit takes the first tail match.
         "meters", "metres", "meter", "metre",
-        "km/h", "kph", "ml", "km", "cm", "mm", "kg", "m", "g",
+        "km/h", "kph", "kW", "kJ", "kPa", "ml", "km", "cm", "mm", "kg", "m", "g",
     },
 
     -- Eighth-inch fraction display for small lengths ("⅜ in", "1¼ in").
@@ -916,7 +931,8 @@ FootFree._IMPERIAL = {
         if not _smart_rounding_enabled() then
             local plain = { ftin = "ft", ["in"] = "in", mi = "mi", lboz = "lb",
                             oz = "oz", ["°F"] = "°F", mph = "mph", acres = "acres",
-                            sqft = "sq ft", sqmi = "sq mi", sqin = "sq in" }
+                            sqft = "sq ft", sqmi = "sq mi", sqin = "sq in",
+                            hp = "hp", btu = "BTU", psi = "psi" }
             if target == "vol" then
                 return _fmt(v * (uk and 0.219969 or 0.264172)) .. " gal"
             end
@@ -1010,6 +1026,12 @@ FootFree._IMPERIAL = {
             out = (r >= 10 and _fmt(_round_to_int(r)) or _fmt(r)) .. " sq mi"
         elseif target == "sqin" then
             out = _fmt(a) .. " sq in"
+        elseif target == "hp" then
+            out = _fmt(_round_to_int(a)) .. " hp"
+        elseif target == "btu" then
+            out = _fmt(_round_to_int(a)) .. " BTU"
+        elseif target == "psi" then
+            out = _fmt(_round_to_int(a)) .. " psi"
         else
             out = _fmt(a) .. " " .. tostring(target)
         end
@@ -1046,18 +1068,45 @@ local function _conv_foot_inch_to_m(text)
     return nil
 end
 
--- "6′9″" / "6'8"" / "6’9”" (curly, most commercial EPUBs) → metres.
--- The feet and inches figures may be separated by a single space: "I was 6' 4"."
--- is how I Heard You Paint Houses sets every height in the book, and without the
--- optional space it split into a bare 6' and a bare 4" — two matches, neither of
--- them the height, and both of them landing in the bare-prime guards below.
+-- "6′9″" / "6'8"" / "6'8½"" / "6'8" → metres. Handles the typographic
+-- apostrophe (') and the closing double quote (") as marks. The inches half
+-- may carry a decimal or a vulgar fraction ("6'8½"" = 8.5 in). The inches
+-- value must be < 12, so a bare trailing number that isn't really inches
+-- ("6'140") can't become a bogus height.
+-- Prime/quote marks for the literal passes. Feet: ASCII ', U+2019 ', U+2032 ′.
+-- Inches: ASCII ", U+201D ", U+2033 ″. (U+201C is an OPENING quote — never a
+-- measure — so it stays out.) Held in ONE class-attached table (the chunk sits
+-- near LuaJIT's 200-locals ceiling; no top-level helper slots to spare). The
+-- U+2019/U+201D curly marks here subsume upstream's _CAPOS/_CDQ handling.
+local _PRIME_MARKS = {}
+do
+    local alts = {}
+    for k in pairs(_VULGAR_FRAC) do alts[#alts + 1] = k end
+    _PRIME_MARKS.vfrac   = "(" .. table.concat(alts, "|") .. ")"
+    _PRIME_MARKS.ft      = "('|\226\128\153|\226\128\178)"
+    _PRIME_MARKS.in_mark = "(\"|\226\128\157|\226\128\179)"
+    _PRIME_MARKS.rsquote = "\226\128\153"   -- ' U+2019
+    _PRIME_MARKS.rdquote = "\226\128\157"   -- " U+201D
+end
+
 local function _conv_prime_to_m(text)
     local clean = _display(text)
-    local f, i = clean:match("^([0-9]+)" .. _PRIME .. "%s?([0-9]+)")
-    if not f then f, i = clean:match("^([0-9]+)'%s?([0-9]+)") end
-    if not f then f, i = clean:match("^([0-9]+)" .. FootFree._CAPOS .. "%s?([0-9]+)") end
-    if f and i then
-        return _fmt_height(tonumber(f) * 0.3048 + tonumber(i) * 0.0254) .. " m"
+    local f = clean:match("^([0-9][0-9.,]*)")
+    if not f then return nil end
+    local rest = clean:sub(#f + 1):gsub("^%s*", "")
+    local mk = 0
+    if rest:sub(1, 1) == "'" then mk = 1
+    elseif rest:sub(1, 3) == _PRIME_MARKS.rsquote then mk = 3
+    elseif rest:sub(1, 3) == _PRIME then mk = 3
+    else return nil end
+    local i = rest:sub(mk + 1)
+    for _, inch in ipairs({ '"', _PRIME_MARKS.rdquote, _DPRIME }) do
+        if i:sub(-#inch) == inch then i = i:sub(1, -#inch - 1); break end
+    end
+    local ft = _parse_num(f)
+    local in_ = _parse_num(i)
+    if ft and in_ and in_ < 12 then
+        return _fmt_height(ft * 0.3048 + in_ * 0.0254) .. " m"
     end
     return nil
 end
@@ -1105,10 +1154,13 @@ end
 -- "4′ × 2″" / "4' × 2"" dimension → "1.2 m by 5.1 cm"
 local function _conv_dim_to_m_cm(text)
     local clean = _display(text)
-    local f = clean:match("^([0-9]+)")
-    local i = clean:match(".*[^0-9]([0-9]+)")
+    local f = clean:match("^([0-9][0-9.,]*)")
+    local i = clean:match(".*[^0-9]([0-9][0-9.,]*)")
     if f and i then
-        return _fmt(tonumber(f) * 0.3048) .. " m by " .. _fmt(tonumber(i) * 2.54) .. " cm"
+        local nf, ni = _parse_num(f), _parse_num(i)
+        if nf and ni then
+            return _fmt(nf * 0.3048) .. " m by " .. _fmt(ni * 2.54) .. " cm"
+        end
     end
     return nil
 end
@@ -1237,6 +1289,12 @@ local _UNIT_CONV_UK = {
     ["fluid ounces"] = { factor=28.4131,  offset=0, target="mL", cat="volume" },
     ["fluid ounce"]  = { factor=28.4131,  offset=0, target="mL", cat="volume" },
     ["fl oz"]        = { factor=28.4131,  offset=0, target="mL", cat="volume" },
+    ["gills"]        = { factor=0.142065, offset=0, target="liters", cat="volume" },
+    ["gill"]         = { factor=0.142065, offset=0, target="liters", cat="volume" },
+    -- Long/imperial ton (2240 lb). The UK flavor's volumes/long ton are always
+    -- on for en-GB books (same mechanism as gallons).
+    ["tons"]         = { factor=1016.05,  offset=0, target="kg", cat="weight" },
+    ["ton"]          = { factor=1016.05,  offset=0, target="kg", cat="weight" },
 }
 
 -- ── Pounds context classifier (weight vs. £ currency) ────────────────────────
@@ -1423,6 +1481,33 @@ local function _pound_currency_wins(window, num, rate_tail)
     return cscore > wscore
 end
 
+-- Ton classifier: is "N tons" a real weight, or the figurative "a lot"? Mirrors
+-- the pound classifier's weighted-decision shape. The "ton(s)" word itself is
+-- deliberately NOT a weight cue (it would tie every case). `window` is the
+-- lowercased prev+next context. A hard register-tonnage cue (ship volume, not
+-- mass) means not a weight, full stop. Class-attached (not a chunk local): the
+-- chunk sits near LuaJIT's 200-locals ceiling — same convention as _IMPERIAL.
+FootFree._TON = {}
+FootFree._TON.figure = {
+    fun=true, work=true, trouble=true, stuff=true, things=true,
+    bricks=true, paperwork=true, people=true, food=true, times=true,
+    worry=true, worries=true, ideas=true, advice=true, nonsense=true,
+}
+FootFree._TON.tonnage = { tonnage=true, displacement=true, deadweight=true }
+FootFree._TON.wins = function(window, num)
+    if window:find("tonnage") or window:find("displacement")
+       or window:find("deadweight") then return true end
+    local fscore, wscore = 0, 0
+    for word in window:gmatch("%a+") do
+        if FootFree._TON.figure[word] then fscore = fscore + 1 end
+        if _WEIGHT_WORDS[word] and word ~= "ton" and word ~= "tons"
+           and word ~= "tonne" and word ~= "tonnes" then
+            wscore = wscore + 1
+        end
+    end
+    return fscore > wscore
+end
+
 -- ── Bare "degrees" temperature cue classifier ───────────────────────────────
 -- Bare "degrees" (no °F/°C, no "Fahrenheit"/"Celsius") is genuinely ambiguous
 -- in prose — angle ("banked forty degrees"), rotation, alcohol proof, compass
@@ -1553,6 +1638,9 @@ local _CAT_ICONS = {
     volume      = "volume",
     speed       = "speed",
     area        = "length",   -- no separate area icon; length is the closest
+    time        = "length",   -- fallback icon for time units
+    energy      = "speed",    -- closest available icon
+    pressure    = "temp",     -- closest available icon
 }
 
 local _SIDECAR_DIR         = DataStorage:getDataDir() .. "/footcream"
@@ -2069,8 +2157,9 @@ local _LOADER_PX  = 28            -- on-screen size before DPI scaling
 -- How long our corner ring yields to KOReader's own re-render bar before
 -- drawing beside it again. Long enough to cover a full-book re-render after an
 -- in-text convert; short enough that a stuck rendering_state can't hide our
--- progress for a whole session.
-local _RENDER_YIELD_S = 60
+-- progress for a whole session. On the class, not a chunk local: merged with
+-- the fork's additions, main.lua sits at Lua's 200-locals-per-chunk ceiling.
+FootFree._RENDER_YIELD_S = 60
 -- How a scan-and-convert divides the ONE ring the reader sees. Each leg gets a
 -- slice and only the last is allowed to close the circle, so the ring never
 -- appears to finish and restart. Grouped in a table rather than as three
@@ -2659,6 +2748,12 @@ local function _apply_settings_to_matches(matches, distinguish_pounds, use_uk_vo
                     keep = false
                 end
             end
+            -- Tons: figurative ("tons of fun", "a ton of work") and ship
+            -- register-tonnage are not weights.
+            if mt:find("ton") then
+                local window = ((r.prev_text or "") .. " " .. (r.next_text or "")):lower()
+                if FootFree._TON.wins(window, r._num) then keep = false end
+            end
         end
 
         if keep then table.insert(result, r) end
@@ -2698,6 +2793,36 @@ local _UNIT_CONV = {
     -- historical and fantasy prose ("three hundred cubits").
     ["cubits"]            = { factor=0.4572,   offset=0,       target="m",    cat="length"      },
     ["cubit"]             = { factor=0.4572,   offset=0,       target="m",    cat="length"      },
+    -- Historical/archaic English units from epic-fantasy & classic fiction
+    -- (upstream issue #3): cloth, distance and horse-height measures. The short
+    -- spellings (span/rod/pole/ell/hand/pace) are ordinary English words, so
+    -- they sit in FootFree._GATED_UNITS and need a book cluster + a literal
+    -- digit before they convert; perch/chain (5 letters, fish / common noun)
+    -- are gated the same way via _GATED_LONG. Values are the common English
+    -- standards, approximate where the unit varied by time/region.
+    -- 1 span = 9 in (quarter yard).
+    ["spans"]             = { factor=0.2286,   offset=0,       target="m",    cat="length"      },
+    ["span"]              = { factor=0.2286,   offset=0,       target="m",    cat="length"      },
+    -- 1 rod = 1 pole = 1 perch = 5.5 yd = 16.5 ft.
+    ["rods"]              = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["rod"]               = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["poles"]             = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["pole"]              = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["perches"]           = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    ["perch"]             = { factor=5.0292,   offset=0,       target="m",    cat="length"      },
+    -- 1 chain = 22 yd = 66 ft (surveying; "twenty chains of road").
+    ["chains"]            = { factor=20.1168,  offset=0,       target="m",    cat="length"      },
+    ["chain"]             = { factor=20.1168,  offset=0,       target="m",    cat="length"      },
+    -- 1 (English) ell = 45 in. Scottish/Flemish ells were shorter.
+    ["ells"]              = { factor=1.143,    offset=0,       target="m",    cat="length"      },
+    ["ell"]               = { factor=1.143,    offset=0,       target="m",    cat="length"      },
+    -- 1 hand = 4 in (horse height: "fifteen hands tall").
+    ["hands"]             = { factor=0.1016,   offset=0,       target="m",    cat="length"      },
+    ["hand"]              = { factor=0.1016,   offset=0,       target="m",    cat="length"      },
+    -- 1 pace ≈ 30 in (the ordinary walking pace). Some sources use the Roman
+    -- pace (5 ft); the common English pace is the safer default for prose.
+    ["paces"]             = { factor=0.762,    offset=0,       target="m",    cat="length"      },
+    ["pace"]              = { factor=0.762,    offset=0,       target="m",    cat="length"      },
     ["pounds"]            = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
     ["pound"]             = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
     ["lbs"]               = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
@@ -2706,6 +2831,25 @@ local _UNIT_CONV = {
     ["ounce"]             = { factor=28.3495,  offset=0,       target="g",    cat="weight"      },
     ["oz"]                = { factor=28.3495,  offset=0,       target="g",    cat="weight"      },
     ["stone"]             = { factor=6.35029,  offset=0,       target="kg",   cat="weight"      },
+    -- Short ton (US) 2000 lb. The long/imperial ton (2240 lb) and the metric
+    -- tonne live in _UNIT_CONV_UK / _IMPERIAL.conv respectively. TONS were
+    -- deliberately absent for years (README note): the word doubles as a
+    -- figurative "a lot" and as ship register-tonnage. A _ton_figurative_wins
+    -- classifier now suppresses those senses; see _apply_settings_to_matches.
+    ["tons"]              = { factor=907.185,  offset=0,       target="kg",   cat="weight"      },
+    ["ton"]               = { factor=907.185,  offset=0,       target="kg",   cat="weight"      },
+    -- Gem/precious-metal weight: 1 carat = 0.2 g. "N-karat" gold fineness
+    -- (spelled with a k) is never matched; "N carat gold" (fineness, spelled
+    -- with a c) is suppressed by a gold-context guard in _finishScan.
+    ["carats"]            = { factor=0.2,      offset=0,       target="g",    cat="weight"      },
+    ["carat"]             = { factor=0.2,      offset=0,       target="g",    cat="weight"      },
+    -- Russian pre-metric units, common in translated 19th-c. prose.
+    ["versts"]            = { factor=1.0668,   offset=0,       target="km",   cat="length"      },
+    ["verst"]             = { factor=1.0668,   offset=0,       target="km",   cat="length"      },
+    ["arshins"]           = { factor=0.7112,   offset=0,       target="m",    cat="length"      },
+    ["arshin"]            = { factor=0.7112,   offset=0,       target="m",    cat="length"      },
+    ["poods"]             = { factor=16.3805,  offset=0,       target="kg",   cat="weight"      },
+    ["pood"]              = { factor=16.3805,  offset=0,       target="kg",   cat="weight"      },
     ["°F"]                = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
     ["degrees Fahrenheit"]= { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
     ["degrees F"]         = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
@@ -2726,32 +2870,244 @@ local _UNIT_CONV = {
     ["fluid ounces"]      = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
     ["fluid ounce"]       = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
     ["fl oz"]             = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
+    ["gills"]             = { factor=0.118294, offset=0,       target="liters", cat="volume"    },
+    ["gill"]              = { factor=0.118294, offset=0,       target="liters", cat="volume"    },
     ["mph"]               = { factor=1.60934,  offset=0,       target="km/h", cat="speed"       },
     ["miles per hour"]    = { factor=1.60934,  offset=0,       target="km/h", cat="speed"       },
     ["miles an hour"]     = { factor=1.60934,  offset=0,       target="km/h", cat="speed"       },
     ["knots"]             = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
     ["knot"]              = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
     ["kn"]                = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
+    -- ── Energy ──────────────────────────────────────────────────────────────
+    ["horsepower"]        = { factor=0.745700, offset=0,       target="kW",   cat="energy"      },
+    ["horse power"]       = { factor=0.745700, offset=0,       target="kW",   cat="energy"      },
+    ["hp"]                = { factor=0.745700, offset=0,       target="kW",   cat="energy"      },
+    ["BTUs"]              = { factor=1.05506,  offset=0,       target="kJ",   cat="energy"      },
+    ["BTU"]               = { factor=1.05506,  offset=0,       target="kJ",   cat="energy"      },
+    ["British thermal units"] = { factor=1.05506, offset=0,    target="kJ",   cat="energy"      },
+    ["British thermal unit"]  = { factor=1.05506, offset=0,    target="kJ",   cat="energy"      },
+    -- Food "calories" (kilocalories) → kilojoules.
+    ["calories"]          = { factor=4.184,    offset=0,       target="kJ",   cat="energy"      },
+    ["calorie"]           = { factor=4.184,    offset=0,       target="kJ",   cat="energy"      },
+    -- ── Pressure ─────────────────────────────────────────────────────────────
+    ["psi"]               = { factor=6.89476,  offset=0,       target="kPa",  cat="pressure"    },
+    ["pounds per square inch"] = { factor=6.89476, offset=0,   target="kPa",  cat="pressure"    },
+    ["atmospheres"]       = { factor=101.325,  offset=0,       target="kPa",  cat="pressure"    },
+    ["atmosphere"]        = { factor=101.325,  offset=0,       target="kPa",  cat="pressure"    },
+    ["atm"]               = { factor=101.325,  offset=0,       target="kPa",  cat="pressure"    },
+    ["mmHg"]              = { factor=0.133322, offset=0,       target="kPa",  cat="pressure"    },
+    ["millimeters of mercury"] = { factor=0.133322, offset=0,  target="kPa",  cat="pressure"    },
+    ["millimeter of mercury"]  = { factor=0.133322, offset=0,  target="kPa",  cat="pressure"    },
     ["acres"]             = { converter=_conv_acres_to_ha,     target="ha",   cat="area"        },
     ["acre"]              = { converter=_conv_acres_to_ha,     target="ha",   cat="area"        },
+    -- ── Asian Distance ──────────────────────────────────────────────────────
+    ["li"]                 = { factor=500,     offset=0, target="m",      cat="length"      },
+    ["zhang"]              = { factor=3.3333,  offset=0, target="m",      cat="length"      },
+    ["chi"]                = { factor=0.3333,  offset=0, target="m",      cat="length"      },
+    ["cun"]                = { factor=0.0333,  offset=0, target="m",      cat="length"      },
+    ["ri"]                 = { factor=3927,    offset=0, target="m",      cat="length"      }, -- Japanese ri (~3.927 km)
+    ["cho"]                = { factor=109.09,  offset=0, target="m",      cat="length"      },
+    ["ken"]                = { factor=1.818,   offset=0, target="m",      cat="length"      },
+    ["shaku"]              = { factor=0.3030,  offset=0, target="m",      cat="length"      },
+    ["sun"]                = { factor=0.0303,  offset=0, target="m",      cat="length"      },
+    ["jang"]               = { factor=3.03,    offset=0, target="m",      cat="length"      }, -- Korean jang
+    ["cheok"]              = { factor=0.303,   offset=0, target="m",      cat="length"      },
+    ["chon"]               = { factor=0.0303,  offset=0, target="m",      cat="length"      },
+    -- ── Asian Weight ────────────────────────────────────────────────────────
+    ["jin"]                = { factor=0.5,     offset=0, target="kg",     cat="weight"      },
+    ["liang"]              = { factor=0.05,    offset=0, target="kg",     cat="weight"      },
+    ["qian"]               = { factor=0.005,   offset=0, target="kg",     cat="weight"      },
+    ["kan"]                = { factor=3.75,    offset=0, target="kg",     cat="weight"      },
+    -- ── Asian Area ──────────────────────────────────────────────────────────
+    ["mu"]                 = { factor=666.67,  offset=0, target="m²",     cat="area"        },
+    ["tsubo"]              = { factor=3.3058,  offset=0, target="m²",     cat="area"        },
+    ["pyeong"]             = { factor=3.3058,  offset=0, target="m²",     cat="area"        },
+    ["tan"]                = { factor=991.7,   offset=0, target="m²",     cat="area"        },
+    -- ── Asian Volume ────────────────────────────────────────────────────────
+    ["sho"]                = { factor=1.8039,  offset=0, target="liters", cat="volume"      },
+    ["go"]                 = { factor=0.18039, offset=0, target="liters", cat="volume"      },
+    ["koku"]               = { factor=180.39,  offset=0, target="liters", cat="volume"      },
+    -- ── Traditional Chinese Time ────────────────────────────────────────────
+    ["shichen"]            = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["geng"]               = { factor=144,     offset=0, target="min",    cat="time"        }, -- 2.4 hours
+    ["dian"]               = { factor=24,      offset=0, target="min",    cat="time"        },
+    ["ke"]                 = { factor=15,      offset=0, target="min",    cat="time"        },
+    -- Pinyin 時辰 appellations rendered in English ("Shen Hour", "Chou Hour",
+    -- ...) — each named period is ONE 2-hour shichen. These appear WITHOUT a
+    -- count ("the Shen Hour"), so they're matched by the _SHICHEN_PATS literal
+    -- pass (converter always yields the fixed 2 h), not the fast path. The
+    -- entries below keep the unit table / category list complete. Values
+    -- mirror "shichen" (120 min).
+    ["Zi Hour"]            = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Tzu Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Chou Hour"]          = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Ch'u Hour"]          = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Yin Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Mao Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Mou Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Chen Hour"]          = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Ch'en Hour"]         = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Ssu Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Szu Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Si Hour"]            = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Wu Hour"]            = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Wou Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Wei Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Shen Hour"]          = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Yu Hour"]            = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["You Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Yiu Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Hsu Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Xu Hour"]            = { factor=120,     offset=0, target="min",    cat="time"        },
+    ["Hai Hour"]           = { factor=120,     offset=0, target="min",    cat="time"        },
+    -- English renderings of the generic/ 更/點/刻 units, ridden by the FAST
+    -- path (they need a count: "three Watch"). Capitalized on purpose so
+    -- ordinary "hour"/"ke" never match. "Ke" (capitalized) identifies as the
+    -- existing lowercase "ke" above.
+    ["Hour"]               = { factor=120,     offset=0, target="min",    cat="time"        }, -- = shichen
+    ["Watch"]              = { factor=144,     offset=0, target="min",    cat="time"        }, -- = geng
+    ["Mark"]               = { factor=24,      offset=0, target="min",    cat="time"        }, -- = dian
 }
+
+-- Ambiguous short units, gated in _finishScan against false positives. Two
+-- groups share the same CLUSTER + DIGIT-ONLY rules:
+--   * transliteration units (Chinese/Japanese/Korean pre-metric) — the short
+--     spellings are ordinary English words ("in one go", "get a tan", "the
+--     sun"), so a stray hit in a normal book is almost certainly a false
+--     positive.
+--   * historical/fantasy English units (span, rod, pole, ell, hand, pace) —
+--     the same everyday-word problem ("life span", "fishing rod", "two hands
+--     of cards").
+-- CLUSTER: a gated unit only converts when the book shows ≥2 DISTINCT gated
+-- units anywhere in it (a genuine wuxia/Japanese/Korean/historical-fantasy
+-- book mixes several; an ordinary English book never does). DIGIT-ONLY: the
+-- number must be literally written ("10 li", "5 span"), so spelled-number
+-- idioms ("one go", "a tan", "two hands") structurally never convert.
+-- Longer, unambiguous spellings ("shichen", "zhang", "koku", "tsubo", "cubit")
+-- convert freely — the momentum here is FP-suppression, not recall.
+-- Then held on the CLASS (not a chunk local): the chunk sits near LuaJIT's
+-- 200-locals ceiling — same convention as FootFree._TON below.
+FootFree._GATED_UNITS = {
+    li = true, zhang = true, chi = true, cun = true, ri = true, cho = true,
+    ken = true, shaku = true, sun = true, jang = true, cheok = true, chon = true,
+    jin = true, liang = true, qian = true, kan = true,
+    mu = true, tsubo = true, pyeong = true, tan = true,
+    sho = true, go = true, koku = true,
+    shichen = true, geng = true, dian = true, ke = true,
+    -- Historical/fantasy English units (short homographs):
+    span = true, rod = true, pole = true, ell = true, hand = true, pace = true,
+    -- English renderings of 時辰/點 (capitalized; "the third Hour"/"seven
+    -- Mark" are ambiguous without a book cluster):
+    Hour = true, Mark = true,
+}
+-- 5-letter historical units that are also ordinary English words (perch =
+-- fish, chain = everyday noun). Longer than the ≤4 "short" rule, so flagged
+-- here to receive the same cluster+digit gate.
+FootFree._GATED_LONG = { perch = true, chain = true, Watch = true }
+
+-- Opt-in UNIT PACKAGES (see FootFree._pkg_enabled). The gated units above are
+-- split into two user-activatable packages so people who never read wuxia or
+-- epic fantasy can leave them off entirely — no scan time, no false positives.
+-- Each package owns a set of unit cores (already-stripped of a trailing "s",
+-- matching the `core()` used by the cluster filter below). The per-alias scan
+-- loop skips any suffix whose core is in a disabled package, and the pinyin
+-- 時辰 period pass is gated by the asian package. The CLUSTER+DIGIT gate still
+-- runs INSIDE an enabled package — it is a second, narrower defense, not a
+-- substitute for the opt-in toggle.
+FootFree._PKG_UNITS = {
+    asian = {
+        li = true, zhang = true, chi = true, cun = true, ri = true, cho = true,
+        ken = true, shaku = true, sun = true, jang = true, cheok = true, chon = true,
+        jin = true, liang = true, qian = true, kan = true,
+        mu = true, tsubo = true, pyeong = true, tan = true,
+        sho = true, go = true, koku = true,
+        shichen = true, geng = true, dian = true, ke = true,
+        Hour = true, Mark = true,
+    },
+    fantasy = {
+        span = true, rod = true, pole = true, ell = true, hand = true, pace = true,
+        perch = true, chain = true, Watch = true,
+    },
+}
+-- Reverse lookup: unit core -> package name. A unit is in at most one package.
+FootFree._UNIT_PKG = {}
+for _pkg, _set in pairs(FootFree._PKG_UNITS) do
+    for _u in pairs(_set) do
+        FootFree._UNIT_PKG[_u] = _pkg
+    end
+end
+-- Unit cores that are gated by a package (any package). Lets the per-alias
+-- loop test membership without consulting each package every iteration.
+FootFree._PKG_GATED = {}
+for _u in pairs(FootFree._UNIT_PKG) do
+    FootFree._PKG_GATED[_u] = true
+end
 
 -- Longest-first so "miles per hour" matches before "miles", etc.
 local _UNIT_SUFFIXES = {
+    -- Asian & Traditional Chinese Units (strictly longest-first; single
+    -- tokens — the pattern's \b anchors supply the word boundaries)
+    "shichen",
+    "pyeong",
+    "tsubo",
+    "liang",
+    "zhang",
+    "cheok",
+    "shaku",
+    "chon",
+    "geng",
+    "dian",
+    "qian",
+    "jang",
+    "koku",
+    "chi",
+    "cun",
+    "cho",
+    "jin",
+    "kan",
+    "ken",
+    "sun",
+    "tan",
+    "sho",
+    "ri",
+    "li",
+    "mu",
+    "go",
+    "ke",
+    -- Existing units...
     "degrees Fahrenheit", "degrees F", "degrees",
     "nautical miles", "nautical mile",
+    "British thermal units", "British thermal unit",
+    "pounds per square inch",
+    "millimeters of mercury", "millimeter of mercury",
     "fluid ounces", "fluid ounce",
     "miles per hour", "miles an hour",
+    -- English renderings of 時辰/更/點/刻 (capitalized so clock "hour" and the
+    -- "ke" syllable never match). Placed AFTER "* per hour"/"* an hour" so
+    -- _identify_unit (first-tail-match wins) never shadows "miles per hour"
+    -- with the generic "Hour". The named periods ("Shen Hour") are matched by
+    -- the _SHICHEN_PATS literal pass instead, since they appear without a
+    -- count.
+    "Hour", "Watch", "Mark", "Ke",
+    "horse power", "horsepower",
     "fl oz", "fathoms", "fathom", "furlongs", "furlong",
     "leagues", "league",
     "gallons", "gallon", "quarts", "quart",
     "cubits", "cubit",
+    "chains", "chain", "perches", "perch", "spans", "span",
+    "hands", "hand", "poles", "pole", "rods", "rod",
+    "paces", "pace", "ells", "ell",
     "knots", "knot", "pounds", "pound",
     "ounces", "ounce", "pints", "pint",
+    "carats", "carat", "tons", "ton",
+    "versts", "verst", "arshins", "arshin",
+    "poods", "pood", "gills", "gill",
     "acres", "acre", "stone", "yards", "yard",
     "miles", "mile", "feet", "foot", "inches", "inch",
+    "atmospheres", "atmosphere", "calories", "calorie",
     "yds", "yd", "lbs", "lb", "nmi", "gal",
-    "mph", "kn", "ft", "mi", "oz", "pt", "qt", "°F",
+    "BTUs", "BTU", "mmHg", "atm",
+    "mph", "kn", "ft", "mi", "oz", "pt", "qt", "psi", "hp", "°F",
 }
 
 local function _identify_unit(text, list)
@@ -2938,11 +3294,11 @@ end
 -- BEFORE the number — for idioms like "own two feet" / "with one foot" — strip
 -- the trailing number word(s) first, then return the last remaining word.
 local function _word_before_number(prev)
-    local p = (prev or ""):gsub("%s+$", "")
+    local p = (prev or ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
     while true do
         local w = p:match("([%w]+)%s*$")
         if w and _is_number_word(w) then
-            p = p:gsub("[%w]+%s*$", ""):gsub("%s+$", "")
+            p = p:gsub("[%w]+%s*$", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
         else
             break
         end
@@ -2967,7 +3323,7 @@ local function _prev_num_words(prev)
     -- here — neither joins compound numbers, and _detect_back_range matches
     -- its em-dash range connector on the RAW prev before this ever runs.
     -- (The en-dash is left alone: it IS a range connector glyph.)
-    s = s:gsub("\226\128\148", " "):gsub("\226\128\166", " "):gsub("%s+$", "")
+    s = s:gsub("\226\128\148", " "):gsub("\226\128\166", " "):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
     -- Fractional "<frac> of a/an [unit]" form ("two thirds of a mile"): the
     -- word-walk below can't cross "of", so handle it up front. The fraction is
     -- the word(s) just before "of a/an"; _parse_num knows these (e.g. prefix
@@ -3550,7 +3906,7 @@ local _VAGUE_ORDER = {
 -- is a BARE multiplier ("a few hundred", not "a few two hundred") preceded by a
 -- vague quantifier — so precise amounts ("two hundred pounds") are untouched.
 local function _detect_vague(prev)
-    local p = (prev or ""):lower():gsub("%s+$", "")
+    local p = (prev or ""):lower():gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
     local mword = p:match("([%a]+)$")
     local mult = mword and _VAGUE_MULTIPLIERS[mword]
     if not mult then return nil end
@@ -3624,30 +3980,62 @@ local function _is_coordinate(prev, nxt)
     return false
 end
 
--- Prime/apostrophe notation (6′8″, 3″, 5'11", 4′ × 2″) isn't anchored on a unit
--- word, so these run as literal findAllText passes rather than riding the
--- alias search. Ordered longest-first so the feet+inches form claims "6′8″"
--- before the bare feet/inches forms.
---
--- `pre` is the shared leading number and `suf` the part that differs, because
--- the whole GROUP runs as ONE findAllText alternation (`pre(suf1|suf2|…)`)
--- rather than one pass per entry — see run_passes. Alternation here is
--- leftmost-first, so keeping the entries longest-first preserves exactly the
--- precedence the separate passes had.
 local _PRIME_PATS = {
     pre = _ND,
     needs_left_char = true,
     -- 4′ × 2″  (feet × inches)
-    { suf = "(".._PRIME.."|'|"..FootFree._CAPOS..")[ ]*".._TIMES.."[ ]*[0-9]+(".._DPRIME.."|\"|"..FootFree._CDQ..")",
+    { suf = _PRIME_MARKS.ft.."[ ]*".._TIMES.."[ ]*[0-9][0-9.,]*".._PRIME_MARKS.in_mark,
       converter = _conv_dim_to_m_cm, target = "m×cm", cat = "length" },
     -- 10″ × 8″  (inches × inches)
-    { suf = "(".._DPRIME.."|\"|"..FootFree._CDQ..")[ ]*".._TIMES.."[ ]*[0-9]+(".._DPRIME.."|\"|"..FootFree._CDQ..")",
+    { suf = _PRIME_MARKS.in_mark.."[ ]*".._TIMES.."[ ]*[0-9][0-9.,]*".._PRIME_MARKS.in_mark,
       converter = _conv_dim_cm_cm, target = "cm×cm", cat = "length" },
-    -- 6′8″ and the spaced 6′ 8″
-    { suf = "(".._PRIME.."|'|"..FootFree._CAPOS..")[ ]?[0-9]+(".._DPRIME.."|\"|"..FootFree._CDQ..")",
+    -- 6′8″, 6′ 8″ and 6′ 8½″ (with optional vulgar fraction)
+    { suf = _PRIME_MARKS.ft.."[ ]*[0-9][0-9.,]*".._PRIME_MARKS.vfrac.."?".._PRIME_MARKS.in_mark,
       converter = _conv_prime_to_m, target = "m", cat = "length" },
-    { suf = "(".._PRIME.."|'|"..FootFree._CAPOS..")",   factor = 0.3048, offset = 0, target = "m",  cat = "length" },
-    { suf = "(".._DPRIME.."|\"|"..FootFree._CDQ..")", factor = 2.54,   offset = 0, target = "cm", cat = "length" },
+    { suf = _PRIME_MARKS.ft.."[0-9][0-9.,]*",
+      converter = _conv_prime_to_m, target = "m", cat = "length" },
+    { suf = _PRIME_MARKS.ft,   factor = 0.3048, offset = 0, target = "m",  cat = "length" },
+    { suf = _PRIME_MARKS.in_mark,   factor = 2.54,   offset = 0, target = "cm", cat = "length" },
+}
+
+-- Pinyin 時辰 appellations rendered in English — each named period is ONE
+-- 2-hour shichen, and in prose it appears WITHOUT a count ("the Shen Hour",
+-- "during the Chou Hour"), so it can't ride the fast path (which requires a
+-- number). These run as their own findAllText pass instead, always converting
+-- to the fixed 2 h (120 min). Capitalized on purpose: lowercase "hour" is the
+-- ordinary 60-minute word and must never match. Romanizations are broad —
+-- translators mix pinyin (Shen, Xu, You) and Wade-Giles (Ch'en, Hsu, Yu).
+FootFree._SHICHEN_HOURS = {
+    "Zi Hour", "Tzu Hour",
+    "Chou Hour", "Ch'u Hour",
+    "Yin Hour",
+    "Mao Hour", "Mou Hour",
+    "Chen Hour", "Ch'en Hour",
+    "Ssu Hour", "Szu Hour", "Si Hour",
+    "Wu Hour", "Wou Hour",
+    "Wei Hour",
+    "Shen Hour",
+    "Yu Hour", "You Hour", "Yiu Hour",
+    "Hsu Hour", "Xu Hour",
+    "Hai Hour",
+}
+-- Any named shichen is a single 2-hour period; the value is fixed regardless
+-- of an ordinal article before it ("the third Shen Hour" is still the Shen
+-- period = 2 h, not three).
+FootFree._conv_shichen = function(text)
+    local clean = _display(text):lower():gsub("^%s+", ""):gsub("%s+$", "")
+    for _, name in ipairs(FootFree._SHICHEN_HOURS) do
+        if clean == name:lower() then
+            return _fmt_dist(120, "min")
+        end
+    end
+    return nil
+end
+FootFree._SHICHEN_PATS = {
+    pre = "",
+    { suf = "\\b(" .. table.concat(FootFree._SHICHEN_HOURS, "|") .. ")\\b",
+      converter = FootFree._conv_shichen, cat = "time", unit = "shichen" },
+    classify = function(s) return 1 end,
 }
 
 -- Map a combined-pass hit back to the entry that would have produced it when
@@ -3689,8 +4077,9 @@ function FootFree._classify_prime(s)
         return 2                                     -- 10″ × 8″
     end
     if dbl and has_any(tail, SGL) then return 3 end   -- 6′8″ / 6′ 8″
-    if ends_any(tail, SGL) then return 4 end          -- 6′
-    if dbl then return 5 end                          -- 3″
+    if ends_any(tail, SGL) then return 5 end          -- 6′ (bare feet)
+    if has_any(tail, SGL) then return 4 end           -- 6′4 (bare compound, no closing quote)
+    if dbl then return 6 end                          -- 3″
     return nil
 end
 _PRIME_PATS.classify = FootFree._classify_prime
@@ -3997,7 +4386,7 @@ local function _article_distance_one(unit, prev, nxt)
     return false
 end
 
-local function _fast_scan_matches(doc, cat_enabled)
+local function _fast_scan_matches(doc, cat_enabled, pkg_enabled)
     -- 15 context words each side (was 8): the pound currency classifier reads
     -- the full width to catch £ cues that sit beyond 8 words. Everything else
     -- (number/range/span logic, the legacy filters) trims back to 8 via
@@ -4089,7 +4478,17 @@ local function _fast_scan_matches(doc, cat_enabled)
             -- would match every occurrence of the letter. They are covered by
             -- their own number-anchored literal passes instead (unit_pats),
             -- which is why the metric direction is unaffected by this path.
-            if u ~= "°F" and u ~= "m" and u ~= "g" then aliases[#aliases + 1] = u end
+            if u ~= "°F" and u ~= "m" and u ~= "g" then
+                -- Opt-in packages: skip a gated suffix whose package is OFF.
+                -- (Capitalized English renderings like "Hour"/"Watch" are stored
+                -- lowercase in _PKG_GATED keyed by their lowercase spelling, so
+                -- fold before the membership test.)
+                local _core = u:lower():gsub("s$", "")
+                local _pkg = FootFree._PKG_GATED[_core] and FootFree._UNIT_PKG[_core]
+                if not _pkg or (pkg_enabled and pkg_enabled[_pkg]) then
+                    aliases[#aliases + 1] = u
+                end
+            end
         end
         table.sort(aliases, function(a, b) return #a > #b end)
         FootFree._scan_t.shy, FootFree._scan_t.passes = shy_book, #aliases
@@ -4178,9 +4577,11 @@ local function _fast_scan_matches(doc, cat_enabled)
             ::next_alias::
         end
         -- Per-alias passes lose document order; the compound-merge logic
-        -- (feet+inches etc.) depends on it. Restore it.
+        -- (feet+inches etc.) depends on it. Restore it. (crengine
+        -- compareXPointers returns -1 when the first pointer precedes the
+        -- second, so == -1 is the ascending document-order sort.)
         table.sort(hits, function(a, b)
-            return doc:compareXPointers(a.start, b.start) == 1
+            return doc:compareXPointers(a.start, b.start) == -1
         end)
         ok = true
     end
@@ -4434,7 +4835,7 @@ local function _fast_scan_matches(doc, cat_enabled)
            -- "1 /10; inch". A tight "19-3/10 miles" / "1-3/8 inches" is a clean
            -- ASCII mixed fraction and must convert — sweep batch 2.)
            and not (h.prev_text or ""):match("%d%s+/%s*%d+%s*;?%s*$")
-           and not _is_range_start((h.next_text or ""):lower(), (unit or ""):lower()) then
+            and not _is_range_start((h.next_text or ""):lower(), (unit or ""):lower()) then
             local p = (h.prev_text or ""):lower()
             local ulow = (unit or ""):lower()
 
@@ -4803,7 +5204,7 @@ local function _fast_scan_matches(doc, cat_enabled)
                                 cand = nx
                                 local t = text_of(rec["end"], cand)
                                 if t then
-                                    local norm = t:lower():gsub("%-", " "):gsub("^[%s,]+", ""):gsub("%s+$", "")
+                                    local norm = t:lower():gsub("%-", " "):gsub("^[%s,]+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
                                     if norm == phrase then rend = cand; break end
                                 end
                             end
@@ -4863,7 +5264,7 @@ local function _fast_scan_matches(doc, cat_enabled)
                                 cand = nx
                                 local t = text_of(rec["end"], cand)
                                 if t then
-                                    local norm = t:lower():gsub("^[%s,]+", ""):gsub("%s+$", "")
+                                    local norm = t:lower():gsub("^[%s,]+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
                                     if norm == phrase then rend = cand; break end
                                 end
                             end
@@ -4948,7 +5349,7 @@ local function _fast_scan_matches(doc, cat_enabled)
                                 cand = nx2
                                 local t = text_of(h["end"], cand)
                                 if t then
-                                    local norm = t:lower():gsub("%-", " "):gsub("^[%s,]+", ""):gsub("%s+$", "")
+                                    local norm = t:lower():gsub("%-", " "):gsub("^[%s,]+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
                                     if norm == phrase then rend = cand; break end
                                 end
                             end
@@ -5054,7 +5455,7 @@ local function _fast_scan_matches(doc, cat_enabled)
         maybe_primes = (not ok_t) or (not bt)
             or bt:find(_PRIME, 1, true) or bt:find(_DPRIME, 1, true)
             or bt:find("%d'") or bt:find('%d"')
-            or bt:find("%d" .. FootFree._CAPOS) or bt:find("%d" .. FootFree._CDQ)
+            or bt:find("%d" .. _PRIME_MARKS.rsquote) or bt:find("%d" .. _PRIME_MARKS.rdquote)
     end
     -- Literal-match passes (primes, °F): run longest-first, deduped by start AND
     -- end xpointer so a range claims its span before the single-value pass can
@@ -5233,9 +5634,26 @@ local function _fast_scan_matches(doc, cat_enabled)
                         elseif not seen_start[r.start] then
                             seen_start[r.start] = true
                             seen_end[r["end"]] = true
-                            r._search = e
-                            r._cat = e.cat
-                            out[#out + 1] = r
+                            -- A converter pattern (compound heights, dimensions)
+                            -- that can't actually convert the span (e.g. the
+                            -- bare "6'4" form where the trailing number is ≥12
+                            -- inches: "6'140") must not emit a display-only
+                            -- match. Verify before keeping.
+                            local conv_ok = true
+                            if e.converter then
+                                local okc, cv = pcall(e.converter, r.matched_text)
+                                conv_ok = okc and cv ~= nil
+                            end
+                            if conv_ok then
+                                r._search = e
+                                r._cat = e.cat
+                                -- Pass entries may tag a canonical unit so the
+                                -- match joins the _GATED_UNITS cluster bookkeeping
+                                -- (e.g. a named shichen counts as its "shichen"
+                                -- unit) — see FootFree._SHICHEN_PATS.
+                                if e.unit then r._unit = e.unit end
+                                out[#out + 1] = r
+                            end
                         else
                             seen_end[r["end"]] = true  -- block tail sub-matches
                         end
@@ -5260,6 +5678,14 @@ local function _fast_scan_matches(doc, cat_enabled)
         run_passes(FootFree._IMPERIAL.unit_pats)
     else
         if maybe_primes then run_passes(_PRIME_PATS) end
+
+        -- Pinyin 時辰 periods ("the Shen Hour") — see FootFree._SHICHEN_PATS.
+        -- Also gated by the opt-in Asian package (it produces the same gated
+        -- "shichen" unit as the per-alias loop, so the package toggle must cover
+        -- both entry points).
+        if cat_enabled["time"] ~= false and (pkg_enabled and pkg_enabled.asian) then
+            run_passes(FootFree._SHICHEN_PATS)
+        end
 
         local has_degf = (cat_enabled["temperature"] ~= false)
             and (probe and probe.degf
@@ -5286,9 +5712,16 @@ end
 
 function FootFree:init()
     self._cat_enabled = {}
-    for _, cat in ipairs({"length", "weight", "temperature", "volume", "speed", "area"}) do
+    for _, cat in ipairs({"length", "weight", "temperature", "volume", "speed", "area", "time", "energy", "pressure"}) do
         local v = G_reader_settings:readSetting("footcream_cat_" .. cat)
         self._cat_enabled[cat] = (v ~= false)
+    end
+    -- Opt-in unit packages (Asian / historical-fantasy). OFF by default: these
+    -- add scan time and false-positive surface, so the user activates them when
+    -- they actually read wuxia or epic fantasy. See FootFree._PKG_UNITS.
+    self._pkg_enabled = {}
+    for _, pkg in ipairs({"asian", "fantasy"}) do
+        self._pkg_enabled[pkg] = G_reader_settings:readSetting("footcream_pkg_" .. pkg) == true
     end
     self._auto_scan         = G_reader_settings:readSetting("footcream_auto_scan") == true
     -- Developer mode (hidden from users via a marker file). Drives the scan
@@ -6943,8 +7376,8 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
             if mt1 == "'" or mt1 == '"'
                or r.matched_text:sub(1, 3) == _PRIME
                or r.matched_text:sub(1, 3) == _DPRIME
-               or r.matched_text:sub(1, 3) == FootFree._CAPOS
-               or r.matched_text:sub(1, 3) == FootFree._CDQ then
+               or r.matched_text:sub(1, 3) == _PRIME_MARKS.rsquote
+               or r.matched_text:sub(1, 3) == _PRIME_MARKS.rdquote then
                 keep = false
             end
         end
@@ -7061,12 +7494,31 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
         do
             local body
             if r.matched_text:sub(-3) == _PRIME or r.matched_text:sub(-3) == _DPRIME
-               or r.matched_text:sub(-3) == FootFree._CAPOS or r.matched_text:sub(-3) == FootFree._CDQ then
+               or r.matched_text:sub(-3) == _PRIME_MARKS.rsquote
+               or r.matched_text:sub(-3) == _PRIME_MARKS.rdquote then
                 body = r.matched_text:sub(1, -4)
             elseif r.matched_text:sub(-1) == "'" or r.matched_text:sub(-1) == '"' then
                 body = r.matched_text:sub(1, -2)
             end
-            if body and not body:sub(-1):match("%d") then keep = false end
+            if body then
+                -- The char right before the mark must look like a measurement
+                -- end: a digit OR a vulgar-fraction glyph ("6'8½\"", "4½\"") —
+                -- anything else (a period, a letter) means the quote closed a
+                -- word or a sentence, not a measurement.
+                local endok = body:sub(-1):match("%d")
+                    or _VULGAR_FRAC[body:sub(-2)] ~= nil
+                    or _VULGAR_FRAC[body:sub(-3)] ~= nil
+                if not endok then keep = false end
+                -- Speech-close guard: a digit-preceded quote that closes quoted
+                -- speech ("He's 6," she said) is punctuation, not an inch/feet
+                -- mark. A real mark is followed by a word or dimension
+                -- ("6\" tall", "6\" × 4\""); a closing quote is followed
+                -- immediately by punctuation.
+                if endok then
+                    local nxt = (r.next_text or ""):gsub("^%s+", "")
+                    if nxt:match("^[%.,;:!?%)%]]") then keep = false end
+                end
+            end
         end
         -- The same glyph ENDING A QUOTATION, with a digit legitimately before
         -- it: '“Reach 18”' (a call sign), '“Bolivian Exploration, 1913–1914”'
@@ -7174,6 +7626,15 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
                 if _DRINK_WORDS[w:lower()] then keep = false; break end
             end
         end
+        -- Carat vs gold fineness: "24 carat gold" is a PURITY grade (24/24 =
+        -- pure), not a weight — the diamond-size reading ("a two-carat stone")
+        -- is the one worth converting. "karat" (with a k) is never matched at
+        -- all; suppress the "carat" spelling when "gold" is nearby.
+        if keep and r._search.target == "g" and mt:find("carat") then
+            for w in (prev .. " " .. nxt):gmatch("[%w'\226\128\153%-]+") do
+                if w:lower() == "gold" then keep = false; break end
+            end
+        end
         -- Mangled vulgar fraction: some EPUBs render "¾" as "3 4'" — a lone
         -- numerator digit, a space, then a single-digit "foot" prime (denominator).
         -- crengine DROPS the lone "3" from prev_text (it's saved as "…still ", no
@@ -7199,6 +7660,57 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
             end
         end
         if keep then table.insert(filtered, r) end
+    end
+
+    -- Ambiguous-unit gate (false-positive defense for the transliteration and
+    -- historical/fantasy unit sets — FootFree._GATED_UNITS/_GATED_LONG). The
+    -- SHORT spellings (≤4 letters, plus the flagged 5-letter _GATED_LONG ones)
+    -- are ordinary English words ("in one go", "get a tan", "life span",
+    -- "fishing rod", "two perch"), so a stray hit in a normal book is almost
+    -- certainly a false positive. Two rules back them:
+    --   (1) CLUSTER: count every DISTINCT gated unit in the book (long or
+    --       short); drop the gated ones unless ≥2 distinct exist. A genuine
+    --       wuxia/Japanese/Korean/historical-fantasy book mixes several; an
+    --       ordinary English book never does.
+    --   (2) DIGIT-ONLY: in a cluster book a gated unit's number must be
+    --       literally written ("10 li", "5 span"), so spelled-number idioms
+    --       ("one go", "a tan", "two hands") structurally never convert.
+    -- Longer, unambiguous spellings ("shichen", "zhang", "koku", "tsubo",
+    -- "cubit", "league") convert freely — the momentum here is FP-suppression,
+    -- not recall.
+    do
+        -- Strip a plural "s" so "hands"/"hand", "spans"/"span" share one key.
+        local core = function(u)
+            return u:gsub("s$", "")
+        end
+        local gated = function(r)
+            if not r._unit then return false end
+            local c = core(r._unit)
+            return FootFree._GATED_UNITS[c] or FootFree._GATED_LONG[c]
+        end
+        local short = function(r)
+            if not gated(r) then return false end
+            local c = core(r._unit)
+            return #c <= 4 or FootFree._GATED_LONG[c]
+        end
+        local distinct, nd = {}, 0
+        for _, r in ipairs(filtered) do
+            if gated(r) then
+                local c = core(r._unit)
+                if not distinct[c] then
+                    distinct[c] = true
+                    nd = nd + 1
+                end
+            end
+        end
+        for i = #filtered, 1, -1 do
+            if short(filtered[i]) then
+                if nd < 2
+                   or not (filtered[i].prev_text or ""):match("%d[%d.,]*%s*$") then
+                    table.remove(filtered, i)
+                end
+            end
+        end
     end
 
     -- Collapse overlapping spans — but only now, AFTER the legacy false-positive
@@ -7334,7 +7846,7 @@ local _FOOT_IDIOM_NEXT = {
     "grounded", "braced", "firmly", "on",
 }
 local function _idiom_guard(original)
-    local o = original:lower():gsub("^%s+", ""):gsub("%s+$", "")
+    local o = original:lower():gsub("^%s+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
     if o == "one foot" or o == "a foot" then return _FOOT_IDIOM_NEXT end
     return nil
 end
@@ -7620,7 +8132,8 @@ function FootFree:_doApplyMetricEdition(doc)
     -- Converting currency is worse than leaving a colliding genuine weight as
     -- imperial — and that weight still converts in the positional Mode 1.
     for original, rep in pairs(rep_of) do
-        if original:lower():find("pound") then
+        if original:lower():find("pound") or original:lower():find(" ton")
+           or original:lower() == "ton" or original:lower() == "tons" then
             rep.expected = kept_count[original]
         end
     end
@@ -8253,6 +8766,7 @@ function FootFree:_startFastScan(doc)
     if self.view then UIManager:setDirty(self.view.dialog, "ui") end
 
     local cat_enabled  = self._cat_enabled
+    local pkg_enabled  = self._pkg_enabled
     local debug_report = self._debug_report
 
     -- Run in a subprocess so the UI stays responsive (same as the classic scan).
@@ -8264,7 +8778,7 @@ function FootFree:_startFastScan(doc)
                 -- (page turns) on single-core e-readers during the long scan.
                 _nice_self()
                 local t0 = _now()
-                local matches = _fast_scan_matches(doc, cat_enabled)
+                local matches = _fast_scan_matches(doc, cat_enabled, pkg_enabled)
                 FootFree._finishScan(nil, doc, matches, _now() - t0, true, debug_report)
             end)
         end)
@@ -8282,7 +8796,7 @@ function FootFree:_startFastScan(doc)
     -- Fallback: synchronous (still only a couple of seconds).
     self._scan_progress = nil
     local t0 = _now()
-    local matches = _fast_scan_matches(doc, self._cat_enabled)
+    local matches = _fast_scan_matches(doc, self._cat_enabled, self._pkg_enabled)
     self:_finishScan(doc, matches, _now() - t0, false, self._debug_report)
 end
 
@@ -8905,12 +9419,12 @@ function FootFree:_showUnitList()
         local before = text_of(walk(r.start, CTX_WORDS, false), r.start) or ""
         local after  = r["end"] and (text_of(r["end"], walk(r["end"], CTX_WORDS, true)) or "") or ""
         local ctx = before .. " [" .. unit .. "] " .. after
-        ctx = ctx:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+        ctx = ctx:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
         -- Extraction failed (no end xp, or both sides empty) — fall back to the
         -- saved context so the row is never blank.
         if not r["end"] or (before == "" and after == "") then
             ctx = ((r.prev_text or "") .. (r.matched_text or "") .. (r.next_text or ""))
-                :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+                :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
         end
         return ctx
     end
@@ -9329,7 +9843,7 @@ function FootFree:_drawHighlights(bb)
                           and self.ui.rolling.rendering_state ~= 0
         if rendering then
             self._render_yield_t0 = self._render_yield_t0 or _now()
-            if _now() - self._render_yield_t0 < _RENDER_YIELD_S then
+            if _now() - self._render_yield_t0 < FootFree._RENDER_YIELD_S then
                 draw = false          -- KOReader's bar owns the corner
             else
                 x_base = math.floor(Screen:getWidth() / 3) + Screen:scaleBySize(4)
@@ -9489,7 +10003,7 @@ function FootFree:_ctxAround(doc, start_xp, end_xp, mid)
     local after  = end_xp and (text_of(end_xp, walk(end_xp, 12, true)) or "") or ""
     if before == "" and after == "" then return nil end
     return (before .. " [" .. mid .. "] " .. after)
-        :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+        :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
 end
 
 -- Build the same item shape _showUnitList's rows carry (what _flagError
@@ -9502,7 +10016,7 @@ function FootFree:_flagItemFromMatch(r)
     local ctx = r["end"] and self:_ctxAround(doc, r.start, r["end"], unit) or nil
     if not ctx then
         ctx = ((r.prev_text or "") .. (r.matched_text or "") .. (r.next_text or ""))
-            :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+            :gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", ""):gsub("[%.,;:!?]+$", "")
     end
     return {
         -- TRANSLATORS: Title of the popup after long-pressing an underlined measurement.
@@ -9803,10 +10317,13 @@ function FootFree:addToMainMenu(menu_items)
         -- TRANSLATORS: Long-press explainer for the 'Length & Distance' category. The unit
         -- names are English measurement words - use your language's names for the same
         -- units.
-        length = _("Inches, feet, yards, miles, fathoms, furlongs, leagues, cubits — and in the imperial direction: millimeters, centimeters, meters, kilometers."),
-        -- TRANSLATORS: Long-press explainer for the 'Weight' category. Tons are left alone
-        -- on purpose because the word means several different quantities.
-        weight = _("Ounces, pounds and stone — and in the imperial direction: grams and kilos. Tons are deliberately not converted (the word is too ambiguous)."),
+        -- TRANSLATORS: Long-press explainer for the 'Length & Distance' category. The unit
+        -- names are English measurement words - use your language's names for the same
+        -- units.
+        length = _("Inches, feet, yards, miles, fathoms, furlongs, leagues, cubits, spans, hands, ells, rods, chains, paces — and in the imperial direction: millimeters, centimeters, meters, kilometers."),
+        -- TRANSLATORS: Long-press explainer for the 'Weight' category. Tons convert only in a
+        -- weight context; the figurative and ship-tonnage senses are left alone.
+        weight = _("Ounces, pounds and stone — and in the imperial direction: grams and kilos. Tons convert only with a weight context (figurative and ship tonnage are left alone)."),
         -- TRANSLATORS: Long-press explainer for the 'Temperature' category.
         temperature = _("°F and \"degrees Fahrenheit\" — and in the imperial direction, °C and \"degrees Celsius\"."),
         -- TRANSLATORS: Long-press explainer for the 'Volume' category. UK and US pints and
@@ -9816,6 +10333,14 @@ function FootFree:addToMainMenu(menu_items)
         speed = _("Miles per hour and knots — and in the imperial direction, km/h and meters per second."),
         -- TRANSLATORS: Long-press explainer for the 'Area' category.
         area = _("Acres and square miles/feet/yards — and in the imperial direction, hectares and square kilometers/meters/centimeters."),
+        -- TRANSLATORS: Long-press explainer for the 'Time' category: pre-metric Chinese time
+        -- units as used in historical fiction. The parentheticals give their modern
+        -- equivalents.
+        time = _("Traditional Chinese time units: shichen (2 hours), geng (2.4 hours), dian (24 minutes), and ke (15 minutes)."),
+        -- TRANSLATORS: Long-press explainer for the 'Energy' category.
+        energy = _("Horsepower, BTUs and food calories — and in the imperial direction, kilowatts and kilojoules."),
+        -- TRANSLATORS: Long-press explainer for the 'Pressure' category.
+        pressure = _("PSI, atmospheres and mmHg — and in the imperial direction, kilopascals."),
     }
     local cat_items = {}
     for _, c in ipairs({
@@ -9838,6 +10363,16 @@ function FootFree:addToMainMenu(menu_items)
         -- TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
         -- Unit categories'. Untick it and areas are left alone everywhere in the book.
         { key = "area",        label = _("Area")              },
+        -- TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
+        -- Unit categories'. Untick it and time units are left alone everywhere in the book.
+        { key = "time",        label = _("Time")              },
+        -- TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
+        -- Unit categories'. Untick it and energy units are left alone everywhere in the book.
+        { key = "energy",      label = _("Energy")            },
+        -- TRANSLATORS: Tickable measurement category under 'Menu > Footcream > Advanced >
+        -- Unit categories'. Untick it and pressure units are left alone everywhere in the
+        -- book.
+        { key = "pressure",    label = _("Pressure")          },
     }) do
         local key = c.key
         table.insert(cat_items, {
@@ -9849,6 +10384,39 @@ function FootFree:addToMainMenu(menu_items)
             callback = function()
                 self._cat_enabled[key] = not (self._cat_enabled[key] ~= false)
                 G_reader_settings:saveSetting("footcream_cat_" .. key, self._cat_enabled[key])
+                if self.view then UIManager:setDirty(self.view.dialog, "ui") end
+            end,
+        })
+    end
+
+    -- Opt-in unit packages (see FootFree._PKG_UNITS). These are OFF by default:
+    -- the units they cover add scan time and false-positive surface, so the user
+    -- switches a package on only when they read the kind of book that uses it.
+    local pkg_help = {
+        -- TRANSLATORS: Long-press explainer for the 'Asian units' package.
+        asian = _("Chinese, Japanese and Korean pre-metric units (li, zhang, jin, mu, shichen, koku, tsubo and more). Off by default — turn on for wuxia, historical Asian or translated fiction. Inside this package the usual cluster + digit guards still apply."),
+        -- TRANSLATORS: Long-press explainer for the 'Historical & fantasy units' package.
+        fantasy = _("Archaic English units from epic fantasy and classic fiction (span, rod, pole, ell, hand, pace, perch, chain and more). Off by default — turn on for that genre. Inside this package the usual cluster + digit guards still apply."),
+    }
+    local pkg_items = {}
+    for _, p in ipairs({
+        -- TRANSLATORS: Opt-in unit package under 'Menu > Footcream > Advanced > Unit
+        -- packages'. Untick it and Asian pre-metric units are never scanned.
+        { key = "asian",   label = _("Asian units") },
+        -- TRANSLATORS: Opt-in unit package under 'Menu > Footcream > Advanced > Unit
+        -- packages'. Untick it and historical/fantasy English units are never scanned.
+        { key = "fantasy", label = _("Historical & fantasy units") },
+    }) do
+        local key = p.key
+        table.insert(pkg_items, {
+            text = p.label,
+            help_text = pkg_help[key],
+            checked_func = function()
+                return self._pkg_enabled[key] == true
+            end,
+            callback = function()
+                self._pkg_enabled[key] = not (self._pkg_enabled[key] == true)
+                G_reader_settings:saveSetting("footcream_pkg_" .. key, self._pkg_enabled[key])
                 if self.view then UIManager:setDirty(self.view.dialog, "ui") end
             end,
         })
@@ -10240,6 +10808,15 @@ function FootFree:addToMainMenu(menu_items)
                         sub_item_table = cat_items,
                     },
                     {
+                        -- TRANSLATORS: Entry under 'Advanced' opening the list of opt-in
+                        -- unit packages (Asian, historical/fantasy) that add scan time and
+                        -- false-positive surface unless switched on.
+                        text = _("Unit packages"),
+                        -- TRANSLATORS: Long-press explainer for 'Unit packages'.
+                        help_text = _("Extra unit sets that are off by default. Turn a package on only when you read the books that use it — Asian pre-metric units, or historical/fantasy English units. Keeping them off speeds up scans and avoids false positives."),
+                        sub_item_table = pkg_items,
+                    },
+                    {
                         -- TRANSLATORS: Tickable entry under 'Advanced': round conversions to values a
                         -- person would say out loud rather than exact arithmetic.
                         text = _("Smart rounding for conversions"),
@@ -10444,5 +11021,19 @@ function FootFree:addToMainMenu(menu_items)
         end,
     }
 end
+
+-- Test-suite hook (tests/run.lua loads this chunk behind KOReader stubs).
+-- Same convention as FootFree._IMPERIAL / _REPORTING: pure helpers attached to
+-- the class so the headless suite can drive them; zero cost in production.
+FootFree._TEST = {
+    convert         = _convert,
+    display         = _display,
+    parse_num       = _parse_num,
+    smart_round     = _smart_round,
+    fmt_dist        = _fmt_dist,
+    apply_settings  = _apply_settings_to_matches,
+    load_sidecar    = _load_sidecar_raw,
+    is_uk_book      = _is_uk_book,
+}
 
 return FootFree
