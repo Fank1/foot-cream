@@ -3,15 +3,14 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-20 13:40+0200\n"
-"PO-Revision-Date: 2026-08-19 11:55\n"
+"PO-Revision-Date: 2026-08-30 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==2 ? 1 : 2);\n"
 "X-Crowdin-Project: foot-cream\n"
 "X-Crowdin-Project-ID: 919191\n"
 "X-Crowdin-Language: he\n"
@@ -41,11 +40,9 @@ msgstr "ההתקנה נכשלה — הגרסה הקודמת שוחזרה."
 
 #. TRANSLATORS: Confirmation after a successful self-update. %1 is the version tag
 #. (e.g. 'v1.6.0'). The new code only runs after a restart.
-msgid ""
-"Updated to %1.\n"
+msgid "Updated to %1.\n"
 "Restart KOReader now to load it?"
-msgstr ""
-"עודכן ל-%1.\n"
+msgstr "עודכן ל-%1.\n"
 "להפעיל מחדש את KOReader כעת כדי לטעון אותה?"
 
 #. TRANSLATORS: Left button on the 'Updated to ...' dialog; restarts KOReader
@@ -245,7 +242,6 @@ msgid_plural "Converted %1 units in book"
 msgstr[0] "%1 יחידה הומרה בספר"
 msgstr[1] "%1 יחידות הומרו בספר"
 msgstr[2] "%1 יחידות הומרו בספר"
-msgstr[3] "%1 יחידות הומרו בספר"
 
 #. TRANSLATORS: Toast after a scan when the mode writes into the book's text but
 #. the conversion hasn't been applied yet. %1 is the number found.
@@ -254,7 +250,6 @@ msgid_plural "Scan complete: %1 units found"
 msgstr[0] "הסריקה הושלמה: נמצאה %1 יחידה"
 msgstr[1] "הסריקה הושלמה: נמצאו %1 יחידות"
 msgstr[2] "הסריקה הושלמה: נמצאו %1 יחידות"
-msgstr[3] "הסריקה הושלמה: נמצאו %1 יחידות"
 
 #. TRANSLATORS: Toast after a scan in underline mode. %1 is the number of
 #. measurements now underlined.
@@ -263,16 +258,13 @@ msgid_plural "Underlined %1 units in book"
 msgstr[0] "%1 יחידה סומנה בקו תחתון בספר"
 msgstr[1] "%1 יחידות סומנו בקו תחתון בספר"
 msgstr[2] "%1 יחידות סומנו בקו תחתון בספר"
-msgstr[3] "%1 יחידות סומנו בקו תחתון בספר"
 
 #. TRANSLATORS: Refusal shown when the book's text has already been converted. The
 #. quoted item is a menu entry - translate it exactly as you translate that entry,
 #. and keep 'Advanced' matching its menu name.
-msgid ""
-"This book is already converted.\n"
+msgid "This book is already converted.\n"
 "Use 'Remove Footcream data from this book' (Advanced) first."
-msgstr ""
-"ספר זה כבר הומר.\n"
+msgstr "ספר זה כבר הומר.\n"
 "יש להשתמש תחילה ב'הסרת נתוני Footcream מספר זה' (מתקדם)."
 
 #. TRANSLATORS: Name of the unit system being converted TO, inserted as %1 into the
@@ -352,47 +344,20 @@ msgstr "ההמרה ליחידות %1 הופסקה — הספר לא השתנה."
 #. TRANSLATORS: Error when the conversion found measurements but couldn't locate
 #. them in the book file itself, so nothing was changed. %1 is the number found, %2
 #. is a mode name ('Underline units, tap for metric').
-msgid ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurement was found, but it could not be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid "Couldn't convert this book in place.\n\n"
+"%1 measurement was found, but it could not be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgid_plural ""
-"Couldn't convert this book in place.\n"
-"\n"
-"%1 measurements were found, but none could be matched in the book's text — "
-"its markup/format may not be supported for in-text conversion.\n"
-"\n"
+msgid_plural "Couldn't convert this book in place.\n\n"
+"%1 measurements were found, but none could be matched in the book's text — its markup/format may not be supported for in-text conversion.\n\n"
 "The '%2' mode still works for this book."
-msgstr[0] ""
-"לא ניתן היה להמיר ספר זה במקום.\n"
-"\n"
-"נמצאה %1 מידה, אך לא ניתן היה לאתר אותה בטקסט של הספר — ייתכן שהסימון או "
-"התבנית שלה אינם נתמכים להמרה בתוך הטקסט.\n"
-"\n"
+msgstr[0] "לא ניתן היה להמיר ספר זה במקום.\n\n"
+"נמצאה %1 מידה, אך לא ניתן היה לאתר אותה בטקסט של הספר — ייתכן שהסימון או התבנית שלה אינם נתמכים להמרה בתוך הטקסט.\n\n"
 "מצב '%2' עדיין פועל עבור ספר זה."
-msgstr[1] ""
-"לא ניתן היה להמיר ספר זה במקום.\n"
-"\n"
-"נמצאו %1 מידות, אך לא ניתן היה לאתר אף אחת מהן בטקסט של הספר — ייתכן שהסימון "
-"או התבנית שלהן אינם נתמכים להמרה בתוך הטקסט.\n"
-"\n"
+msgstr[1] "לא ניתן היה להמיר ספר זה במקום.\n\n"
+"נמצאו %1 מידות, אך לא ניתן היה לאתר אף אחת מהן בטקסט של הספר — ייתכן שהסימון או התבנית שלהן אינם נתמכים להמרה בתוך הטקסט.\n\n"
 "מצב '%2' עדיין פועל עבור ספר זה."
-msgstr[2] ""
-"לא ניתן היה להמיר ספר זה במקום.\n"
-"\n"
-"נמצאו %1 מידות, אך לא ניתן היה לאתר אף אחת מהן בטקסט של הספר — ייתכן שהסימון "
-"או התבנית שלהן אינם נתמכים להמרה בתוך הטקסט.\n"
-"\n"
-"מצב '%2' עדיין פועל עבור ספר זה."
-msgstr[3] ""
-"לא ניתן היה להמיר ספר זה במקום.\n"
-"\n"
-"נמצאו %1 מידות, אך לא ניתן היה לאתר אף אחת מהן בטקסט של הספר — ייתכן שהסימון "
-"או התבנית שלהן אינם נתמכים להמרה בתוך הטקסט.\n"
-"\n"
+msgstr[2] "לא ניתן היה להמיר ספר זה במקום.\n\n"
+"נמצאו %1 מידות, אך לא ניתן היה לאתר אף אחת מהן בטקסט של הספר — ייתכן שהסימון או התבנית שלהן אינם נתמכים להמרה בתוך הטקסט.\n\n"
 "מצב '%2' עדיין פועל עבור ספר זה."
 
 #. TRANSLATORS: Generic failure when rewriting the book's text didn't work; the
@@ -411,12 +376,8 @@ msgstr "היחידות המקוריות שוחזרו בספר"
 
 #. TRANSLATORS: Shown when the book file was edited or replaced outside Footcream,
 #. so the saved original text no longer matches and can't be put back.
-msgid ""
-"This book's file changed since Footcream converted it, so the original text "
-"can't be restored. Footcream's conversion record has been cleared."
-msgstr ""
-"קובץ הספר השתנה מאז ש-Footcream המיר אותו, ולכן לא ניתן לשחזר את הטקסט "
-"המקורי. רשומת ההמרה של Footcream נוקתה."
+msgid "This book's file changed since Footcream converted it, so the original text can't be restored. Footcream's conversion record has been cleared."
+msgstr "קובץ הספר השתנה מאז ש-Footcream המיר אותו, ולכן לא ניתן לשחזר את הטקסט המקורי. רשומת ההמרה של Footcream נוקתה."
 
 #. TRANSLATORS: Generic failure when restoring the book's original text didn't
 #. work; the technical reason is appended on the next line, untranslated.
@@ -431,11 +392,9 @@ msgstr "סריקה כבר מתבצעת…"
 #. TRANSLATORS: Shown when the background scan failed or was stopped, so the book
 #. has no results. 'Scan book' is a menu entry - translate it as you translate that
 #. entry.
-msgid ""
-"Couldn't finish scanning this book.\n"
+msgid "Couldn't finish scanning this book.\n"
 "Use 'Scan book' to try again."
-msgstr ""
-"לא ניתן היה לסיים את סריקת הספר הזה.\n"
+msgstr "לא ניתן היה לסיים את סריקת הספר הזה.\n"
 "יש להשתמש ב'סריקת הספר' כדי לנסות שוב."
 
 #. TRANSLATORS: Shown when 'Units in book (list)' is opened before the book has
@@ -446,11 +405,9 @@ msgstr "עדיין לא נמצאו יחידות בספר זה."
 #. TRANSLATORS: One row of the 'Units in book' list. %1 is the row number, %2 the
 #. measurement as written in the book, %3 the value Footcream read from it, %4 the
 #. conversion, %5 the surrounding sentence. Keep the arrow.
-msgid ""
-"%1. %2 (%3)  →  %4\n"
+msgid "%1. %2 (%3)  →  %4\n"
 "…%5…"
-msgstr ""
-"%1. %2 (%3)  →  %4\n"
+msgstr "%1. %2 (%3)  →  %4\n"
 "…%5…"
 
 #. TRANSLATORS: Title of the 'Units in book' list. %1 is how many measurements it
@@ -520,31 +477,25 @@ msgstr "השגיאות שדווחו נוקו."
 #. TRANSLATORS: Title of the popup after long-pressing an underlined measurement.
 #. %1 is the measurement as written in the book, %2 the value Footcream read, %3
 #. the conversion, %4 the surrounding sentence. Keep the arrow.
-msgid ""
-"%1 (%2)  →  %3\n"
+msgid "%1 (%2)  →  %3\n"
 "…%4…"
-msgstr ""
-"%1 (%2)  →  %3\n"
+msgstr "%1 (%2)  →  %3\n"
 "…%4…"
 
 #. TRANSLATORS: Title of the popup after long-pressing a measurement in a book
 #. whose text was already converted. %1 is the original measurement, %2 what it now
 #. says, %3 the surrounding sentence. Keep the arrow.
-msgid ""
-"%1  →  %2\n"
+msgid "%1  →  %2\n"
 "…%3…"
-msgstr ""
-"%1  →  %2\n"
+msgstr "%1  →  %2\n"
 "…%3…"
 
 #. TRANSLATORS: Title of the popup after long-pressing text you selected yourself
 #. (reporting a measurement Footcream missed). %1 is the selected text, %2 the
 #. surrounding sentence.
-msgid ""
-"%1\n"
+msgid "%1\n"
 "…%2…"
-msgstr ""
-"%1\n"
+msgstr "%1\n"
 "…%2…"
 
 #. TRANSLATORS: Button in the long-press report popup, offered only for text you
@@ -585,15 +536,11 @@ msgstr "לא נמצאה חבילת גרסה להורדה."
 
 #. TRANSLATORS: Asked when a newer Footcream is available. %1 is the new version
 #. tag, %2 the installed version number.
-msgid ""
-"Update available: %1\n"
-"(installed: v%2)\n"
-"\n"
+msgid "Update available: %1\n"
+"(installed: v%2)\n\n"
 "Download and install now?"
-msgstr ""
-"עדכון זמין: %1\n"
-"(מותקן: v%2)\n"
-"\n"
+msgstr "עדכון זמין: %1\n"
+"(מותקן: v%2)\n\n"
 "להוריד ולהתקין כעת?"
 
 #. TRANSLATORS: Button that downloads and installs the new version; the other
@@ -689,7 +636,6 @@ msgid_plural "%1 hints found in this %2 book"
 msgstr[0] "%1 תוצאה בספר זה (%2)"
 msgstr[1] "%1 תוצאות בספר זה (%2)"
 msgstr[2] "%1 תוצאות בספר זה (%2)"
-msgstr[3] "%1 תוצאות בספר זה (%2)"
 
 #. TRANSLATORS: Line at the top of 'Menu > Footcream' reporting what the scan
 #. found. %1 is the count, and it is 0 for a book that was scanned and contains no
@@ -701,7 +647,6 @@ msgid_plural "%1 hints found"
 msgstr[0] "נמצאה %1 תוצאה"
 msgstr[1] "נמצאו %1 תוצאות"
 msgstr[2] "נמצאו %1 תוצאות"
-msgstr[3] "נמצאו %1 תוצאות"
 
 #. TRANSLATORS: Same menu line, for a book that has never been scanned.
 msgid "Not yet scanned"
@@ -760,23 +705,15 @@ msgstr "סריקת הספר"
 #. TRANSLATORS: Asked before scanning a book that doesn't look English, since
 #. Footcream only recognises English measurement words. %1 is the language code
 #. from the book's metadata.
-msgid ""
-"This book does not appear to be in English (detected: %1).\n"
-"\n"
+msgid "This book does not appear to be in English (detected: %1).\n\n"
 "Scan it anyway?"
-msgstr ""
-"נראה שספר זה אינו באנגלית (זוהה: %1).\n"
-"\n"
+msgstr "נראה שספר זה אינו באנגלית (זוהה: %1).\n\n"
 "לסרוק אותו בכל זאת?"
 
 #. TRANSLATORS: Same question, for a book whose metadata names no language at all.
-msgid ""
-"This book does not appear to be in English.\n"
-"\n"
+msgid "This book does not appear to be in English.\n\n"
 "Scan it anyway?"
-msgstr ""
-"נראה שספר זה אינו באנגלית.\n"
-"\n"
+msgstr "נראה שספר זה אינו באנגלית.\n\n"
 "לסרוק אותו בכל זאת?"
 
 #. TRANSLATORS: Button that scans the book anyway; the other button is the shared
@@ -830,14 +767,10 @@ msgstr "הצגת היחידה המקורית בחלונית (מצב '%1 בלבד
 #. TRANSLATORS: Shown when this toggle can't work because the record of the book's
 #. original measurements is gone. The quoted items are menu entries - translate
 #. them exactly as you translate those entries.
-msgid ""
-"Original-unit data for this book is missing.\n"
-"To restore it, use 'Remove Footcream data from this book', then convert "
-"again via the Mode menu."
-msgstr ""
-"נתוני היחידות המקוריות של ספר זה חסרים.\n"
-"כדי לשחזר אותם, יש להשתמש ב'הסרת נתוני Footcream מספר זה', ולאחר מכן להמיר "
-"שוב דרך תפריט המצב."
+msgid "Original-unit data for this book is missing.\n"
+"To restore it, use 'Remove Footcream data from this book', then convert again via the Mode menu."
+msgstr "נתוני היחידות המקוריות של ספר זה חסרים.\n"
+"כדי לשחזר אותם, יש להשתמש ב'הסרת נתוני Footcream מספר זה', ולאחר מכן להמיר שוב דרך תפריט המצב."
 
 #. TRANSLATORS: Tickable entry under 'Advanced': allow reporting bad conversions by
 #. long-pressing them while reading.
@@ -875,3 +808,4 @@ msgstr "הצגת השגיאות שדווחו"
 #. TRANSLATORS: Entry under 'Debug' that deletes the local list of flagged errors.
 msgid "Clear flagged errors"
 msgstr "ניקוי השגיאות שדווחו"
+

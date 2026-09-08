@@ -3,15 +3,14 @@ msgstr ""
 "Project-Id-Version: foot-cream\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-20 13:40+0200\n"
-"PO-Revision-Date: 2026-08-18 13:59\n"
+"PO-Revision-Date: 2026-08-30 15:09\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==2 ? 1 : 2);\n"
 "X-Crowdin-Project: foot-cream\n"
 "X-Crowdin-Project-ID: 919191\n"
 "X-Crowdin-Language: he\n"
@@ -21,264 +20,125 @@ msgstr ""
 #. TRANSLATORS: Long-press explainer for the 'Length & Distance' category. The unit
 #. names are English measurement words - use your language's names for the same
 #. units.
-msgid ""
-"Inches, feet, yards, miles, fathoms, furlongs, leagues, cubits — and in the "
-"imperial direction: millimeters, centimeters, meters, kilometers."
-msgstr ""
-"אינצ׳ים, רגל, יארד, מייל, פאתום, פורלונג, ליגה ואמה — ובכיוון האימפריאלי: "
-"מילימטרים, סנטימטרים, מטרים, קילומטרים."
+msgid "Inches, feet, yards, miles, fathoms, furlongs, leagues, cubits — and in the imperial direction: millimeters, centimeters, meters, kilometers."
+msgstr "אינצ׳ים, רגל, יארד, מייל, פאתום, פורלונג, ליגה ואמה — ובכיוון האימפריאלי: מילימטרים, סנטימטרים, מטרים, קילומטרים."
 
 #. TRANSLATORS: Long-press explainer for the 'Weight' category. Tons are left alone
 #. on purpose because the word means several different quantities.
-msgid ""
-"Ounces, pounds and stone — and in the imperial direction: grams and kilos. "
-"Tons are deliberately not converted (the word is too ambiguous)."
-msgstr ""
-"אונקיות, ליברות וסטון — ובכיוון האימפריאלי: גרמים וקילוגרמים. טונות אינן "
-"מומרות במכוון (המילה רב-משמעית מדי)."
+msgid "Ounces, pounds and stone — and in the imperial direction: grams and kilos. Tons are deliberately not converted (the word is too ambiguous)."
+msgstr "אונקיות, ליברות וסטון — ובכיוון האימפריאלי: גרמים וקילוגרמים. טונות אינן מומרות במכוון (המילה רב-משמעית מדי)."
 
 #. TRANSLATORS: Long-press explainer for the 'Temperature' category.
-msgid ""
-"°F and \"degrees Fahrenheit\" — and in the imperial direction, °C and "
-"\"degrees Celsius\"."
+msgid "°F and \"degrees Fahrenheit\" — and in the imperial direction, °C and \"degrees Celsius\"."
 msgstr "°F ו\"מעלות פרנהייט\" — ובכיוון האימפריאלי, °C ו\"מעלות צלזיוס\"."
 
 #. TRANSLATORS: Long-press explainer for the 'Volume' category. UK and US pints and
 #. gallons are different sizes, hence the note about the book's origin.
-msgid ""
-"Pints, quarts, gallons and fluid ounces — and in the imperial direction, "
-"liters and milliliters. UK and US gallons differ; Footcream picks the right "
-"one from the book."
-msgstr ""
-"פיינטים, קווארטים, גלונים ואונקיות נוזל — ובכיוון האימפריאלי, ליטרים "
-"ומיליליטרים. הגלון הבריטי והאמריקאי שונים זה מזה; Footcream בוחר את הנכון "
-"לפי הספר."
+msgid "Pints, quarts, gallons and fluid ounces — and in the imperial direction, liters and milliliters. UK and US gallons differ; Footcream picks the right one from the book."
+msgstr "פיינטים, קווארטים, גלונים ואונקיות נוזל — ובכיוון האימפריאלי, ליטרים ומיליליטרים. הגלון הבריטי והאמריקאי שונים זה מזה; Footcream בוחר את הנכון לפי הספר."
 
 #. TRANSLATORS: Long-press explainer for the 'Speed' category.
-msgid ""
-"Miles per hour and knots — and in the imperial direction, km/h and meters "
-"per second."
+msgid "Miles per hour and knots — and in the imperial direction, km/h and meters per second."
 msgstr "מיילים לשעה וקשרים — ובכיוון האימפריאלי, km/h ומטרים לשנייה."
 
 #. TRANSLATORS: Long-press explainer for the 'Area' category.
-msgid ""
-"Acres and square miles/feet/yards — and in the imperial direction, hectares "
-"and square kilometers/meters/centimeters."
-msgstr ""
-"אקרים ומיילים, רגל ויארדים רבועים — ובכיוון האימפריאלי, הקטרים וקילומטרים, "
-"מטרים וסנטימטרים רבועים."
+msgid "Acres and square miles/feet/yards — and in the imperial direction, hectares and square kilometers/meters/centimeters."
+msgstr "אקרים ומיילים, רגל ויארדים רבועים — ובכיוון האימפריאלי, הקטרים וקילומטרים, מטרים וסנטימטרים רבועים."
 
 #. TRANSLATORS: Long-press explainer for the hint-count line at the top of 'Menu >
 #. Footcream'.
-msgid ""
-"How many measurements Footcream found in this book. The count always shows "
-"everything that was found, whichever mode you are in."
-msgstr ""
-"כמה מידות מצא Footcream בספר זה. המספר מציג תמיד את כל מה שנמצא, בכל מצב שבו "
-"נמצאים."
+msgid "How many measurements Footcream found in this book. The count always shows everything that was found, whichever mode you are in."
+msgstr "כמה מידות מצא Footcream בספר זה. המספר מציג תמיד את כל מה שנמצא, בכל מצב שבו נמצאים."
 
 #. TRANSLATORS: Long-press explainer for 'Enable Footcream in this book'.
-msgid ""
-"Turn Footcream off for this book only: no underlines, no conversions, no "
-"prompts — and a converted book gets its original text back. Other books are "
-"unaffected, and the choice is remembered for this book. To disable Footcream "
-"everywhere, use KOReader's plugin management."
-msgstr ""
-"כיבוי Footcream עבור ספר זה בלבד: ללא קווים תחתונים, ללא המרות, ללא שאלות — "
-"וספר שהומר מקבל בחזרה את הטקסט המקורי שלו. ספרים אחרים אינם מושפעים, והבחירה "
-"נשמרת עבור ספר זה. כדי לכבות את Footcream בכל מקום, יש להשתמש בניהול התוספים "
-"של KOReader."
+msgid "Turn Footcream off for this book only: no underlines, no conversions, no prompts — and a converted book gets its original text back. Other books are unaffected, and the choice is remembered for this book. To disable Footcream everywhere, use KOReader's plugin management."
+msgstr "כיבוי Footcream עבור ספר זה בלבד: ללא קווים תחתונים, ללא המרות, ללא שאלות — וספר שהומר מקבל בחזרה את הטקסט המקורי שלו. ספרים אחרים אינם מושפעים, והבחירה נשמרת עבור ספר זה. כדי לכבות את Footcream בכל מקום, יש להשתמש בניהול התוספים של KOReader."
 
 #. TRANSLATORS: Long-press explainer for 'Convert units to'.
-msgid ""
-"The unit system you want to read in. Metric converts imperial measurements "
-"(feet, miles, °F) to metric. The Imperial options do the reverse: they find "
-"metric measurements (meters, kilometers, kilos, °C) and show imperial "
-"values. Works in every mode; a converted book is restored and reconverted "
-"when you switch."
-msgstr ""
-"מערכת היחידות שבה ברצונך לקרוא. 'מטריות' ממירה מידות אימפריאליות (רגל, "
-"מיילים, °F) למטריות. האפשרויות האימפריאליות עושות את ההפך: הן מאתרות מידות "
-"מטריות (מטרים, קילומטרים, קילוגרמים, °C) ומציגות ערכים אימפריאליים. פועל בכל "
-"המצבים; בעת מעבר, ספר שהומר משוחזר ומומר מחדש."
+msgid "The unit system you want to read in. Metric converts imperial measurements (feet, miles, °F) to metric. The Imperial options do the reverse: they find metric measurements (meters, kilometers, kilos, °C) and show imperial values. Works in every mode; a converted book is restored and reconverted when you switch."
+msgstr "מערכת היחידות שבה ברצונך לקרוא. 'מטריות' ממירה מידות אימפריאליות (רגל, מיילים, °F) למטריות. האפשרויות האימפריאליות עושות את ההפך: הן מאתרות מידות מטריות (מטרים, קילומטרים, קילוגרמים, °C) ומציגות ערכים אימפריאליים. פועל בכל המצבים; בעת מעבר, ספר שהומר משוחזר ומומר מחדש."
 
 #. TRANSLATORS: Long-press explainer for the 'Metric' choice.
-msgid ""
-"Convert imperial measurements (feet, miles, pounds, °F, gallons…) to metric."
+msgid "Convert imperial measurements (feet, miles, pounds, °F, gallons…) to metric."
 msgstr "המרת מידות אימפריאליות (רגל, מיילים, ליברות, °F, גלונים…) למטריות."
 
 #. TRANSLATORS: Long-press explainer for the 'Imperial (US)' choice. The quoted
 #. measurements are examples of the output; 'm', 'ft' and 'in' are unit symbols and
 #. are not translated.
-msgid ""
-"Convert metric measurements to US units: meters become feet and inches "
-"(\"1.8 m\" → \"5 ft 11 in\"), kilometers become miles, kilos become pounds, "
-"°C becomes °F, liters become quarts and gallons."
-msgstr ""
-"המרת מידות מטריות ליחידות אמריקאיות: מטרים הופכים לרגל ואינצ׳ים (\"1.8 m\" → "
-"\"5 ft 11 in\"), קילומטרים למיילים, קילוגרמים לליברות, °C הופך ל-°F, ליטרים "
-"לקווארטים וגלונים."
+msgid "Convert metric measurements to US units: meters become feet and inches (\"1.8 m\" → \"5 ft 11 in\"), kilometers become miles, kilos become pounds, °C becomes °F, liters become quarts and gallons."
+msgstr "המרת מידות מטריות ליחידות אמריקאיות: מטרים הופכים לרגל ואינצ׳ים (\"1.8 m\" → \"5 ft 11 in\"), קילומטרים למיילים, קילוגרמים לליברות, °C הופך ל-°F, ליטרים לקווארטים וגלונים."
 
 #. TRANSLATORS: Long-press explainer for the 'Imperial (UK)' choice. The quoted
 #. measurements are examples of the output; 'kg', 'st' and 'lb' are unit symbols
 #. and are not translated.
-msgid ""
-"Like Imperial (US), but with UK measures: body weights in stones (\"75 kg\" "
-"→ \"11 st 11 lb\") and volumes in imperial pints and gallons."
-msgstr ""
-"כמו 'אימפריאליות (ארה״ב)', אך עם מידות בריטיות: משקלי גוף בסטון (\"75 kg\" → "
-"\"11 st 11 lb\") ונפחים בפיינטים ובגלונים בריטיים."
+msgid "Like Imperial (US), but with UK measures: body weights in stones (\"75 kg\" → \"11 st 11 lb\") and volumes in imperial pints and gallons."
+msgstr "כמו 'אימפריאליות (ארה״ב)', אך עם מידות בריטיות: משקלי גוף בסטון (\"75 kg\" → \"11 st 11 lb\") ונפחים בפיינטים ובגלונים בריטיים."
 
 #. TRANSLATORS: Long-press explainer for the 'Mode' entry.
-msgid ""
-"How conversions are shown while you read. Opens a picker showing a sample "
-"sentence in each of the three modes; the change is applied to the book when "
-"you leave the menu. The two \"written into the text\" modes rewrite the book "
-"file itself — fully reversible at any time. In the \"converted only\" mode, "
-"the Advanced option \"Show original unit in tooltip\" lets you tap a "
-"converted value to see the original text."
-msgstr ""
-"כיצד ההמרות מוצגות בזמן הקריאה. נפתח בורר שמראה משפט לדוגמה בכל אחד משלושת "
-"המצבים; השינוי מוחל על הספר עם היציאה מהתפריט. שני המצבים ש\"כותבים בתוך "
-"הטקסט\" משנים את קובץ הספר עצמו — וניתנים לביטול מלא בכל עת. במצב \"ההמרה "
-"בלבד\", האפשרות המתקדמת \"הצגת היחידה המקורית בחלונית\" מאפשרת להקיש על ערך "
-"שהומר ולראות את הטקסט המקורי."
+msgid "How conversions are shown while you read. Opens a picker showing a sample sentence in each of the three modes; the change is applied to the book when you leave the menu. The two \"written into the text\" modes rewrite the book file itself — fully reversible at any time. In the \"converted only\" mode, the Advanced option \"Show original unit in tooltip\" lets you tap a converted value to see the original text."
+msgstr "כיצד ההמרות מוצגות בזמן הקריאה. נפתח בורר שמראה משפט לדוגמה בכל אחד משלושת המצבים; השינוי מוחל על הספר עם היציאה מהתפריט. שני המצבים ש\"כותבים בתוך הטקסט\" משנים את קובץ הספר עצמו — וניתנים לביטול מלא בכל עת. במצב \"ההמרה בלבד\", האפשרות המתקדמת \"הצגת היחידה המקורית בחלונית\" מאפשרת להקיש על ערך שהומר ולראות את הטקסט המקורי."
 
 #. TRANSLATORS: Long-press explainer for 'Auto-convert when opening a new book'.
 #. Shown only in the in-text modes, which rewrite the book's own text.
-msgid ""
-"Convert every new book automatically when you open it, without asking first "
-"— this rewrites the book's own text. Only English books are converted; other "
-"languages are left alone. Turn this off to convert books one by one with "
-"\"Scan book\", which asks before it starts."
-msgstr ""
-"ממיר כל ספר חדש אוטומטית עם פתיחתו, בלי לשאול תחילה — פעולה זו משכתבת את "
-"הטקסט של הספר עצמו. מומרים ספרים באנגלית בלבד; שפות אחרות נותרות ללא שינוי. "
-"יש לכבות אפשרות זו כדי להמיר ספרים אחד־אחד באמצעות 'סריקת הספר', ששואלת לפני "
-"שהיא מתחילה."
+msgid "Convert every new book automatically when you open it, without asking first — this rewrites the book's own text. Only English books are converted; other languages are left alone. Turn this off to convert books one by one with \"Scan book\", which asks before it starts."
+msgstr "ממיר כל ספר חדש אוטומטית עם פתיחתו, בלי לשאול תחילה — פעולה זו משכתבת את הטקסט של הספר עצמו. מומרים ספרים באנגלית בלבד; שפות אחרות נותרות ללא שינוי. יש לכבות אפשרות זו כדי להמיר ספרים אחד־אחד באמצעות 'סריקת הספר', ששואלת לפני שהיא מתחילה."
 
 #. TRANSLATORS: Long-press explainer for 'Auto-scan when opening a new book'.
-msgid ""
-"Scan every new book automatically when you open it. Only English books are "
-"scanned — other languages are left alone. Turn this off to scan books one by "
-"one with \"Scan book\"."
-msgstr ""
-"סריקה אוטומטית של כל ספר חדש עם פתיחתו. רק ספרים באנגלית נסרקים — שפות אחרות "
-"אינן נוגעות. יש לכבות כדי לסרוק ספרים אחד-אחד באמצעות \"סריקת הספר\"."
+msgid "Scan every new book automatically when you open it. Only English books are scanned — other languages are left alone. Turn this off to scan books one by one with \"Scan book\"."
+msgstr "סריקה אוטומטית של כל ספר חדש עם פתיחתו. רק ספרים באנגלית נסרקים — שפות אחרות אינן נוגעות. יש לכבות כדי לסרוק ספרים אחד-אחד באמצעות \"סריקת הספר\"."
 
 #. TRANSLATORS: Long-press explainer for the 'Scan book' / 'Rescan book' entry.
-msgid ""
-"Scan this book now, or scan it again from scratch. The scan runs in the "
-"background, so you can keep reading while it works. Results are saved, so "
-"reopening the book later is instant."
-msgstr ""
-"סריקת ספר זה כעת, או סריקתו מחדש מההתחלה. הסריקה פועלת ברקע, כך שאפשר להמשיך "
-"לקרוא בזמן שהיא עובדת. התוצאות נשמרות, ולכן פתיחה חוזרת של הספר מיידית."
+msgid "Scan this book now, or scan it again from scratch. The scan runs in the background, so you can keep reading while it works. Results are saved, so reopening the book later is instant."
+msgstr "סריקת ספר זה כעת, או סריקתו מחדש מההתחלה. הסריקה פועלת ברקע, כך שאפשר להמשיך לקרוא בזמן שהיא עובדת. התוצאות נשמרות, ולכן פתיחה חוזרת של הספר מיידית."
 
 #. TRANSLATORS: Long-press explainer for 'Styling'.
-msgid ""
-"Customise how underlines look (solid or wavy, intensity, thickness) and the "
-"tooltip (size, unit icon), with a live preview. Drag the dialog around if it "
-"covers the text you want to see."
-msgstr ""
-"התאמת מראה הקווים התחתונים (מלא או גלי, עוצמה, עובי) והחלונית (גודל, סמל "
-"היחידה), עם תצוגה מקדימה חיה. אפשר לגרור את החלון אם הוא מסתיר את הטקסט "
-"שרוצים לראות."
+msgid "Customise how underlines look (solid or wavy, intensity, thickness) and the tooltip (size, unit icon), with a live preview. Drag the dialog around if it covers the text you want to see."
+msgstr "התאמת מראה הקווים התחתונים (מלא או גלי, עוצמה, עובי) והחלונית (גודל, סמל היחידה), עם תצוגה מקדימה חיה. אפשר לגרור את החלון אם הוא מסתיר את הטקסט שרוצים לראות."
 
 #. TRANSLATORS: Long-press explainer for 'Check for updates'.
-msgid ""
-"Check GitHub for a newer Footcream release and install it in place. Needs Wi-"
-"Fi; you'll be asked to restart KOReader when it's done."
-msgstr ""
-"בדיקה ב-GitHub אם קיימת גרסה חדשה יותר של Footcream והתקנתה במקום. נדרש Wi-"
-"Fi; בסיום תוצג בקשה להפעיל מחדש את KOReader."
+msgid "Check GitHub for a newer Footcream release and install it in place. Needs Wi-Fi; you'll be asked to restart KOReader when it's done."
+msgstr "בדיקה ב-GitHub אם קיימת גרסה חדשה יותר של Footcream והתקנתה במקום. נדרש Wi-Fi; בסיום תוצג בקשה להפעיל מחדש את KOReader."
 
 #. TRANSLATORS: Long-press explainer for the 'Advanced' submenu.
-msgid ""
-"Extra options: unit categories, rounding, original-unit tooltips, error "
-"reporting to the developer, per-book cleanup, and debug tools."
-msgstr ""
-"אפשרויות נוספות: קטגוריות יחידות, עיגול, חלוניות עם היחידה המקורית, דיווח "
-"שגיאות למפתח, ניקוי לכל ספר בנפרד וכלי אבחון."
+msgid "Extra options: unit categories, rounding, original-unit tooltips, error reporting to the developer, per-book cleanup, and debug tools."
+msgstr "אפשרויות נוספות: קטגוריות יחידות, עיגול, חלוניות עם היחידה המקורית, דיווח שגיאות למפתח, ניקוי לכל ספר בנפרד וכלי אבחון."
 
 #. TRANSLATORS: Long-press explainer for 'Unit categories'.
-msgid ""
-"Choose which kinds of measurements are converted. Anything you untick is "
-"ignored everywhere — no underlines, popups or in-text conversions for that "
-"category."
-msgstr ""
-"בחירה אילו סוגי מידות יומרו. כל מה שמסירים ממנו את הסימון נעלם בכל מקום — "
-"ללא קווים תחתונים, חלוניות או המרות בטקסט עבור אותה קטגוריה."
+msgid "Choose which kinds of measurements are converted. Anything you untick is ignored everywhere — no underlines, popups or in-text conversions for that category."
+msgstr "בחירה אילו סוגי מידות יומרו. כל מה שמסירים ממנו את הסימון נעלם בכל מקום — ללא קווים תחתונים, חלוניות או המרות בטקסט עבור אותה קטגוריה."
 
 #. TRANSLATORS: Long-press explainer for 'Smart rounding for conversions'. The
 #. quoted values are examples; 'm' is the metre symbol, not translated.
-msgid ""
-"Round conversions to friendly, readable values — \"90 m\" instead of \"91.44 "
-"m\". Turn off if you prefer exact numbers."
-msgstr ""
-"עיגול ההמרות לערכים נוחים וקריאים — \"90 m\" במקום \"91.44 m\". יש לכבות אם "
-"מעדיפים מספרים מדויקים."
+msgid "Round conversions to friendly, readable values — \"90 m\" instead of \"91.44 m\". Turn off if you prefer exact numbers."
+msgstr "עיגול ההמרות לערכים נוחים וקריאים — \"90 m\" במקום \"91.44 m\". יש לכבות אם מעדיפים מספרים מדויקים."
 
 #. TRANSLATORS: Long-press explainer for 'Show original unit in tooltip'.
-msgid ""
-"In the \"only (in text)\" mode, underline the converted values so you can "
-"tap any of them and see the original text. Handy if you want to double-check "
-"a conversion against what the author wrote."
-msgstr ""
-"במצב \"בלבד (בטקסט)\", סימון הערכים שהומרו בקו תחתון כדי שאפשר יהיה להקיש על "
-"כל אחד מהם ולראות את הטקסט המקורי. נוח כשרוצים להשוות המרה למה שהמחבר כתב."
+msgid "In the \"only (in text)\" mode, underline the converted values so you can tap any of them and see the original text. Handy if you want to double-check a conversion against what the author wrote."
+msgstr "במצב \"בלבד (בטקסט)\", סימון הערכים שהומרו בקו תחתון כדי שאפשר יהיה להקיש על כל אחד מהם ולראות את הטקסט המקורי. נוח כשרוצים להשוות המרה למה שהמחבר כתב."
 
 #. TRANSLATORS: Long-press explainer for 'Long-press units to send errors to the
 #. developer'.
-msgid ""
-"Flag bad conversions while you read: long-press a unit (or select text "
-"Footcream missed) and the error is sent anonymously to the developer. Each "
-"flag contains the book title, the measurement, its conversion and the "
-"surrounding sentence — nothing else. Works offline: flags are queued and "
-"sent when you're connected."
-msgstr ""
-"דיווח על המרות שגויות תוך כדי קריאה: לחיצה ארוכה על יחידה (או סימון טקסט "
-"ש-Footcream פספס) שולחת את השגיאה למפתח באופן אנונימי. כל דיווח מכיל את שם "
-"הספר, המידה, ההמרה שלה והמשפט שסביבה — ולא יותר מזה. פועל גם ללא חיבור: "
-"הדיווחים ממתינים בתור ונשלחים כשיש חיבור."
+msgid "Flag bad conversions while you read: long-press a unit (or select text Footcream missed) and the error is sent anonymously to the developer. Each flag contains the book title, the measurement, its conversion and the surrounding sentence — nothing else. Works offline: flags are queued and sent when you're connected."
+msgstr "דיווח על המרות שגויות תוך כדי קריאה: לחיצה ארוכה על יחידה (או סימון טקסט ש-Footcream פספס) שולחת את השגיאה למפתח באופן אנונימי. כל דיווח מכיל את שם הספר, המידה, ההמרה שלה והמשפט שסביבה — ולא יותר מזה. פועל גם ללא חיבור: הדיווחים ממתינים בתור ונשלחים כשיש חיבור."
 
 #. TRANSLATORS: Long-press explainer for 'Remove Footcream data from this book'.
-msgid ""
-"Undo everything for this book: restore the original text, remove all "
-"underlines and delete the saved scan. The book file goes back to exactly how "
-"it was before Footcream touched it."
-msgstr ""
-"ביטול הכול עבור ספר זה: שחזור הטקסט המקורי, הסרת כל הקווים התחתונים ומחיקת "
-"הסריקה השמורה. קובץ הספר חוזר בדיוק למצב שבו היה לפני ש-Footcream נגע בו."
+msgid "Undo everything for this book: restore the original text, remove all underlines and delete the saved scan. The book file goes back to exactly how it was before Footcream touched it."
+msgstr "ביטול הכול עבור ספר זה: שחזור הטקסט המקורי, הסרת כל הקווים התחתונים ומחיקת הסריקה השמורה. קובץ הספר חוזר בדיוק למצב שבו היה לפני ש-Footcream נגע בו."
 
 #. TRANSLATORS: Long-press explainer for the 'Debug' submenu.
-msgid ""
-"See exactly what the scan found in this book, and manage errors you've "
-"flagged on this device."
-msgstr ""
-"אפשר לראות בדיוק מה מצאה הסריקה בספר זה, ולנהל שגיאות שדווחו במכשיר זה."
+msgid "See exactly what the scan found in this book, and manage errors you've flagged on this device."
+msgstr "אפשר לראות בדיוק מה מצאה הסריקה בספר זה, ולנהל שגיאות שדווחו במכשיר זה."
 
 #. TRANSLATORS: Long-press explainer for 'Units in book (list)'.
-msgid ""
-"Every measurement found in this book, with its detected value and "
-"conversion. Long-press an entry to flag it as wrong."
-msgstr ""
-"כל מידה שנמצאה בספר זה, עם הערך שזוהה וההמרה שלה. לחיצה ארוכה על רשומה "
-"מדווחת עליה כשגויה."
+msgid "Every measurement found in this book, with its detected value and conversion. Long-press an entry to flag it as wrong."
+msgstr "כל מידה שנמצאה בספר זה, עם הערך שזוהה וההמרה שלה. לחיצה ארוכה על רשומה מדווחת עליה כשגויה."
 
 #. TRANSLATORS: Long-press explainer for 'View flagged errors'. The path in
 #. parentheses is a file location - leave it as it is.
-msgid ""
-"Show the errors you've flagged on this device. They're kept in a plain-text "
-"file (koreader/footcream/flagged_errors.txt) that you can also attach to a "
-"GitHub issue."
-msgstr ""
-"הצגת השגיאות שדווחו במכשיר זה. הן נשמרות בקובץ טקסט פשוט (koreader/footcream/"
-"flagged_errors.txt) שאפשר גם לצרף לדיווח ב-GitHub."
+msgid "Show the errors you've flagged on this device. They're kept in a plain-text file (koreader/footcream/flagged_errors.txt) that you can also attach to a GitHub issue."
+msgstr "הצגת השגיאות שדווחו במכשיר זה. הן נשמרות בקובץ טקסט פשוט (koreader/footcream/flagged_errors.txt) שאפשר גם לצרף לדיווח ב-GitHub."
 
 #. TRANSLATORS: Long-press explainer for 'Clear flagged errors'.
-msgid ""
-"Delete the local flagged-errors file. Reports that were already sent to the "
-"developer are not affected."
-msgstr ""
-"מחיקת קובץ השגיאות המדווחות המקומי. דיווחים שכבר נשלחו למפתח אינם מושפעים."
+msgid "Delete the local flagged-errors file. Reports that were already sent to the developer are not affected."
+msgstr "מחיקת קובץ השגיאות המדווחות המקומי. דיווחים שכבר נשלחו למפתח אינם מושפעים."
+
