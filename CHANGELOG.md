@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.8.3
+
+If KOReader's language was set to Russian, Ukrainian or Welsh, Footcream never appeared at all — it looked like it was not installed. That is fixed. The plugin was tripping over its own translation file for those three languages and failing to start, which is why 1.6.0 was the last version that worked for those readers.
+
+Also fixed (thank you for the flagging!): when a book already gives both units, Footcream now leaves it alone, so "12 pounds (5.5 kilograms)" no longer gains a third number. Quotation marks in web articles and code listings are no longer mistaken for inch marks, and a bid at an auction is read as money rather than weight.
+
 ## v1.8.2
 
 Footcream was mistaking quotation marks for foot marks, so quoted numbers turned into measurements — `'18'` on a label became 5.5 m. That's now fixed in nearly every case, and no real measurements were lost along the way.
