@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased — Spanish support
+
+Footcream now converts measurements in Spanish books, in both directions: imperial units (*libra/libras*, *onza/onzas*, *milla/millas*, *pie/pies*, *pulgada/pulgadas*, *galón/galones*, *pinta/pintas*, *onza líquida*, *milla náutica*, *yarda/yardas*, *braza/brazas*, *legua/leguas*, *grados Fahrenheit*, *millas por hora*, *nudo/nudos*, *acre/acres*) convert to metric, and metric units (*kilómetros, metros, centímetros, milímetros, kilogramos, kilos, gramos, litros, mililitros, grados Celsius/centígrados, kilómetros por hora, hectáreas*) convert back to imperial — with accented and unaccented spellings.
+
+Also understood: spelled-out Spanish numbers (*treinta y cinco*, *doscientos treinta*, *dos millones*, *un cuarto de milla*, *dos y medio*), Spanish decimal commas and thousand dots (*1,5* · *1.609,34*), and Spanish context cues — *libras esterlinas*, *pagó*, *precio*, *al año* read as money and are left alone, while *pesaba*, *carga*, *frío*, *temperatura* read as weight and weather.
+
 ## v1.8.3
 
 If KOReader's language was set to Russian, Ukrainian or Welsh, Footcream never appeared at all — it looked like it was not installed. That is fixed. The plugin was tripping over its own translation file for those three languages and failing to start, which is why 1.6.0 was the last version that worked for those readers.
