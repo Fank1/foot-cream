@@ -2846,6 +2846,14 @@ local function _is_english(doc)
     return lang == "" or lang == "und" or lang:match("^en") ~= nil
 end
 
+-- This build also understands Spanish measurement words, so Spanish books
+-- skip the "not in English" scan confirmation too. A FootFree field (not a
+-- chunk-level local): main.lua sits at Lua's 200-local limit.
+function FootFree._is_spanish(doc)
+    local lang = _get_book_lang(doc)
+    return lang:match("^es") ~= nil
+end
+
 -- True specifically for en-GB / en-UK (UK Imperial volumes).
 local function _is_uk_book(doc)
     local lang = _get_book_lang(doc)
@@ -8466,7 +8474,7 @@ function FootFree:_reconcileModeWithBook(cancel_restore_mode)
             local d = self.ui.document
             if not d then return end
             if (self._all_matches and #self._all_matches > 0) or self._scanned
-               or not _is_english(d) then
+               or not (_is_english(d) or FootFree._is_spanish(d)) then
                 self:_applyMetricEdition(d, nil, cancel_restore_mode)
             else
                 self:_confirmScanAndConvert(d, cancel_restore_mode,
@@ -8507,7 +8515,7 @@ function FootFree:_setPreferred(v)
     self._current_boxes = {}
     self._scanned       = false
     if self.view then UIManager:setDirty(self.view.dialog, "ui") end
-    if _is_english(doc) then
+    if _is_english(doc) or FootFree._is_spanish(doc) then
         self.ui:handleEvent(Event:new("CloseReaderMenu"))
         -- Explicit action (the reader changed direction), so ASK FIRST and then
         -- run scan + convert uninterrupted. The 0.3s settle is kept: closing
@@ -10620,14 +10628,14 @@ function FootFree:addToMainMenu(menu_items)
                         end)
                     end
                     local function maybe_scan()
-                        if _is_english(doc) then
+                        if _is_english(doc) or FootFree._is_spanish(doc) then
                             do_scan()
                         else
                             local lang = _get_book_lang(doc)
                             local msg = lang ~= ""
-                                -- TRANSLATORS: Asked before scanning a book that doesn't look English, since
-                                -- Footcream only recognises English measurement words. %1 is the language code
-                                -- from the book's metadata.
+                                -- TRANSLATORS: Asked before scanning a book that looks like neither English
+                                -- nor Spanish, since Footcream only recognises measurement words in those
+                                -- languages. %1 is the language code from the book's metadata.
                                 and T(_("This book does not appear to be in English (detected: %1).\n\nScan it anyway?"), lang)
                                 -- TRANSLATORS: Same question, for a book whose metadata names no language at all.
                                 or  _("This book does not appear to be in English.\n\nScan it anyway?")
