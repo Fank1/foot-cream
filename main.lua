@@ -238,6 +238,35 @@ local _WORD_NUMS = {
     { "eight",      8 }, { "seven",       7 }, { "six",         6 },
     { "five",       5 }, { "four",        4 }, { "three",       3 },
     { "two",        2 }, { "half",       0.5 }, { "one",         1 },
+    -- ── Spanish ──────────────────────────────────────────────────────────
+    -- The lookup input is de-accented first (FootFree._deaccent in _parse_num),
+    -- so "millón"/"veintidós" arrive here as "millon"/"veintidos" and only the
+    -- plain forms are needed. Longest-first within each group, and fractions
+    -- before the bare "un"/"una" they start with.
+    { "un cuarto",  0.25 }, { "un medio",    0.5 }, { "una media",   0.5 },
+    { "un tercio",  1/3  }, { "medio",       0.5 }, { "media",       0.5 },
+    { "veintinueve", 29 }, { "veintiocho", 28 }, { "veintisiete", 27 },
+    { "veintiseis",  26 }, { "veinticinco", 25 }, { "veinticuatro", 24 },
+    { "veintitres",  23 }, { "veintidos",  22 }, { "veintiuno",    21 },
+    { "veinte", 20 },
+    { "diecinueve", 19 }, { "dieciocho", 18 }, { "diecisiete", 17 },
+    { "dieciseis",  16 }, { "quince",    15 }, { "catorce",    14 },
+    { "trece", 13 }, { "doce", 12 }, { "once", 11 }, { "diez", 10 },
+    { "novecientos", 900 }, { "ochocientos", 800 }, { "setecientos", 700 },
+    { "seiscientos", 600 }, { "quinientos",  500 }, { "cuatrocientos", 400 },
+    { "trescientos", 300 }, { "doscientos",  200 },
+    -- Feminine hundreds ("trescientas yardas" — the noun is feminine).
+    { "novecientas", 900 }, { "ochocientas", 800 }, { "setecientas", 700 },
+    { "seiscientas", 600 }, { "quinientas",  500 }, { "cuatrocientas", 400 },
+    { "trescientas", 300 }, { "doscientas",  200 },
+    { "ciento", 100 }, { "cien", 100 },
+    { "noventa", 90 }, { "ochenta", 80 }, { "setenta", 70 }, { "sesenta", 60 },
+    { "cincuenta", 50 }, { "cuarenta", 40 }, { "treinta", 30 },
+    { "nueve", 9 }, { "ocho", 8 }, { "siete", 7 }, { "seis", 6 },
+    { "cinco", 5 }, { "cuatro", 4 }, { "tres", 3 }, { "dos", 2 },
+    { "una", 1 }, { "uno", 1 }, { "un", 1 },
+    { "billones", 1000000000 }, { "billon", 1000000000 },
+    { "millones", 1000000 }, { "millon", 1000000 }, { "mil", 1000 },
 }
 
 -- ── Core helpers ─────────────────────────────────────────────────────────────
@@ -280,12 +309,62 @@ local _NUM_UNIT = {
     zero=0, one=1, two=2, three=3, four=4, five=5, six=6, seven=7, eight=8, nine=9,
     ten=10, eleven=11, twelve=12, thirteen=13, fourteen=14, fifteen=15,
     sixteen=16, seventeen=17, eighteen=18, nineteen=19,
+    -- Spanish (input is de-accented before lookup: "veintidós"→"veintidos").
+    uno=1, un=1, una=1, dos=2, tres=3, cuatro=4, cinco=5, seis=6, siete=7,
+    ocho=8, nueve=9, diez=10, once=11, doce=12, trece=13, catorce=14,
+    quince=15, dieciseis=16, diecisiete=17, dieciocho=18, diecinueve=19,
+    veinte=20, veintiuno=21, veintidos=22, veintitres=23, veinticuatro=24,
+    veinticinco=25, veintiseis=26, veintisiete=27, veintiocho=28,
+    veintinueve=29,
 }
 local _NUM_TEN = {
     twenty=20, thirty=30, forty=40, fifty=50, sixty=60, seventy=70, eighty=80, ninety=90,
+    treinta=30, cuarenta=40, cincuenta=50, sesenta=60, setenta=70, ochenta=80,
+    noventa=90,
 }
-local _NUM_SCALE = { thousand=1000, million=1000000, billion=1000000000 }
-local _NUM_FRAC  = { half=0.5, quarter=0.25, third=1/3 }
+local _NUM_SCALE = { thousand=1000, million=1000000, billion=1000000000,
+                     mil=1000, millon=1000000, millones=1000000,
+                     billon=1000000000, billones=1000000000 }
+local _NUM_FRAC  = { half=0.5, quarter=0.25, third=1/3,
+                     medio=0.5, media=0.5, cuarto=0.25, tercio=1/3 }
+
+-- Spanish fused hundreds ("doscientos" = 200). They are already scaled, so
+-- the composer ADDS them and opens a fresh sub-hundred group — like the
+-- "hundred" branch, but without multiplying. Class attribute, not a local:
+-- main.lua is at Lua's 200-local ceiling (see references/gotchas.md).
+FootFree._NUM_HUNDRED = {
+    doscientos=200, trescientos=300, cuatrocientos=400, quinientos=500,
+    seiscientos=600, setecientos=700, ochocientos=800, novecientos=900,
+    -- Feminine forms: hundreds agree with the noun ("trescientas yardas",
+    -- "doscientas millas").
+    doscientas=200, trescientas=300, cuatrocientas=400, quinientas=500,
+    seiscientas=600, setecientas=700, ochocientas=800, novecientas=900,
+}
+
+-- Strip diacritics ("millón"→"millon", "frío"→"frio") so Spanish words match
+-- their plain-ASCII table keys. Identity on ASCII, so English behavior is
+-- unchanged. Class attributes for the same 200-local reason as above.
+FootFree._DEACCENT_MAP = {
+    ["\195\161"]="a", ["\195\160"]="a", ["\195\164"]="a", ["\195\162"]="a",
+    ["\195\129"]="A", ["\195\128"]="A", ["\195\132"]="A", ["\195\130"]="A",
+    ["\195\169"]="e", ["\195\168"]="e", ["\195\171"]="e", ["\195\170"]="e",
+    ["\195\137"]="E", ["\195\136"]="E", ["\195\139"]="E", ["\195\138"]="E",
+    ["\195\173"]="i", ["\195\172"]="i", ["\195\175"]="i", ["\195\174"]="i",
+    ["\195\141"]="I", ["\195\140"]="I", ["\195\143"]="I", ["\195\142"]="I",
+    ["\195\179"]="o", ["\195\178"]="o", ["\195\182"]="o", ["\195\180"]="o",
+    ["\195\147"]="O", ["\195\146"]="O", ["\195\150"]="O", ["\195\148"]="O",
+    ["\195\186"]="u", ["\195\185"]="u", ["\195\188"]="u", ["\195\187"]="u",
+    ["\195\154"]="U", ["\195\153"]="U", ["\195\156"]="U", ["\195\155"]="U",
+    ["\195\177"]="n", ["\195\145"]="N", ["\195\167"]="c", ["\195\135"]="C",
+    ["\195\189"]="y", ["\195\157"]="Y",
+}
+function FootFree._deaccent(s)
+    if not s or s == "" then return s end
+    local map = FootFree._DEACCENT_MAP
+    -- Any 2-byte UTF-8 sequence starting with C2/C3; unmapped ones (e.g. §)
+    -- pass through unchanged.
+    return (s:gsub("[\194\195][\128-\191]", function(c) return map[c] or c end))
+end
 -- Unicode "vulgar fraction" glyphs (their UTF-8 bytes) → decimal value, so
 -- "18½ miles" reads 18.5 and "½ mile" reads 0.5. The ½/¼/¾ live in Latin-1
 -- (2 bytes); the ⅓-family in U+215x (3 bytes).
@@ -311,9 +390,13 @@ local _FRAC_DENOM = {
     fourth=4, fourths=4, fifth=5, fifths=5, sixth=6, sixths=6,
     seventh=7, sevenths=7, eighth=8, eighths=8, ninth=9, ninths=9,
     tenth=10, tenths=10, twelfth=12, twelfths=12, sixteenth=16, sixteenths=16,
+    -- Spanish (de-accented input): "tres cuartos" = 0.75, "dos tercios" = 2/3.
+    medio=2, medios=2, tercio=3, tercios=3, cuarto=4, cuartos=4,
+    quinto=5, quintos=5, sexto=6, sextos=6, septimo=7, septimos=7,
+    octavo=8, octavos=8, noveno=9, novenos=9, decimo=10, decimos=10,
 }
 local function _word_fraction(text)
-    local s = (text or ""):lower():gsub("%-", " "):gsub("^%s+", "")
+    local s = FootFree._deaccent((text or ""):lower():gsub("%-", " "):gsub("^%s+", ""))
     local nw, dw = s:match("^(%a+)%s+(%a+)")
     if not nw then return nil end
     local denom = _FRAC_DENOM[dw]
@@ -327,7 +410,7 @@ local function _compose_spelled(text)
     -- Only the ASCII hyphen joins parts of ONE number ("twenty-three",
     -- "six-and-a-half"). En/em dashes separate two numbers (a range, "five–six"),
     -- so they are NOT normalised here — otherwise "five–six" would compose to 11.
-    local s = text:lower():gsub("%-", " ")
+    local s = FootFree._deaccent(text:lower():gsub("%-", " "))
     local total, cur, frac = 0, 0, 0
     local ntok, started, await_frac, used = 0, false, false, 0
     -- Within one sub-hundred group there is at most one tens word and one units
@@ -341,6 +424,11 @@ local function _compose_spelled(text)
         local w = raw:gsub("[^%a]", "")
         if w == "and" then
             -- connector, ignore
+        elseif w == "y" then
+            -- Spanish connector: skipped like "and", but it also arms the
+            -- additive fraction — Spanish needs no article ("dos y medio"
+            -- = 2.5, "treinta y cinco" = 35).
+            await_frac = true
         elseif w == "a" or w == "an" then
             await_frac = true                              -- "a half" vs "a hundred"
         elseif _NUM_UNIT[w] then
@@ -351,8 +439,14 @@ local function _compose_spelled(text)
             if have_ten or have_unit then break end        -- "eighty-five and ninety" → 85, then stop
             cur = cur + _NUM_TEN[w]; have_ten = true
             ntok = ntok + 1; started = true; await_frac = false
-        elseif w == "hundred" then
+        elseif w == "hundred" or w == "cien" or w == "ciento" then
             cur = (cur == 0 and 1 or cur) * 100; have_ten, have_unit = false, false
+            ntok = ntok + 1; started = true; await_frac = false
+        elseif FootFree._NUM_HUNDRED[w] then
+            -- Spanish fused hundreds ("doscientos"): already scaled, so they
+            -- ADD and open a fresh sub-hundred group ("doscientos treinta").
+            cur = cur + FootFree._NUM_HUNDRED[w]
+            have_ten, have_unit = false, false
             ntok = ntok + 1; started = true; await_frac = false
         elseif w == "dozen" then
             -- "two dozen" = 24, "a dozen" = 12. Without this branch the composer
@@ -434,7 +528,35 @@ local function _parse_num(text)
     end
     local s_start, s_end, s = text:find("([0-9][0-9,.]*)")
     if s then
-        local n = tonumber((s:gsub(",", "")))
+        -- Decimal/thousands separators are locale-mirrored: Spanish writes
+        -- 1.609,34 for 1609.34 (dots group thousands, comma is the decimal
+        -- mark), the mirror of English 1,609.34. When BOTH appear, the LAST
+        -- one is the decimal mark — unambiguous in either locale. With only a
+        -- comma, three trailing digits mean thousands ("1,500" = 1500) and
+        -- anything else a decimal ("1,5" = 1.5). A lone dot keeps the English
+        -- reading: without book-language detection "1.500" is genuinely
+        -- ambiguous (1500 in Spanish, 1.5 in English).
+        local norm = s
+        do
+            local tail_c = s:match(",([^,]*)$")
+            local last_dot = s:match(".*()%.")
+            local last_comma = s:match(".*(),")
+            if last_dot and last_comma and last_comma > last_dot
+               and tail_c and #tail_c > 0 then
+                norm = s:gsub("%.", ""):gsub(",", ".")   -- "1.609,34" → 1609.34
+            elseif last_comma and not last_dot then
+                if tail_c and #tail_c == 3 then
+                    norm = s:gsub(",", "")              -- "1,500" → 1500
+                elseif tail_c and #tail_c > 0 then
+                    norm = s:gsub(",", ".")             -- "1,5" → 1.5
+                else
+                    norm = s:gsub(",", "")              -- "1,500," → 1500
+                end
+            else
+                norm = s:gsub(",", "")                  -- English default
+            end
+        end
+        local n = tonumber(norm)
         if n then
             -- A vulgar-fraction glyph fused to the digits ("18½") adds its value.
             local tail = text:sub(s_end + 1, s_end + 3)
@@ -467,7 +589,7 @@ local function _parse_num(text)
     if wf then return wf end
     -- Strip leading punctuation/space so a paren- or quote-attached word number
     -- still prefix-matches ("(three" → "three", "  ten" → "ten").
-    local lower = text:lower():gsub("^[^%w]+", "")
+    local lower = FootFree._deaccent(text:lower():gsub("^[^%w]+", ""))
     -- Hyphen-glued attributive fraction ("third-of-a-mile-thick rock"): the
     -- "-of-a" tail disambiguates the ordinal completely — "the third of May"
     -- is never hyphenated — so <denominator>-of-a reads as 1/denom. Singular
@@ -817,6 +939,23 @@ FootFree._IMPERIAL = {
         ["km"]                   = { factor=0.621371,  offset=0,  target="mi",    cat="length" },
         ["klicks"]               = { factor=0.621371,  offset=0,  target="mi",    cat="length" },
         ["klick"]                = { factor=0.621371,  offset=0,  target="mi",    cat="length" },
+        -- Spanish metric aliases (same factors), accented and unaccented —
+        -- the scan's plain search is byte-exact, so "kilómetros" needs its
+        -- own alias distinct from "kilometros".
+        ["kilómetros"]           = { factor=0.621371,  offset=0,  target="mi",    cat="length" },
+        ["kilómetro"]            = { factor=0.621371,  offset=0,  target="mi",    cat="length" },
+        ["kilometros"]           = { factor=0.621371,  offset=0,  target="mi",    cat="length" },
+        ["kilometro"]            = { factor=0.621371,  offset=0,  target="mi",    cat="length" },
+        ["metros"]               = { factor=3.28084,   offset=0,  target="ftin",  cat="length" },
+        ["metro"]                = { factor=3.28084,   offset=0,  target="ftin",  cat="length" },
+        ["centímetros"]          = { factor=0.393701,  offset=0,  target="in",    cat="length" },
+        ["centímetro"]           = { factor=0.393701,  offset=0,  target="in",    cat="length" },
+        ["centimetros"]          = { factor=0.393701,  offset=0,  target="in",    cat="length" },
+        ["centimetro"]           = { factor=0.393701,  offset=0,  target="in",    cat="length" },
+        ["milímetros"]           = { factor=0.0393701, offset=0,  target="in",    cat="length" },
+        ["milímetro"]            = { factor=0.0393701, offset=0,  target="in",    cat="length" },
+        ["milimetros"]           = { factor=0.0393701, offset=0,  target="in",    cat="length" },
+        ["milimetro"]            = { factor=0.0393701, offset=0,  target="in",    cat="length" },
         ["meters"]               = { factor=3.28084,   offset=0,  target="ftin",  cat="length" },
         ["metres"]               = { factor=3.28084,   offset=0,  target="ftin",  cat="length" },
         ["meter"]                = { factor=3.28084,   offset=0,  target="ftin",  cat="length" },
@@ -837,13 +976,20 @@ FootFree._IMPERIAL = {
         ["kilos"]                = { factor=2.20462,   offset=0,  target="lboz",  cat="weight" },
         ["kilo"]                 = { factor=2.20462,   offset=0,  target="lboz",  cat="weight" },
         ["kg"]                   = { factor=2.20462,   offset=0,  target="lboz",  cat="weight" },
+        ["kilogramos"]           = { factor=2.20462,   offset=0,  target="lboz",  cat="weight" },
+        ["kilogramo"]            = { factor=2.20462,   offset=0,  target="lboz",  cat="weight" },
         ["grams"]                = { factor=0.0352740, offset=0,  target="oz",    cat="weight" },
         ["gram"]                 = { factor=0.0352740, offset=0,  target="oz",    cat="weight" },
         ["g"]                    = { factor=0.0352740, offset=0,  target="oz",    cat="weight" },
+        ["gramos"]               = { factor=0.0352740, offset=0,  target="oz",    cat="weight" },
+        ["gramo"]                = { factor=0.0352740, offset=0,  target="oz",    cat="weight" },
         ["degrees Celsius"]      = { factor=9/5,       offset=32, target="°F",    cat="temperature" },
         ["degrees centigrade"]   = { factor=9/5,       offset=32, target="°F",    cat="temperature" },
         ["centigrade"]           = { factor=9/5,       offset=32, target="°F",    cat="temperature" },
         ["Celsius"]              = { factor=9/5,       offset=32, target="°F",    cat="temperature" },
+        ["grados celsius"]       = { factor=9/5,       offset=32, target="°F",    cat="temperature" },
+        ["grados centígrados"]   = { factor=9/5,       offset=32, target="°F",    cat="temperature" },
+        ["grados centigrados"]   = { factor=9/5,       offset=32, target="°F",    cat="temperature" },
         ["liters"]               = { factor=1,         offset=0,  target="vol",   cat="volume" },
         ["litres"]               = { factor=1,         offset=0,  target="vol",   cat="volume" },
         ["liter"]                = { factor=1,         offset=0,  target="vol",   cat="volume" },
@@ -853,6 +999,14 @@ FootFree._IMPERIAL = {
         ["milliliter"]           = { factor=0.001,     offset=0,  target="vol",   cat="volume" },
         ["millilitre"]           = { factor=0.001,     offset=0,  target="vol",   cat="volume" },
         ["ml"]                   = { factor=0.001,     offset=0,  target="vol",   cat="volume" },
+        ["litros"]               = { factor=1,         offset=0,  target="vol",   cat="volume" },
+        ["litro"]                = { factor=1,         offset=0,  target="vol",   cat="volume" },
+        ["mililitros"]           = { factor=0.001,     offset=0,  target="vol",   cat="volume" },
+        ["mililitro"]            = { factor=0.001,     offset=0,  target="vol",   cat="volume" },
+        ["hectáreas"]            = { factor=2.47105,   offset=0,  target="acres", cat="area" },
+        ["hectárea"]             = { factor=2.47105,   offset=0,  target="acres", cat="area" },
+        ["hectareas"]            = { factor=2.47105,   offset=0,  target="acres", cat="area" },
+        ["hectarea"]             = { factor=2.47105,   offset=0,  target="acres", cat="area" },
         ["hectares"]             = { factor=2.47105,   offset=0,  target="acres", cat="area" },
         ["hectare"]              = { factor=2.47105,   offset=0,  target="acres", cat="area" },
         -- Square metric ("an eleven-square-metre cell" converted as LINEAR
@@ -875,8 +1029,21 @@ FootFree._IMPERIAL = {
         ["square centimeter"]    = { factor=0.155,     offset=0,  target="sqin",  cat="area" },
         ["square centimetre"]    = { factor=0.155,     offset=0,  target="sqin",  cat="area" },
         ["square-centimeter"]    = { factor=0.155,     offset=0,  target="sqin",  cat="area" },
+        -- Spanish square metric.
+        ["kilómetros cuadrados"] = { factor=0.386102,  offset=0,  target="sqmi",  cat="area" },
+        ["kilómetro cuadrado"]   = { factor=0.386102,  offset=0,  target="sqmi",  cat="area" },
+        ["kilometros cuadrados"] = { factor=0.386102,  offset=0,  target="sqmi",  cat="area" },
+        ["kilometro cuadrado"]   = { factor=0.386102,  offset=0,  target="sqmi",  cat="area" },
+        ["metros cuadrados"]     = { factor=10.7639,   offset=0,  target="sqft",  cat="area" },
+        ["metro cuadrado"]       = { factor=10.7639,   offset=0,  target="sqft",  cat="area" },
+        ["centímetros cuadrados"]= { factor=0.155,     offset=0,  target="sqin",  cat="area" },
+        ["centímetro cuadrado"]  = { factor=0.155,     offset=0,  target="sqin",  cat="area" },
+        ["centimetros cuadrados"]= { factor=0.155,     offset=0,  target="sqin",  cat="area" },
+        ["centimetro cuadrado"]  = { factor=0.155,     offset=0,  target="sqin",  cat="area" },
         ["square-centimetre"]    = { factor=0.155,     offset=0,  target="sqin",  cat="area" },
         ["kilometers per hour"]  = { factor=0.621371,  offset=0,  target="mph",   cat="speed" },
+        ["kilómetros por hora"]  = { factor=0.621371,  offset=0,  target="mph",   cat="speed" },
+        ["kilometros por hora"]  = { factor=0.621371,  offset=0,  target="mph",   cat="speed" },
         ["kilometres per hour"]  = { factor=0.621371,  offset=0,  target="mph",   cat="speed" },
         ["kilometers an hour"]   = { factor=0.621371,  offset=0,  target="mph",   cat="speed" },
         ["kilometres an hour"]   = { factor=0.621371,  offset=0,  target="mph",   cat="speed" },
@@ -899,20 +1066,36 @@ FootFree._IMPERIAL = {
         "square centimetre", "square-centimeter", "square-centimetre",
         "square meters", "square metres", "square meter", "square metre",
         "square-meter", "square-metre",
+        -- Spanish square metric (same rule: before the linear forms).
+        "kilómetros cuadrados", "kilómetro cuadrado",
+        "kilometros cuadrados", "kilometro cuadrado",
+        "centímetros cuadrados", "centímetro cuadrado",
+        "centimetros cuadrados", "centimetro cuadrado",
+        "metros cuadrados", "metro cuadrado",
         "kilometers per hour", "kilometres per hour",
+        "kilómetros por hora", "kilometros por hora",
         "kilometers an hour", "kilometres an hour",
         "meters per second", "metres per second",
         "degrees Celsius", "degrees centigrade", "centigrade", "Celsius",
+        "grados celsius", "grados centígrados", "grados centigrados",
         "millimeters", "millimetres", "millimeter", "millimetre",
+        "milímetros", "milímetro", "milimetros", "milimetro",
         "centimeters", "centimetres", "centimeter", "centimetre",
+        "centímetros", "centímetro", "centimetros", "centimetro",
         "kilometers", "kilometres", "kilometer", "kilometre",
+        "kilómetros", "kilómetro", "kilometros", "kilometro",
         "milliliters", "millilitres", "milliliter", "millilitre",
-        "kilograms", "kilogram", "hectares", "hectare",
+        "mililitros", "mililitro",
+        "kilograms", "kilogram", "kilogramos", "kilogramo",
+        "hectares", "hectare", "hectáreas", "hectárea", "hectareas", "hectarea",
         "klicks", "klick", "liters", "litres", "liter", "litre",
-        "kilos", "kilo", "grams", "gram",
+        "litros", "litro",
+        "kilos", "kilo", "grams", "gram", "gramos", "gramo",
         -- AFTER kilometers/centimeters/millimeters: "meters" is a tail of all
-        -- three, and _identify_unit takes the first tail match.
+        -- three, and _identify_unit takes the first tail match. Same for the
+        -- Spanish forms ("metros" tails "kilometros"/"centimetros"/...).
         "meters", "metres", "meter", "metre",
+        "metros", "metro",
         "km/h", "kph", "ml", "km", "cm", "mm", "kg", "m", "g",
     },
 
@@ -1286,6 +1469,8 @@ local _CURRENCY_HARD = {
     threepence=true, fourpence=true, florin=true, florins=true,
     halfpenny=true, halfpence=true, groat=true, groats=true, quid=true,
     sovereign=true, sovereigns=true, sterling=true,
+    -- Spanish: "libra esterlina" is always money, never weight.
+    esterlina=true, esterlinas=true,
 }
 local _CURRENCY_SOFT = {
     -- transaction verbs
@@ -1355,6 +1540,28 @@ local _CURRENCY_SOFT = {
     -- weight near these words still ties and keeps.
     bank=true, banks=true, account=true, accounts=true,
     bills=true, untraceable=true,
+    -- Spanish money cues (windows are de-accented before lookup, so the keys
+    -- below are accent-free: "pagó"→"pago", "préstamo"→"prestamo").
+    pagar=true, paga=true, pagan=true, pago=true, pagos=true,
+    pagado=true, pagada=true, pagados=true, pagaron=true,
+    cobrar=true, cobra=true, cobran=true, cobrado=true,
+    costar=true, cuesta=true, cuestan=true, costo=true, coste=true,
+    valer=true, vale=true, valen=true,
+    comprar=true, compra=true, compras=true, compro=true, comprado=true,
+    vender=true, vende=true, venden=true, vendido=true, venta=true,
+    ventas=true,
+    precio=true, precios=true, dinero=true, moneda=true, monedas=true,
+    salario=true, salarios=true, sueldo=true, sueldos=true,
+    deuda=true, deudas=true, fortuna=true, fortunas=true,
+    herencia=true, herencias=true, rentas=true, renta=true,
+    alquiler=true, alquileres=true,
+    billete=true, billetes=true, banco=true, bancos=true,
+    cuenta=true, cuentas=true,
+    subasta=true, subastas=true, puja=true, pujas=true,
+    oferta=true, ofertas=true, remate=true, remates=true,
+    apuesta=true, apuestas=true,
+    impuesto=true, impuestos=true, multa=true, multas=true,
+    prestamo=true, prestamos=true, hipoteca=true, hipotecas=true,
 }
 -- Currency PHRASES (multi-word; checked as bounded substrings). "in gold" /
 -- "in silver" mark money ("twenty thousand pounds in gold"), while the weight
@@ -1367,6 +1574,9 @@ local _CURRENCY_SOFT = {
 local _CURRENCY_PHRASES = {
     "in gold", "in silver",
     "left her", "left him", "left them", "left me", "left us",
+    -- Spanish: "libras esterlinas" is always money; "en oro"/"en plata" mark
+    -- money the way "in gold"/"in silver" do ("de oro" stays weight).
+    "libras esterlinas", "libra esterlina", "en oro", "en plata",
 }
 -- An income rate written IMMEDIATELY after the unit — "thirty pounds a year",
 -- "twenty pounds per annum". A sum quoted at a yearly or monthly rate is a
@@ -1390,9 +1600,12 @@ local _CURRENCY_PHRASES = {
 -- references/gotchas.md), and this form is also what the headless harness
 -- extracts by name.
 function FootFree._pound_rate_tail(nxt)
-    local n = (nxt or ""):lower():gsub("^%s+", "")
+    -- De-accented, so "año" matches below as "ano".
+    local n = FootFree._deaccent((nxt or ""):lower():gsub("^%s+", ""))
     for _, t in ipairs({ "a year", "per year", "a month", "per month",
-                         "per annum", "an annum" }) do
+                         "per annum", "an annum",
+                         "al ano", "por ano", "cada ano",
+                         "al mes", "por mes", "cada mes" }) do
         if n:sub(1, #t) == t and not n:sub(#t + 1, #t + 1):match("%a") then
             return true
         end
@@ -1421,11 +1634,17 @@ local _WEIGHT_WORDS = {
     muscle=true, overweight=true,
     stone=true, ounce=true, ounces=true, ton=true, tons=true,
     tonne=true, tonnes=true, kilogram=true, kilograms=true, kilo=true, kilos=true,
+    -- Spanish weight cues (de-accented keys; NOT "peso"/"pesos" — also currency).
+    pesar=true, pesa=true, pesan=true, pesaba=true, pesaban=true,
+    pesado=true, pesada=true, pesados=true, pesadas=true, pesando=true,
+    carga=true, cargas=true, cargamento=true, cargamentos=true,
+    cargado=true, cargada=true, bulto=true, bultos=true,
 }
 -- Pound classifier helpers (pure; unit-tested in builder/lua_helper_tests.lua).
 -- `window` is the lowercased prev+next context around a spelled-"pound(s)" match.
 -- A hard currency cue (coin denomination / "sterling") means money, full stop.
 local function _pound_hard_currency(window)
+    window = FootFree._deaccent(window or "")
     for word in window:gmatch("%a+") do
         if _CURRENCY_HARD[word] then return true end
     end
@@ -1436,6 +1655,8 @@ end
 -- word nearby. Ties keep (lean toward converting). `num` (optional) is the
 -- pound amount, used for the magnitude prior below.
 local function _pound_currency_wins(window, num, rate_tail)
+    -- De-accented so Spanish cues ("pagó"→"pago", "préstamo"→"prestamo") match.
+    window = FootFree._deaccent(window or "")
     local cscore, wscore = 0, 0
     -- An income rate right after the unit is worth one currency vote, like a
     -- phrase cue — so a genuine weight cue still ties and keeps the conversion.
@@ -1491,11 +1712,23 @@ FootFree._TEMP_CUE_WORDS = {
     fridge=true, freezer=true, icebox=true,
     fever=true, feverish=true,
     boiling=true, simmer=true, simmering=true,
+    -- Spanish temperature cues (de-accented keys: "frío"→"frio").
+    frio=true, fria=true, frios=true, frias=true,
+    calor=true, caliente=true, calientes=true, caluroso=true, calurosa=true,
+    temperatura=true, temperaturas=true, clima=true,
+    termometro=true, fiebre=true, fiebres=true,
+    invierno=true, verano=true,
+    nieve=true, hielo=true, helado=true, helada=true, helados=true,
+    humedad=true, humedo=true, humeda=true,
+    hirviendo=true, congelado=true, congelada=true, congelados=true,
 }
 FootFree._TEMP_CUE_PHRASES = {
     "below zero", "sub zero", "below freezing", "wind chill", "heat index",
+    -- Spanish (matched against the de-accented window).
+    "bajo cero", "ola de calor", "sensacion termica",
 }
 local function _degrees_temperature_cue(window)
+    window = FootFree._deaccent(window or "")
     for word in window:gmatch("%a+") do
         if FootFree._TEMP_CUE_WORDS[word] then return true end
     end
@@ -2613,6 +2846,14 @@ local function _is_english(doc)
     return lang == "" or lang == "und" or lang:match("^en") ~= nil
 end
 
+-- This build also understands Spanish measurement words, so Spanish books
+-- skip the "not in English" scan confirmation too. A FootFree field (not a
+-- chunk-level local): main.lua sits at Lua's 200-local limit.
+function FootFree._is_spanish(doc)
+    local lang = _get_book_lang(doc)
+    return lang:match("^es") ~= nil
+end
+
 -- True specifically for en-GB / en-UK (UK Imperial volumes).
 local function _is_uk_book(doc)
     local lang = _get_book_lang(doc)
@@ -2690,7 +2931,7 @@ local function _apply_settings_to_matches(matches, distinguish_pounds, use_uk_vo
         -- (e.g. "one hundred lbs ... a month's wages" is still a weight).
         if distinguish_pounds and r._cat == "weight" then
             local mt = (r.matched_text or ""):lower()
-            if mt:find("pound") then
+            if mt:find("pound") or mt:find("libra") then
                 local window = ((r.prev_text or "") .. " " .. (r.next_text or "")):lower()
                 if _pound_currency_wins(window, r._num,
                                         FootFree._pound_rate_tail(r.next_text)) then
@@ -2736,6 +2977,28 @@ local _UNIT_CONV = {
     -- historical and fantasy prose ("three hundred cubits").
     ["cubits"]            = { factor=0.4572,   offset=0,       target="m",    cat="length"      },
     ["cubit"]             = { factor=0.4572,   offset=0,       target="m",    cat="length"      },
+    -- Spanish aliases (same factors). NOTE: "cuarto/cuartos" is deliberately
+    -- NOT a quart alias — in Spanish it far more often means "quarter" ("un
+    -- cuarto de milla") or "room" than the volume unit.
+    ["pies"]              = { factor=0.3048,   offset=0,       target="m",    cat="length"      },
+    ["pie"]               = { factor=0.3048,   offset=0,       target="m",    cat="length"      },
+    ["pulgadas"]          = { factor=2.54,     offset=0,       target="cm",   cat="length"      },
+    ["pulgada"]           = { factor=2.54,     offset=0,       target="cm",   cat="length"      },
+    ["millas"]            = { factor=1.60934,  offset=0,       target="km",   cat="length"      },
+    ["milla"]             = { factor=1.60934,  offset=0,       target="km",   cat="length"      },
+    ["millas náuticas"]   = { factor=1.852,    offset=0,       target="km",   cat="length"      },
+    ["milla náutica"]     = { factor=1.852,    offset=0,       target="km",   cat="length"      },
+    -- Unaccented twins: some texts drop diacritics entirely.
+    ["millas nauticas"]   = { factor=1.852,    offset=0,       target="km",   cat="length"      },
+    ["milla nautica"]     = { factor=1.852,    offset=0,       target="km",   cat="length"      },
+    ["yardas"]            = { factor=0.9144,   offset=0,       target="m",    cat="length"      },
+    ["yarda"]             = { factor=0.9144,   offset=0,       target="m",   cat="length"      },
+    ["brazas"]            = { factor=1.8288,   offset=0,       target="m",   cat="length"      },
+    ["braza"]             = { factor=1.8288,   offset=0,       target="m",   cat="length"      },
+    ["leguas"]            = { factor=4.82803,  offset=0,       target="km",   cat="length"      },
+    ["legua"]             = { factor=4.82803,  offset=0,       target="km",   cat="length"      },
+    ["codos"]             = { factor=0.4572,   offset=0,       target="m",   cat="length"      },
+    ["codo"]              = { factor=0.4572,   offset=0,       target="m",   cat="length"      },
     ["pounds"]            = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
     ["pound"]             = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
     ["lbs"]               = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
@@ -2743,6 +3006,10 @@ local _UNIT_CONV = {
     ["ounces"]            = { factor=28.3495,  offset=0,       target="g",    cat="weight"      },
     ["ounce"]             = { factor=28.3495,  offset=0,       target="g",    cat="weight"      },
     ["oz"]                = { factor=28.3495,  offset=0,       target="g",    cat="weight"      },
+    ["libras"]            = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
+    ["libra"]             = { factor=0.453592, offset=0,       target="kg",   cat="weight"      },
+    ["onzas"]             = { factor=28.3495,  offset=0,       target="g",    cat="weight"      },
+    ["onza"]              = { factor=28.3495,  offset=0,       target="g",    cat="weight"      },
     ["stone"]             = { factor=6.35029,  offset=0,       target="kg",   cat="weight"      },
     ["°F"]                = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
     ["degrees Fahrenheit"]= { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
@@ -2752,6 +3019,10 @@ local _UNIT_CONV = {
     -- gate can tell it apart from the unambiguous "degrees F"/"Fahrenheit"
     -- entries above, which never need the cue check).
     ["degrees"]            = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature", bare_degrees=true },
+    ["grados fahrenheit"] = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
+    ["grados farenheit"]  = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
+    ["grados f"]          = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature" },
+    ["grados"]            = { factor=5/9,      offset=-32*5/9, target="°C",   cat="temperature", bare_degrees=true },
     ["gallons"]           = { factor=3.78541,  offset=0,       target="liters",    cat="volume"      },
     ["gallon"]            = { factor=3.78541,  offset=0,       target="liters",    cat="volume"      },
     ["gal"]               = { factor=3.78541,  offset=0,       target="liters",    cat="volume"      },
@@ -2764,12 +3035,24 @@ local _UNIT_CONV = {
     ["fluid ounces"]      = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
     ["fluid ounce"]       = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
     ["fl oz"]             = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
+    ["galones"]           = { factor=3.78541,  offset=0,       target="liters",    cat="volume"      },
+    ["galón"]             = { factor=3.78541,  offset=0,       target="liters",    cat="volume"      },
+    ["galon"]             = { factor=3.78541,  offset=0,       target="liters",    cat="volume"      },
+    ["pintas"]            = { factor=0.473176, offset=0,       target="liters",    cat="volume"      },
+    ["pinta"]             = { factor=0.473176, offset=0,       target="liters",    cat="volume"      },
+    ["onzas líquidas"]    = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
+    ["onza líquida"]      = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
+    ["onzas liquidas"]    = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
+    ["onza liquida"]      = { factor=29.5735,  offset=0,       target="mL",   cat="volume"      },
     ["mph"]               = { factor=1.60934,  offset=0,       target="km/h", cat="speed"       },
     ["miles per hour"]    = { factor=1.60934,  offset=0,       target="km/h", cat="speed"       },
     ["miles an hour"]     = { factor=1.60934,  offset=0,       target="km/h", cat="speed"       },
     ["knots"]             = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
     ["knot"]              = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
     ["kn"]                = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
+    ["millas por hora"]   = { factor=1.60934,  offset=0,       target="km/h", cat="speed"       },
+    ["nudos"]             = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
+    ["nudo"]              = { factor=1.852,    offset=0,       target="km/h", cat="speed"       },
     ["acres"]             = { converter=_conv_acres_to_ha,     target="ha",   cat="area"        },
     ["acre"]              = { converter=_conv_acres_to_ha,     target="ha",   cat="area"        },
 }
@@ -2777,17 +3060,22 @@ local _UNIT_CONV = {
 -- Longest-first so "miles per hour" matches before "miles", etc.
 local _UNIT_SUFFIXES = {
     "degrees Fahrenheit", "degrees F", "degrees",
+    "grados fahrenheit", "grados farenheit", "grados f", "grados",
     "nautical miles", "nautical mile",
+    "millas náuticas", "milla náutica", "millas nauticas", "milla nautica",
     "fluid ounces", "fluid ounce",
-    "miles per hour", "miles an hour",
+    "onzas líquidas", "onza líquida", "onzas liquidas", "onza liquida",
+    "miles per hour", "miles an hour", "millas por hora",
     "fl oz", "fathoms", "fathom", "furlongs", "furlong",
-    "leagues", "league",
-    "gallons", "gallon", "quarts", "quart",
-    "cubits", "cubit",
-    "knots", "knot", "pounds", "pound",
-    "ounces", "ounce", "pints", "pint",
-    "acres", "acre", "stone", "yards", "yard",
-    "miles", "mile", "feet", "foot", "inches", "inch",
+    "leagues", "league", "leguas", "legua",
+    "gallons", "gallon", "galones", "galón", "galon", "quarts", "quart",
+    "cubits", "cubit", "codos", "codo",
+    "knots", "knot", "nudos", "nudo", "pounds", "pound", "libras", "libra",
+    "ounces", "ounce", "onzas", "onza", "pints", "pint", "pintas", "pinta",
+    "acres", "acre", "stone", "yards", "yard", "yardas", "yarda",
+    "brazas", "braza",
+    "millas", "milla", "miles", "mile", "feet", "foot", "pies", "pie",
+    "inches", "inch", "pulgadas", "pulgada",
     "yds", "yd", "lbs", "lb", "nmi", "gal",
     "mph", "kn", "ft", "mi", "oz", "pt", "qt", "°F",
 }
@@ -2962,7 +3250,8 @@ FootFree._IMPERIAL.unit_pats = {
 
 -- Is this token part of a number phrase? (digit, number-word, or connector word
 -- like "a"/"and" that glue multi-word numbers such as "a hundred and fifty").
-local _NUM_CONNECTOR = { a = true, an = true, ["and"] = true, half = true, quarter = true }
+local _NUM_CONNECTOR = { a = true, an = true, ["and"] = true, half = true, quarter = true,
+                        y = true }
 local function _is_number_word(w)
     w = w:lower():gsub("[%.,;:%)]+$", ""):gsub("^[%(]+", "")
     if w == "" then return false end
@@ -3030,6 +3319,20 @@ local function _prev_num_words(prev)
             if n and n < 1 then return n, span + 2 end
         end
     end
+    -- Spanish "<frac> de [unit]" ("un cuarto de milla", "dos tercios de
+    -- libra"): the mirror of the "of a/an" form above — the word-walk can't
+    -- cross "de" either. Guarded to sub-1 fractions, so "millones de millas"
+    -- (1e6, not a fraction) and "un par de" (not a fraction) fall through.
+    -- Span includes the trailing "de" (1 word).
+    local before_de = s:match("^(.-)%s+de%s*$")
+    if before_de and before_de ~= "" then
+        local fwords = {}
+        for w in before_de:gmatch("%S+") do fwords[#fwords + 1] = w end
+        for span = math.min(3, #fwords), 1, -1 do
+            local n = _parse_num(table.concat(fwords, " ", #fwords - span + 1))
+            if n and n < 1 then return n, span + 1 end
+        end
+    end
     -- Additive "N and a/<frac> [unit]" form ("four and a half feet",
     -- "one and three-quarter leagues"): value = whole N + fraction. The fraction
     -- must sit at the END of prev (adjacent to the unit) and be only 1–2 words —
@@ -3087,7 +3390,8 @@ local function _prev_num_words(prev)
     -- hundred and fifty feet" — the leading "and" connects two measurements, it
     -- is not part of this number. (Internal "and", as in "four hundred AND
     -- fifty", is kept — the walk merely stopped here, it didn't start here.)
-    while first < #words and words[first]:lower() == "and" do
+    while first < #words
+          and (words[first]:lower() == "and" or words[first]:lower() == "y") do
         first = first + 1
     end
     -- "a hundred" / "a thousand" / "a dozen": the article scales the following
@@ -3315,6 +3619,11 @@ local _AREA_CONV = {
     yard = 0.83612736, yards = 0.83612736,
     foot = 0.09290304, feet  = 0.09290304,
     inch = 0.00064516, inches = 0.00064516,
+    -- Spanish.
+    milla = 2589988.11, millas = 2589988.11,
+    yarda = 0.83612736, yardas = 0.83612736,
+    pie = 0.09290304, pies  = 0.09290304,
+    pulgada = 0.00064516, pulgadas = 0.00064516,
     -- League already converts as a length (_UNIT_CONV, 4.82803 km); square of
     -- that same land-league factor (report #10: "twenty-three square leagues"
     -- was a straight miss — "square" ate the cue but no area factor existed,
@@ -3570,16 +3879,28 @@ end
 -- scaled by an indefinite band ("a few" ≈ 2–5×). We convert it as a metric band
 -- instead. Multiplier words whose bare value (and nothing more) carries the
 -- amount; "score"/archaic forms deliberately omitted.
-local _VAGUE_MULTIPLIERS = { dozen = 12, hundred = 100, thousand = 1000, million = 1000000 }
+local _VAGUE_MULTIPLIERS = { dozen = 12, hundred = 100, thousand = 1000, million = 1000000,
+    -- Spanish: "cientos de millas", "miles de libras", "un par de días".
+    cientos = 100, miles = 1000, millones = 1000000, par = 2 }
 -- Quantifier → {low, high} multiplier band. low==high renders as a single "≈ X".
 local _VAGUE_BANDS = {
     ["a couple of"] = {2, 2}, ["a couple"] = {2, 2}, ["couple of"] = {2, 2},
     ["couple"] = {2, 2}, ["a few"] = {2, 5}, ["several"] = {3, 7},
     ["some"] = {1, 1}, ["few"] = {2, 5},
+    -- Spanish.
+    ["un par de"] = {2, 2},
+    ["unos cuantos"] = {3, 7}, ["unas cuantas"] = {3, 7},
+    ["varios"] = {3, 7}, ["varias"] = {3, 7},
+    ["algunos"] = {2, 5}, ["algunas"] = {2, 5},
+    ["unos"] = {2, 5}, ["unas"] = {2, 5},
+    ["pocos"] = {2, 5}, ["pocas"] = {2, 5},
 }
 -- Longest-first so "a couple of" beats "couple", "a few" beats "few".
 local _VAGUE_ORDER = {
     "a couple of", "a couple", "couple of", "several", "a few", "couple", "some", "few",
+    "unos cuantos", "unas cuantas", "un par de",
+    "algunos", "algunas", "varios", "varias",
+    "pocos", "pocas", "unos", "unas",
 }
 
 -- Given the lowercased prev_text (which ends with the multiplier word, the
@@ -3590,6 +3911,15 @@ local _VAGUE_ORDER = {
 local function _detect_vague(prev)
     local p = (prev or ""):lower():gsub("%s+$", "")
     local mword = p:match("([%a]+)$")
+    -- Spanish "cientos de millas": the multiplier is followed by "de".
+    local had_de = false
+    if mword == "de" then
+        local p2 = p:sub(1, #p - 2):gsub("%s+$", "")
+        local m2 = p2:match("([%a]+)$")
+        if m2 and _VAGUE_MULTIPLIERS[m2] then
+            p, mword, had_de = p2, m2, true
+        end
+    end
     local mult = mword and _VAGUE_MULTIPLIERS[mword]
     if not mult then return nil end
     p = p:sub(1, #p - #mword):gsub("%s+$", "")     -- drop the multiplier word itself
@@ -3598,7 +3928,7 @@ local function _detect_vague(prev)
             local bch = p:sub(-#q - 1, -#q - 1)     -- char before the quantifier
             if bch == "" or bch:match("%s") then
                 local band = _VAGUE_BANDS[q]
-                return band[1], band[2], q, mult
+                return band[1], band[2], q, mult, had_de
             end
         end
     end
@@ -4528,8 +4858,13 @@ local function _fast_scan_matches(doc, cat_enabled)
             -- instead of ~23 000 m²).
             local area_factor = _AREA_CONV[ulow]
             local lw8 = _last_words(p, 8):gsub("%-", " ")
-            if area_factor and lw8:match("square%s*$") then
+            -- Spanish "cuadrado/cuadrada/cuadrados/cuadradas" ("dos millas
+            -- cuadradas"); the hyphenated adjectival form is already
+            -- normalized to spaces above.
+            if area_factor and (lw8:match("square%s*$")
+                                or lw8:match("cuadrad[oa]s?%s*$")) then
                 local pbefore = lw8:gsub("%s*square%s*$", "")
+                    :gsub("%s*cuadrad[oa]s?%s*$", "")
                 local an1, an2 = _detect_back_range(pbefore, "")
                 local single = (not an1) and _prev_num_words(pbefore) or nil
                 local lonum = an1 or single
@@ -4689,17 +5024,24 @@ local function _fast_scan_matches(doc, cat_enabled)
                    and p:match("%f[%a]a%s+million%s*$") then
                     num = nil
                 end
-                local vlo, vhi, vword, vmult = _detect_vague(h.prev_text)
+                local vlo, vhi, vword, vmult, vague_de = _detect_vague(h.prev_text)
+                -- Spanish vague ("unos cientos de millas"): the prev ends
+                -- "<mult> de", so the number walk found nothing — the
+                -- multiplier itself is the number (span 2 covers "<mult> de").
+                local vnum, vspan = num, span
+                if vlo and vmult and vague_de and vnum == nil then
+                    vnum, vspan = vmult, 2
+                end
                 -- Vague bands are metric-direction-deferred ("a few hundred
                 -- meters" → band) — stage 2 of the imperial direction.
-                if num and vlo and vmult == num and conv.factor
+                if vnum and vlo and vmult == vnum and conv.factor
                    and not dir_imperial then
                     -- Vague quantified amount ("a few hundred pounds") → convert
                     -- as a metric BAND ("≈ 90–230 kg") rather than a false-precise
                     -- point. Always rounded (vagueness demands it, regardless of
                     -- the Smart Rounding toggle). Flagged _vague so Mode 3 skips it
                     -- — "a few hundred pounds" can't be cleanly rewritten in place.
-                    local qstart = extend_start(h.start, num, span, h.prev_text)
+                    local qstart = extend_start(h.start, vnum, vspan, h.prev_text)
                     local qwc = select(2, vword:gsub("%S+", ""))
                     for _ = 1, qwc do
                         local okx, nx = pcall(function() return doc:getPrevVisibleWordStart(qstart) end)
@@ -4707,11 +5049,11 @@ local function _fast_scan_matches(doc, cat_enabled)
                     end
                     local full = text_of(qstart, h["end"])
                     if not (full and full:lower():find(vword, 1, true)) then
-                        qstart = extend_start(h.start, num, span, h.prev_text)
+                        qstart = extend_start(h.start, vnum, vspan, h.prev_text)
                         full = text_of(qstart, h["end"]) or (vword .. " " .. h.matched_text)
                     end
-                    local lo_m = _nice_round(vlo * num * conv.factor + (conv.offset or 0), _HARSH_TOLERANCE)
-                    local hi_m = _nice_round(vhi * num * conv.factor + (conv.offset or 0), _HARSH_TOLERANCE)
+                    local lo_m = _nice_round(vlo * vnum * conv.factor + (conv.offset or 0), _HARSH_TOLERANCE)
+                    local hi_m = _nice_round(vhi * vnum * conv.factor + (conv.offset or 0), _HARSH_TOLERANCE)
                     local band
                     if vlo == vhi then
                         band = _APPROX .. " " .. _fmt_dist(lo_m, conv.target)
@@ -6805,7 +7147,7 @@ function FootFree:_finishScan(doc, all_matches, t_total, in_subprocess, debug_re
         -- them ("the crate, worth a fortune, weighed two hundred pounds"). This
         -- keeps the soft-currency matches in the sidecar so the decision can be
         -- re-made on load (and re-tuned) without a rescan.
-        if r._search.target == "kg" and mt:find("pound") then
+        if r._search.target == "kg" and (mt:find("pound") or mt:find("libra")) then
             local window = prev_full .. " " .. nxt_full
             if window:find("\194\163", 1, true)
                or nxt_full:match("^%s*on account")
@@ -7765,7 +8107,8 @@ function FootFree:_doApplyMetricEdition(doc)
     -- Converting currency is worse than leaving a colliding genuine weight as
     -- imperial — and that weight still converts in the positional Mode 1.
     for original, rep in pairs(rep_of) do
-        if original:lower():find("pound") then
+        local ol = original:lower()
+        if ol:find("pound") or ol:find("libra") then
             rep.expected = kept_count[original]
         end
     end
@@ -8131,7 +8474,7 @@ function FootFree:_reconcileModeWithBook(cancel_restore_mode)
             local d = self.ui.document
             if not d then return end
             if (self._all_matches and #self._all_matches > 0) or self._scanned
-               or not _is_english(d) then
+               or not (_is_english(d) or FootFree._is_spanish(d)) then
                 self:_applyMetricEdition(d, nil, cancel_restore_mode)
             else
                 self:_confirmScanAndConvert(d, cancel_restore_mode,
@@ -8172,7 +8515,7 @@ function FootFree:_setPreferred(v)
     self._current_boxes = {}
     self._scanned       = false
     if self.view then UIManager:setDirty(self.view.dialog, "ui") end
-    if _is_english(doc) then
+    if _is_english(doc) or FootFree._is_spanish(doc) then
         self.ui:handleEvent(Event:new("CloseReaderMenu"))
         -- Explicit action (the reader changed direction), so ASK FIRST and then
         -- run scan + convert uninterrupted. The 0.3s settle is kept: closing
@@ -10285,14 +10628,14 @@ function FootFree:addToMainMenu(menu_items)
                         end)
                     end
                     local function maybe_scan()
-                        if _is_english(doc) then
+                        if _is_english(doc) or FootFree._is_spanish(doc) then
                             do_scan()
                         else
                             local lang = _get_book_lang(doc)
                             local msg = lang ~= ""
-                                -- TRANSLATORS: Asked before scanning a book that doesn't look English, since
-                                -- Footcream only recognises English measurement words. %1 is the language code
-                                -- from the book's metadata.
+                                -- TRANSLATORS: Asked before scanning a book that looks like neither English
+                                -- nor Spanish, since Footcream only recognises measurement words in those
+                                -- languages. %1 is the language code from the book's metadata.
                                 and T(_("This book does not appear to be in English (detected: %1).\n\nScan it anyway?"), lang)
                                 -- TRANSLATORS: Same question, for a book whose metadata names no language at all.
                                 or  _("This book does not appear to be in English.\n\nScan it anyway?")

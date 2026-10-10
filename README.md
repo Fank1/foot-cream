@@ -39,6 +39,10 @@ Set **Convert units to**: Metric, Imperial (US) or Imperial (UK). Every category
 
 **In reverse** (Imperial US/UK) the same categories convert back (km/m/cm/mm, kg/kilos/grams, °C, liters/ml, km/h, hectares, square km/m/cm) as natural compounds: *"1.8 m"* → *5 ft 11 in*, *"2.5 kg"* → *5 lb 8 oz*, *"9 mm"* → *⅜ in*. The UK flavour uses stones and imperial pints and gallons.
 
+### Also in Spanish
+
+Spanish books convert in both directions too: *pie/pies*, *pulgada/pulgadas*, *milla/millas*, *milla náutica*, *yarda/yardas*, *braza/brazas*, *legua/leguas*, *libra/libras*, *onza/onzas*, *galón/galones*, *pinta/pintas*, *onza líquida*, *grado(s) Fahrenheit*, *millas por hora*, *nudo/nudos*, *acre/acres* → metric; and *kilómetros, metros, centímetros, milímetros, kilogramos, kilos, gramos, litros, mililitros, grados Celsius/centígrados, kilómetros por hora, hectáreas* → imperial. Spelled-out numbers (*treinta y cinco*, *doscientos*, *dos millones*, *un cuarto de milla*, *dos y medio*), decimal commas (*1,5* · *1.609,34*), and context cues (*libras esterlinas*, *pagó*, *precio* → money, left alone; *pesaba*, *carga* → weight) are all understood, accents included.
+
 Volumes follow the book's own locale, because UK and US gallons and pints differ.
 
 > **Tons are deliberately not converted.** A long ton is 1016 kg, a short ton 907 kg, a metric tonne 1000 kg. Rather than guess wrong, Footcream leaves them alone.
