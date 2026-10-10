@@ -255,6 +255,10 @@ local _WORD_NUMS = {
     { "novecientos", 900 }, { "ochocientos", 800 }, { "setecientos", 700 },
     { "seiscientos", 600 }, { "quinientos",  500 }, { "cuatrocientos", 400 },
     { "trescientos", 300 }, { "doscientos",  200 },
+    -- Feminine hundreds ("trescientas yardas" — the noun is feminine).
+    { "novecientas", 900 }, { "ochocientas", 800 }, { "setecientas", 700 },
+    { "seiscientas", 600 }, { "quinientas",  500 }, { "cuatrocientas", 400 },
+    { "trescientas", 300 }, { "doscientas",  200 },
     { "ciento", 100 }, { "cien", 100 },
     { "noventa", 90 }, { "ochenta", 80 }, { "setenta", 70 }, { "sesenta", 60 },
     { "cincuenta", 50 }, { "cuarenta", 40 }, { "treinta", 30 },
@@ -331,6 +335,10 @@ local _NUM_FRAC  = { half=0.5, quarter=0.25, third=1/3,
 FootFree._NUM_HUNDRED = {
     doscientos=200, trescientos=300, cuatrocientos=400, quinientos=500,
     seiscientos=600, setecientos=700, ochocientos=800, novecientos=900,
+    -- Feminine forms: hundreds agree with the noun ("trescientas yardas",
+    -- "doscientas millas").
+    doscientas=200, trescientas=300, cuatrocientas=400, quinientas=500,
+    seiscientas=600, setecientas=700, ochocientas=800, novecientas=900,
 }
 
 -- Strip diacritics ("millón"→"millon", "frío"→"frio") so Spanish words match

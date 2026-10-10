@@ -46,6 +46,7 @@ cases = [
     ("ciento veinte", 120), ("cien", 100), ("ciento", 100),
     ("doscientos", 200), ("doscientos treinta", 230),
     ("quinientos", 500), ("novecientos noventa y nueve", 999),
+    ("trescientas", 300), ("doscientas millas", 200),
     ("mil", 1000), ("dos mil", 2000),
     ("mil novecientos ochenta y cuatro", 1984),
     ("un millón", 1000000), ("millón", 1000000), ("dos millones", 2000000),
